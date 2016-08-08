@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/username"
                 android:textColor="#000000"
-                android:textSize="16pt"/>
+                android:textSize="16dp"/>
 
             <EditText
                 android:id="@+id/edit_username"
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:text="1403010814"
-                android:textSize="16pt"
+                android:textSize="16dp"
                 android:textColor="#000000"/>
         </LinearLayout>
         <LinearLayout
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/passwd"
                 android:textColor="#000000"
-                android:textSize="16pt"/>
+                android:textSize="16dp"/>
 
             <EditText
                 android:id="@+id/edit_passwd"
@@ -52,26 +52,26 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:text="zxc009zxc"
-                android:textSize="16pt"
+                android:textSize="16dp"
                 android:textColor="#000000"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10pt">
+            android:layout_marginTop="10dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/randomcode"
                 android:textColor="#000000"
-                android:textSize="16pt"/>
+                android:textSize="16dp"/>
             <EditText
                 android:id="@+id/edit_randomcode"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="16pt"
+                android:textSize="16dp"
                 android:textColor="#000000"
                 android:inputType="text"/>
             <ImageView
@@ -80,7 +80,7 @@
                 android:layout_weight="1"
                 android:id="@+id/randomImg"
                 android:onClick="onRandomImgClick"
-                android:contentDescription="@string/randomcode" />
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

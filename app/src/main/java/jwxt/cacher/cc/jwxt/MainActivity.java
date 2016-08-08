@@ -1,5 +1,6 @@
 package jwxt.cacher.cc.jwxt;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
@@ -37,6 +38,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     HttpURLConnection connection;
     ExecutorService threadPool;
+    public static List<HashMap<String,String>> data;
     String cookie;
     Handler handler=new Handler(){
         @Override
@@ -65,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            webView.loadData((String)msg.obj,"text/html; charset=UTF-8",null);
+            data=(List<HashMap<String,String>>)msg.obj;
+            Intent intent=new Intent(MainActivity.this,ScoreActivity.class);
+            startActivity(intent);
         }
     };
     @Override
@@ -212,25 +219,38 @@ public class MainActivity extends AppCompatActivity {
                     outputStream.close();
 
                     InputStream inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
+                    BufferedReader in=new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+                    Scanner scann=new Scanner(in);
                     StringBuilder stringBuilder=new StringBuilder();
-                    byte[] b=new byte[1024];
-                    int len=inputStream.read(b);
-                    System.out.println(len);
-                    while(len!=-1){
-                        stringBuilder.append(new String(b,0,len,"UTF-8"));
-                        len=inputStream.read(b);
+                    while(scann.hasNextLine()){
+                        stringBuilder.append(scann.nextLine()+"\n");
                     }
                     String result=stringBuilder.toString();
                     System.out.println(result.length());
                     Document doc= Jsoup.parse(result);
-                    Integer id=1;
-                    StringBuilder s=new StringBuilder();
-                    for(id=1;id<=10;id++){
-                        Element elem=doc.getElementById(id.toString());
-                        s.append(elem.toString());
+                    List<HashMap<String,String>> data=new ArrayList<>();
+                    Integer i=1;
+                    for(i=1;i<=10;i++){
+                        HashMap<String,String> item=new HashMap<>();
+                        Element elem;
+                        if((elem=doc.getElementById(i.toString()))!=null){
+                            Element temp;
+                            temp=elem.select("td").get(3);
+                            item.put("kksj",temp.text());
+                            temp=elem.select("td").get(4);
+                            item.put("kcmc",temp.text());
+                            temp=elem.select("td").get(5);
+                            item.put("zcj",temp.text());
+                            temp=elem.select("td").get(10);
+                            item.put("xf",temp.text());
+                        }else{
+                            break;
+                        }
+                        data.add(item);
                     }
+
                     Message msg=handler1.obtainMessage();
-                    msg.obj=s.toString();
+                    msg.obj=data;
                     handler1.sendMessage(msg);
 
                 }catch (Exception e){
