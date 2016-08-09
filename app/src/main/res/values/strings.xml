@@ -1,7 +1,22 @@
 <resources>
     <string name="app_name">JWXT</string>
-    <string name="username">登录：</string>
+    <string name="username">学号：</string>
     <string name="passwd">密码：</string>
     <string name="randomcode">验证码：</string>
     <string name="login">登录</string>
+
+    <string-array name="kksjChoice">
+        <item>2013-2014-1</item>
+        <item>2013-2014-2</item>
+        <item>2013-2014-3</item>
+        <item>2014-2015-1</item>
+        <item>2014-2015-2</item>
+        <item>2014-2015-3</item>
+        <item>2015-2016-1</item>
+        <item>2015-2016-2</item>
+        <item>2015-2016-3</item>
+        <item>2016-2017-1</item>
+        <item>2016-2017-2</item>
+        <item>2016-2017-3</item>
+    </string-array>
 </resources>

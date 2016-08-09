@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView imageView;
     Button button;
-    WebView webView;
     EditText edit_Username;
     EditText edit_PassWd;
     EditText edit_randomCode;
@@ -118,9 +117,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        webView=(WebView)findViewById(R.id.webView);
-        WebSettings webSettings=webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
 
     }
     public void onRandomImgClick(View view){
@@ -173,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
                     httpURLConnection.setRequestProperty("Cookie", cookie);
 
                     DataOutputStream outstream1 = new DataOutputStream(httpURLConnection.getOutputStream());
-                    String content = "USERNAME=" + URLEncoder.encode("1403010814", "UTF-8")
-                            + "&PASSWORD=" + URLEncoder.encode("zxc009zxc", "UTF-8")
+                    String content = "USERNAME=" + URLEncoder.encode(edit_Username.getText().toString(), "UTF-8")
+                            + "&PASSWORD=" + URLEncoder.encode(edit_PassWd.getText().toString(), "UTF-8")
                             + "&RANDOMCODE=" + URLEncoder.encode(edit_randomCode.getText().toString(), "UTF-8");
                     outstream1.writeBytes(content);
                     outstream1.flush();
@@ -258,8 +254,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-    private void login(){
-
     }
 }
