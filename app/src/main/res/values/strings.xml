@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">JWXT</string>
+    <string name="app_name">小助手</string>
     <string name="username">学号：</string>
     <string name="passwd">密码：</string>
     <string name="randomcode">验证码：</string>
     <string name="login">登录</string>
-
+    <string name="search_hint">开课时间</string>
     <string-array name="kksjChoice">
         <item>2013-2014-1</item>
         <item>2013-2014-2</item>

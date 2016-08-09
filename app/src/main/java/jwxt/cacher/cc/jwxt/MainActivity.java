@@ -12,8 +12,10 @@ import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ButtonBarLayout;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -78,12 +80,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         imageView=(ImageView)findViewById(R.id.randomImg);
         button=(Button)findViewById(R.id.btn_login);
         edit_Username=(EditText)findViewById(R.id.edit_username);
         edit_PassWd=(EditText)findViewById(R.id.edit_passwd);
         edit_randomCode=(EditText)findViewById(R.id.edit_randomcode);
         threadPool= Executors.newSingleThreadExecutor();
+
 
         threadPool.execute(new Runnable() {
             @Override
