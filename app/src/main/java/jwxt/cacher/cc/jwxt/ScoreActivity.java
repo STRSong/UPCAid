@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -45,140 +46,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import javax.xml.datatype.Duration;
+
 /**
  * Created by xhaiben on 2016/8/8.
  */
 public class ScoreActivity extends AppCompatActivity {
     private Context context = null;
     private ImageView mag_icon = null;
-
+    private SearchView searchView=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
         context = this;
-        //asdfsdfsddfdfdfsdf
-        SearchView scoreSearchView = (SearchView) findViewById(R.id.search_score_1);
-        scoreSearchView.setSubmitButtonEnabled(true);
-        scoreSearchView.setQueryHint("开课时间");
-        scoreSearchView.setSubmitButtonEnabled(true);
-
-        String[] columnNames = {"_id", "text"};
-        MatrixCursor cursor = new MatrixCursor(columnNames);
-        String[] array = {"2014-2015-1", "2014-2015-2", "2014-2015-3"};
-        String[] temp = new String[2];
-        int id = 0;
-        for (String item : array) {
-            temp[0] = Integer.toString(id++);
-            temp[1] = item;
-            cursor.addRow(temp);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_score);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar=getSupportActionBar();
+        if(actionBar!=null){
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        String[] from = {"text"};
-        int[] to = {R.id.search_textView};
-        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(context, R.layout.search_item, cursor, from, to, 0);
-        scoreSearchView.setSuggestionsAdapter(simpleCursorAdapter);
+        toolbar.setOnMenuItemClickListener(getMenuItemClickListener());
+        
+        searchView = (SearchView) findViewById(R.id.search_score_1);
 
-        try {
-            Field[] fields=scoreSearchView.getClass().getDeclaredFields();
-            System.out.println(fields.length);
-            for(Field f:fields){
-                System.out.println(f);
-            }
-
-            Field mSearchButton = scoreSearchView.getClass().getDeclaredField("mSearchButton");
-            mSearchButton.setAccessible(true);
-            ImageView searchButton = (ImageView) mSearchButton.get(scoreSearchView);
-
-            Field mSubmitButton = scoreSearchView.getClass().getDeclaredField("mSubmitButton");
-            mSubmitButton.setAccessible(true);
-            ImageView submit = (ImageView) mSubmitButton.get(scoreSearchView);
-            submit.setImageDrawable(searchButton.getDrawable());
-
-            //暴力反射+上转型 设置auto
-            Field mSearchEditFrame = scoreSearchView.getClass().getDeclaredField("mSearchEditFrame");
-            mSearchEditFrame.setAccessible(true);
-            LinearLayout linearLayout = (LinearLayout) mSearchEditFrame.get(scoreSearchView);
-            LinearLayout linearLayout1 = (LinearLayout) linearLayout.getChildAt(1);
-            AutoCompleteTextView a = (AutoCompleteTextView) linearLayout1.getChildAt(0);
-            a.setThreshold(0);
-            a.setTextColor(Color.WHITE);
-
-            mag_icon=(ImageView)linearLayout.getChildAt(0);
-            mag_icon.setImageDrawable(null);
-            linearLayout.removeViewAt(0);
-//            mag_icon.setImageResource(R.drawable.search_16px);
-
-
-//            fMethod[] methods=searchView.getClass().getDeclaredMethods();
-//            for(Method m:methods){
-//                System.out.println(m);
-//            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_score);
-//        toolbar.inflateMenu(R.menu.score_menu);
-//
-//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.search_score:
-//                        SearchView searchView = (SearchView) item.getActionView();
-//                        searchView.setQueryHint("开课时间");
-//                        searchView.setSubmitButtonEnabled(true);
-//
-//                        try {
-//                            //Java暴力反射
-//                            Field mSubmitButton = searchView.getClass().getDeclaredField("mGoButton");
-//                            mSubmitButton.setAccessible(true);
-//                            ImageView submit = (ImageView) mSubmitButton.get(searchView);
-//                            submit.setImageResource(R.drawable.search_16px);
-//
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                        final SearchView.SearchAutoComplete searchAutoComplete=(SearchView.SearchAutoComplete)
-//                                searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-//                        searchAutoComplete.setTextColor(Color.WHITE);
-//                        //设置输入一个字母就开始匹配
-//                        searchAutoComplete.setThreshold(1);
-//
-//                        ArrayAdapter<String> adapter=new ArrayAdapter<String>(
-//                                context,R.layout.search_item
-//                        );
-//                        adapter.add("2014-2015-1");
-//                        adapter.add("2014-2015-2");
-//                        adapter.add("2014-2015-3");
-//                        searchAutoComplete.setAdapter(adapter);
-//
-//                        searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                            @Override
-//                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                                String searchString=(String)parent.getItemAtPosition(position);
-//                                searchAutoComplete.setText(searchString);
-//                                searchAutoComplete.setSelection((searchAutoComplete.getText().toString().length()));
-//                            }
-//                        });
-//                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
-//                            @Override
-//                            public boolean onQueryTextChange(String newText) {
-//                                Toast.makeText(context,newText,Toast.LENGTH_SHORT).show();
-//                                return false;
-//                            }
-//
-//                            @Override
-//                            public boolean onQueryTextSubmit(String query) {
-//                                Toast.makeText(context,query,Toast.LENGTH_SHORT).show();
-//                                return false;
-//                            }
-//                        });
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
+        setSearchViewProperties();
 
 
         ListView listView = (ListView) this.findViewById(R.id.listView_Score);
@@ -189,15 +82,6 @@ public class ScoreActivity extends AppCompatActivity {
 
         //Button button=(Button)this.findViewById(R.id.Btn_win);
     }
-//    public void onBtnWinCLick(View view){
-//        View contentView= LayoutInflater.from(context).inflate(R.layout.time_choice_popupwindow,null);
-//        PopupWindow popupWindow=new PopupWindow(
-//                contentView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT,true);
-//        popupWindow.setTouchable(true);
-//        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-//        popupWindow.showAsDropDown(view);
-//    }
-
 
     @Override
     protected void onStart() {
@@ -209,5 +93,86 @@ public class ScoreActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.score_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private Toolbar.OnMenuItemClickListener getMenuItemClickListener(){
+        return new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.whole_score:
+
+                        break;
+                }
+                return false;
+            }
+        };
+    }
+    private void setSearchViewProperties(){
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setQueryHint("开课时间");
+        searchView.setSubmitButtonEnabled(true);
+
+        String[] columnNames = {"_id", "text"};
+        MatrixCursor cursor = new MatrixCursor(columnNames);
+        String[] array = getResources().getStringArray(R.array.kksjChoice);
+        String[] temp = new String[2];
+        int id = 0;
+        for (String item : array) {
+            temp[0] = Integer.toString(id++);
+            temp[1] = item;
+            cursor.addRow(temp);
+        }
+        String[] from = {"text"};
+        int[] to = {R.id.search_textView};
+        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(context, R.layout.search_item, cursor, from, to, 0);
+        searchView.setSuggestionsAdapter(simpleCursorAdapter);
+        try {
+            Field mSearchButton = searchView.getClass().getDeclaredField("mSearchButton");
+            mSearchButton.setAccessible(true);
+            ImageView searchButton = (ImageView) mSearchButton.get(searchView);
+
+            Field mSubmitButton = searchView.getClass().getDeclaredField("mSubmitButton");
+            mSubmitButton.setAccessible(true);
+            ImageView submit = (ImageView) mSubmitButton.get(searchView);
+            submit.setImageDrawable(searchButton.getDrawable());
+
+            //暴力反射+上转型 设置auto
+            Field mSearchEditFrame = searchView.getClass().getDeclaredField("mSearchEditFrame");
+            mSearchEditFrame.setAccessible(true);
+            LinearLayout linearLayout = (LinearLayout) mSearchEditFrame.get(searchView);
+            LinearLayout linearLayout1 = (LinearLayout) linearLayout.getChildAt(1);
+            AutoCompleteTextView a = (AutoCompleteTextView) linearLayout1.getChildAt(0);
+            a.setThreshold(0);
+            a.setTextColor(Color.WHITE);
+
+            mag_icon = (ImageView) linearLayout.getChildAt(0);
+            mag_icon.setImageDrawable(null);
+            linearLayout.removeViewAt(0);
+
+//            Field[] fields = searchView.getClass().getDeclaredFields();
+//            System.out.println(fields.length);
+//            for (Field f : fields) {
+//                System.out.println(f);
+//            }
+//            fMethod[] methods=searchView.getClass().getDeclaredMethods();
+//            for(Method m:methods){
+//                System.out.println(m);
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
