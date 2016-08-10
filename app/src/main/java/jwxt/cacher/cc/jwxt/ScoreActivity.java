@@ -57,7 +57,7 @@ public class ScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
         context = this;
-
+        //asdfsdfsddfdfdfsdf
         SearchView scoreSearchView = (SearchView) findViewById(R.id.search_score_1);
         scoreSearchView.setSubmitButtonEnabled(true);
         scoreSearchView.setQueryHint("开课时间");
