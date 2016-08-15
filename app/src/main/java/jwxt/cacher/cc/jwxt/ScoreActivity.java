@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ExpandedMenuView;
@@ -37,7 +39,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -100,20 +101,8 @@ public class ScoreActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.score_menu,menu);
+        this.setSearchViewProperties();
 
-//        MenuItem item=menu.findItem(R.id.search_score_1);
-//        searchView=(SearchView)MenuItemCompat.getActionView(item);
-        searchView=(SearchView)findViewById(R.id.search_score_1);
-        searchView.setIconified(false);
-        searchView.setIconifiedByDefault(false);
-        searchView.setSubmitButtonEnabled(true);
-        ImageView ico=(ImageView) searchView.findViewById(android.support.v7.appcompat.R.id.search_mag_icon);
-        ImageView mGoButton=(ImageView)searchView.findViewById(android.support.v7.appcompat.R.id.search_go_btn);
-        mGoButton.setImageDrawable(ico.getDrawable());
-        ico.setVisibility(View.GONE);
-        ico.setImageDrawable(null);
-        AutoCompleteTextView mEdit=(SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -145,84 +134,62 @@ public class ScoreActivity extends AppCompatActivity {
         };
     }
     private void setSearchViewProperties(){
-        searchView.setSubmitButtonEnabled(true);
+        searchView=(SearchView)findViewById(R.id.search_score_1);
+        searchView.setIconified(false);
         searchView.setQueryHint("开课时间");
-//        searchView.setSubmitButtonEnabled(true);
+        searchView.setIconifiedByDefault(false);
+        searchView.setSubmitButtonEnabled(true);
 
-//        String[] columnNames = {"_id", "text"};
-//        final MatrixCursor cursor = new MatrixCursor(columnNames);
-//        String[] array = getResources().getStringArray(R.array.kksjChoice);
-//        String[] temp = new String[2];
-//        int id = 0;
-//        for (String item : array) {
-//            temp[0] = Integer.toString(id++);
-//            temp[1] = item;
-//            cursor.addRow(temp);
-//        }
-//        String[] from = {"text"};
-//        int[] to = {R.id.search_textView};
-//
-//        final SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(context, R.layout.search_item, cursor, from, to, 0);
-//        searchView.setSuggestionsAdapter(simpleCursorAdapter);
-//        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
-//            @Override
-//            public boolean onSuggestionSelect(int position) {
-//                return false;
-//            }
-//            @Override
-//            public boolean onSuggestionClick(int position) {
-//                Cursor cursor1=simpleCursorAdapter.getCursor();
-//                searchView.setQuery(cursor1.getString(1),false);
-//                return false;
-//            }
-//        });
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
-        try {
-            Field mSearchButton = searchView.getClass().getDeclaredField("mSearchButton");
-            mSearchButton.setAccessible(true);
-            ImageView searchButton = (ImageView) mSearchButton.get(searchView);
+        ImageView ico=(ImageView) searchView.findViewById(android.support.v7.appcompat.R.id.search_mag_icon);
+        ImageView mGoButton=(ImageView)searchView.findViewById(android.support.v7.appcompat.R.id.search_go_btn);
+        mGoButton.setImageDrawable(ico.getDrawable());
+        ico.setVisibility(View.GONE);
+        ico.setImageDrawable(null);
 
-            Field mSubmitButton = searchView.getClass().getDeclaredField("mGoButton");
-            mSubmitButton.setAccessible(true);
-            ImageView submit = (ImageView) mSubmitButton.get(searchView);
-            submit.setImageDrawable(searchButton.getDrawable());
+        AutoCompleteTextView mEdit=(SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        mEdit.setThreshold(1);
+        mEdit.setTextColor(Color.WHITE);
 
-            //暴力反射+上转型 设置auto
-            Field mSearchEditFrame = searchView.getClass().getDeclaredField("mSearchEditFrame");
-            mSearchEditFrame.setAccessible(true);
-            LinearLayout linearLayout = (LinearLayout) mSearchEditFrame.get(searchView);
-            LinearLayout linearLayout1 = (LinearLayout) linearLayout.getChildAt(1);
-            AutoCompleteTextView a = (AutoCompleteTextView) linearLayout1.getChildAt(0);
-
-            a.setThreshold(1);
-            a.setTextColor(Color.WHITE);
-
-            mag_icon = (ImageView) linearLayout.getChildAt(0);
-            mag_icon.setImageDrawable(null);
-            linearLayout.removeViewAt(0);
-
-//            Field[] fields = searchView.getClass().getDeclaredFields();
-//            System.out.println(fields.length);
-//            for (Field f : fields) {
-//                System.out.println(f);
-//            }
-//            fMethod[] methods=searchView.getClass().getDeclaredMethods();
-//            for(Method m:methods){
-//                System.out.println(m);
-//            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        String[] columnNames = {"_id", "text"};
+        final MatrixCursor cursor = new MatrixCursor(columnNames);
+        String[] array = getResources().getStringArray(R.array.kksjChoice);
+        String[] temp = new String[2];
+        int id = 0;
+        for (String item : array) {
+            temp[0] = Integer.toString(id++);
+            temp[1] = item;
+            cursor.addRow(temp);
         }
+        String[] from = {"text"};
+        int[] to = {R.id.search_textView};
+
+        SearchManager searchManager=(SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        final CursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(context, R.layout.search_item, cursor, from, to, 0);
+        searchView.setSuggestionsAdapter(simpleCursorAdapter);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                return true;
+            }
+            @Override
+            public boolean onSuggestionClick(int position) {
+                Cursor cursor1=simpleCursorAdapter.getCursor();
+                searchView.setQuery(cursor1.getString(1),false);
+                return true;
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 }
