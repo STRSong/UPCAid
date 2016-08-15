@@ -59,7 +59,7 @@ public class JWXTLoginActivity extends AppCompatActivity {
             super.handleMessage(msg);
             data=(List<HashMap<String,String>>)msg.obj;
             Intent intent=new Intent(JWXTLoginActivity.this,ScoreActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent,1);
         }
     };
     @Override

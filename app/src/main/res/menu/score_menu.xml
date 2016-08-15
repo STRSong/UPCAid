@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ScoreActivity">
+    <!--<item-->
+        <!--android:id="@+id/search_score_1"-->
+        <!--android:title="搜索"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
+        <!--&gt;</item>-->
     <item
         android:id="@+id/whole_score"
         android:orderInCategory="80"
