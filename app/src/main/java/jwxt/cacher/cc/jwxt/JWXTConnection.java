@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -23,11 +24,10 @@ import java.util.Scanner;
 /**
  * Created by xhaiben on 2016/8/15.
  */
-public class JWXTConnection {
-    private String account;
-    private String passwd;
-    private String randomcode;
+public class JWXTConnection implements Serializable {
+
     private String cookie;
+
     public JWXTConnection(){
 
     }
@@ -77,9 +77,10 @@ public class JWXTConnection {
                 outputStream.flush();
                 outputStream.close();
                 System.out.println(content);
-                InputStream inputStream=new BufferedInputStream(connection.getInputStream());
-                int count=inputStream.available();
-                if(count>120){
+                BufferedInputStream inputStream=new BufferedInputStream(connection.getInputStream());
+                byte[] b=new byte[120];
+                int count=inputStream.read(b);
+                if(count>118){
                     BufferedReader bufferedReader=new
                             BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
                     StringBuilder resultBuilder=new StringBuilder();
@@ -123,7 +124,7 @@ public class JWXTConnection {
         }
         return null;
     }
-    public String getScore(String kksj){
+    public List<HashMap<String,String>> getScore(String kksj){
         //成绩查询
         try{
             URL searchScore=new URL("http://jwxt.upc.edu.cn/jwxt/xszqcjglAction.do?method=queryxscj");
@@ -135,7 +136,7 @@ public class JWXTConnection {
             httpURLConnection.setRequestProperty("Cookie",cookie);
 
             DataOutputStream outputStream=new DataOutputStream(httpURLConnection.getOutputStream());
-            String content2="kksj="+URLEncoder.encode("2015-2016-2","UTF-8")
+            String content2="kksj="+URLEncoder.encode(kksj,"UTF-8")
                     +"&xsfs="+URLEncoder.encode("qbcj","UTF-8")
                     +"&PageNum="+URLEncoder.encode("1","UTF-8");
             outputStream.writeBytes(content2);
@@ -172,6 +173,7 @@ public class JWXTConnection {
                 }
                 data.add(item);
             }
+            return data;
         }catch (Exception e){
             e.printStackTrace();
         }

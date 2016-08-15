@@ -12,6 +12,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -58,8 +60,10 @@ import javax.xml.datatype.Duration;
  */
 public class ScoreActivity extends AppCompatActivity {
     private Context context = null;
-    private ImageView mag_icon = null;
     private SearchView searchView=null;
+    private JWXTConnection connection;
+    private ListView listView;
+    private Handler handlerListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +72,7 @@ public class ScoreActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_score);
         setSupportActionBar(toolbar);
         ActionBar actionBar=getSupportActionBar();
+        this.initHandler();
         if(actionBar!=null){
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -76,22 +81,15 @@ public class ScoreActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(getNavigationOnClickListener());
 //        searchView = (SearchView) findViewById(R.id.search_score_1);
         //setSearchViewProperties();
+        listView = (ListView) this.findViewById(R.id.listView_Score);
+        connection=(JWXTConnection)getIntent().getSerializableExtra("connection");
 
-        ListView listView = (ListView) this.findViewById(R.id.listView_Score);
-
-//        SimpleAdapter adapter=new SimpleAdapter(this,MainActivity.data,R.layout.score_item,new String[]{
-//                "kksj","kcmc","zcj","xf"},new int[]{R.id.kksj,R.id.kcmc,R.id.zjc,R.id.xf});
-//        listView.setAdapter(adapter);
-
-        //Button button=(Button)this.findViewById(R.id.Btn_win);
     }
-
     @Override
     protected void onStart() {
         super.onStart();
 
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -146,7 +144,7 @@ public class ScoreActivity extends AppCompatActivity {
         ico.setVisibility(View.GONE);
         ico.setImageDrawable(null);
 
-        AutoCompleteTextView mEdit=(SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        final AutoCompleteTextView mEdit=(SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         mEdit.setThreshold(1);
         mEdit.setTextColor(Color.WHITE);
 
@@ -182,8 +180,19 @@ public class ScoreActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
-                return false;
+                final String kksj=query;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<HashMap<String,String>> data=connection.getScore(kksj);
+                        SimpleAdapter adapter=new SimpleAdapter(context,data,R.layout.score_item,new String[]{
+                                "kksj","kcmc","zcj","xf"},new int[]{R.id.kksj,R.id.kcmc,R.id.zjc,R.id.xf});
+                        Message msg=handlerListView.obtainMessage();
+                        msg.obj=adapter;
+                        handlerListView.sendMessage(msg);
+                    }
+                }).start();
+                return true;
             }
 
             @Override
@@ -191,5 +200,15 @@ public class ScoreActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+    private void initHandler(){
+        handlerListView=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                SimpleAdapter adapter=(SimpleAdapter)msg.obj;
+                listView.setAdapter(adapter);
+            }
+        };
     }
 }

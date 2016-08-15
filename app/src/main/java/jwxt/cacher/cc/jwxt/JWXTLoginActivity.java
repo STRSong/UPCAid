@@ -43,28 +43,13 @@ public class JWXTLoginActivity extends AppCompatActivity {
     EditText edit_PassWd;
     EditText edit_randomCode;
     Context context;
-    HttpURLConnection connection;
     ExecutorService threadPool;
-
     JWXTConnection jwxtConnection;
-    public static List<HashMap<String,String>> data;
-    String cookie;
-    Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            imageView.setImageBitmap((Bitmap) msg.obj);
-        }
-    };
-    Handler handler1=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            data=(List<HashMap<String,String>>)msg.obj;
-            Intent intent=new Intent(JWXTLoginActivity.this,ScoreActivity.class);
-            startActivityForResult(intent,1);
-        }
-    };
+
+    Handler handler;
+    Handler handlerError;
+    Handler handlerToScore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +63,9 @@ public class JWXTLoginActivity extends AppCompatActivity {
         edit_Username=(EditText)findViewById(R.id.edit_username);
         edit_PassWd=(EditText)findViewById(R.id.edit_passwd);
         edit_randomCode=(EditText)findViewById(R.id.edit_randomcode);
+
+        this.initHandler();
+
         threadPool= Executors.newSingleThreadExecutor();
 
         threadPool.execute(new Runnable() {
@@ -115,16 +103,49 @@ public class JWXTLoginActivity extends AppCompatActivity {
                             edit_PassWd.getText().toString(),edit_randomCode.getText().toString());
                     System.out.println(result);
                     if(result!=null){
-                        Toast.makeText(context,result,Toast.LENGTH_SHORT).show();
+                        Message msg=handlerError.obtainMessage();
+                        msg.obj=result;
+                        handlerError.sendMessage(msg);
+                    }else {
+                        Message msg=handlerToScore.obtainMessage();
+                        msg.obj=jwxtConnection;
+                        handlerToScore.sendMessage(msg);
                     }
+
 //                    Message msg=handler1.obtainMessage();
 //                    msg.obj=data;
 //                    handler1.sendMessage(msg);
-
                 }catch (Exception e){
                     e.printStackTrace();
                 }
             }
         });
+    }
+    private void initHandler(){
+        handler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                imageView.setImageBitmap((Bitmap) msg.obj);
+            }
+        };
+        handlerError=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                String error=(String)msg.obj;
+                Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+            }
+        };
+        handlerToScore=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                JWXTConnection conn=(JWXTConnection) msg.obj;
+                Intent intent=new Intent(JWXTLoginActivity.this,ScoreActivity.class);
+                intent.putExtra("connection",conn);
+                startActivityForResult(intent,1);
+            }
+        };
     }
 }
