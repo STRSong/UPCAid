@@ -1,5 +1,6 @@
 package jwxt.cacher.cc.jwxt;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
@@ -31,6 +32,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -40,6 +42,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,11 +67,20 @@ public class ScoreActivity extends AppCompatActivity {
     private JWXTConnection connection;
     private ListView listView;
     private Handler handlerListView;
+    private Handler handlerProgressbar;
+    private ProgressDialog progressDialog;
+    private AutoCompleteTextView mEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
         context = this;
+
+        progressDialog=new ProgressDialog(context);
+        progressDialog.setMessage("正在加载，请稍后...");
+        progressDialog.setCancelable(false);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_score);
         setSupportActionBar(toolbar);
         ActionBar actionBar=getSupportActionBar();
@@ -116,7 +128,28 @@ public class ScoreActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.whole_score:
+                        final String kksj="";
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Message msg1=handlerProgressbar.obtainMessage();
+                                msg1.arg1=1;
+                                msg1.obj=progressDialog;
+                                handlerProgressbar.sendMessage(msg1);
+                                List<HashMap<String,String>> data=connection.getScore(kksj);
+                                SimpleAdapter adapter=new SimpleAdapter(context,data,R.layout.score_item,new String[]{
+                                        "kksj","kcmc","zcj","xf"},new int[]{R.id.kksj,R.id.kcmc,R.id.zjc,R.id.xf});
 
+                                Message msg=handlerListView.obtainMessage();
+                                msg.obj=adapter;
+                                handlerListView.sendMessage(msg);
+
+                                msg1=handlerProgressbar.obtainMessage();
+                                msg1.arg1=2;
+                                msg1.obj=progressDialog;
+                                handlerProgressbar.sendMessage(msg1);
+                            }
+                        }).start();
                         break;
                 }
                 return false;
@@ -144,7 +177,7 @@ public class ScoreActivity extends AppCompatActivity {
         ico.setVisibility(View.GONE);
         ico.setImageDrawable(null);
 
-        final AutoCompleteTextView mEdit=(SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        mEdit=(SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         mEdit.setThreshold(1);
         mEdit.setTextColor(Color.WHITE);
 
@@ -161,7 +194,7 @@ public class ScoreActivity extends AppCompatActivity {
         String[] from = {"text"};
         int[] to = {R.id.search_textView};
 
-        SearchManager searchManager=(SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        final SearchManager searchManager=(SearchManager)getSystemService(Context.SEARCH_SERVICE);
         final CursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(context, R.layout.search_item, cursor, from, to, 0);
         searchView.setSuggestionsAdapter(simpleCursorAdapter);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -184,12 +217,22 @@ public class ScoreActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        Message msg1=handlerProgressbar.obtainMessage();
+                        msg1.arg1=1;
+                        msg1.obj=progressDialog;
+                        handlerProgressbar.sendMessage(msg1);
                         List<HashMap<String,String>> data=connection.getScore(kksj);
                         SimpleAdapter adapter=new SimpleAdapter(context,data,R.layout.score_item,new String[]{
                                 "kksj","kcmc","zcj","xf"},new int[]{R.id.kksj,R.id.kcmc,R.id.zjc,R.id.xf});
+
                         Message msg=handlerListView.obtainMessage();
                         msg.obj=adapter;
                         handlerListView.sendMessage(msg);
+
+                        msg1=handlerProgressbar.obtainMessage();
+                        msg1.arg1=2;
+                        msg1.obj=progressDialog;
+                        handlerProgressbar.sendMessage(msg1);
                     }
                 }).start();
                 return true;
@@ -207,6 +250,28 @@ public class ScoreActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 SimpleAdapter adapter=(SimpleAdapter)msg.obj;
                 listView.setAdapter(adapter);
+                mEdit.setFocusable(false);
+                mEdit.setFocusableInTouchMode(true);
+                InputMethodManager imm=(InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(listView.getWindowToken(),0);
+            }
+        };
+        handlerProgressbar=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                //ProgressBar progressBar=(ProgressBar)msg.obj;
+                int command=msg.arg1;
+                switch (command) {
+                    case 1:
+                        ProgressDialog dialog = (ProgressDialog) msg.obj;
+                        dialog.show();
+                        break;
+                    case 2:
+                        dialog = (ProgressDialog) msg.obj;
+                        dialog.dismiss();
+                        break;
+                }
             }
         };
     }

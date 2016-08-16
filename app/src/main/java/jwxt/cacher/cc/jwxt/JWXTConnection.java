@@ -2,6 +2,11 @@ package jwxt.cacher.cc.jwxt;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.SimpleAdapter;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -124,6 +129,7 @@ public class JWXTConnection implements Serializable {
         return null;
     }
     public List<HashMap<String,String>> getScore(String kksj){
+
         //成绩查询
         try{
             URL searchScore=new URL("http://jwxt.upc.edu.cn/jwxt/xszqcjglAction.do?method=queryxscj");
@@ -144,6 +150,7 @@ public class JWXTConnection implements Serializable {
 
                 InputStream inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
                 BufferedReader in=new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+
                 StringBuffer stringBuffer=new StringBuffer();
                 Scanner scann=new Scanner(in);
                 while(scann.hasNextLine()){
@@ -160,12 +167,6 @@ public class JWXTConnection implements Serializable {
                 e=e.select("font").first();
 
                 Integer itemNum=new Integer(e.text());
-//                Integer times;
-//                if(itemNum%10==0){
-//                	times=itemNum/10;
-//                }else{
-//                	times=itemNum/10;
-//                }
                 System.out.println(itemNum);
                 List<HashMap<String,String>> data=new ArrayList<HashMap<String,String>>();
 
@@ -194,6 +195,7 @@ public class JWXTConnection implements Serializable {
                             }else{
                                 break;
                             }
+
                             data.add(item);
                         }
                         httpURLConnection=(HttpURLConnection)searchScore.openConnection();
@@ -249,6 +251,7 @@ public class JWXTConnection implements Serializable {
                     }
                 }
 //                System.out.println(data.toString());
+//                progressBar.setVisibility(View.GONE);
                 return data;
             }catch (Exception e){
                 e.printStackTrace();
@@ -260,5 +263,8 @@ public class JWXTConnection implements Serializable {
             e.printStackTrace();
         }
         return null;
+    }
+    private void initHandler(){
+
     }
 }
