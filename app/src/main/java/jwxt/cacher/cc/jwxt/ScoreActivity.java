@@ -194,7 +194,6 @@ public class ScoreActivity extends AppCompatActivity {
                 }).start();
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;

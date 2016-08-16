@@ -25,7 +25,6 @@ import java.util.Scanner;
  * Created by xhaiben on 2016/8/15.
  */
 public class JWXTConnection implements Serializable {
-
     private String cookie;
 
     public JWXTConnection(){
@@ -177,7 +176,6 @@ public class JWXTConnection implements Serializable {
         }catch (Exception e){
             e.printStackTrace();
         }
-
         return null;
     }
 }

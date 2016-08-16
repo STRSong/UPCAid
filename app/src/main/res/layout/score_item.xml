@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="130"
-        android:gravity="center"
-        android:textSize="18dp"
-        android:id="@+id/kksj"/>
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="130"
-        android:gravity="center"
-        android:textSize="18dp"
-        android:id="@+id/kcmc"/>
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="70"
-        android:gravity="center"
-        android:textSize="18dp"
-        android:id="@+id/zjc"/>
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="60"
-        android:gravity="center"
-        android:textSize="18dp"
-        android:id="@+id/xf"/>
+android:layout_width="match_parent"
+android:layout_height="50dp"
+    android:gravity="center"
+android:orientation="horizontal">
+<TextView
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="130"
+    android:gravity="center"
+    android:textSize="18dp"
+    android:text="2014-2015-2"
+    android:id="@+id/kksj"/>
+<TextView
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="130"
+    android:gravity="center"
+    android:textSize="18dp"
+    android:text="中国近代史纲要"
+    android:id="@+id/kcmc"/>
+<TextView
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="70"
+    android:gravity="center"
+    android:textSize="18dp"
+    android:text="79"
+    android:id="@+id/zjc"/>
+<TextView
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="50"
+    android:gravity="center"
+    android:textSize="18dp"
+    android:text="3"
+    android:id="@+id/xf"/>
 </LinearLayout>
