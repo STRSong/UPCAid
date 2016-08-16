@@ -133,46 +133,129 @@ public class JWXTConnection implements Serializable {
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Cookie",cookie);
+            try{
+                DataOutputStream outputStream1=new DataOutputStream(httpURLConnection.getOutputStream());
+                String content2="kksj="+URLEncoder.encode(kksj,"UTF-8")
+                        +"&xsfs="+URLEncoder.encode("qbcj","UTF-8")
+                        +"&PageNum="+URLEncoder.encode("1","UTF-8");
+                outputStream1.writeBytes(content2);
+                outputStream1.flush();
+                outputStream1.close();
 
-            DataOutputStream outputStream=new DataOutputStream(httpURLConnection.getOutputStream());
-            String content2="kksj="+URLEncoder.encode(kksj,"UTF-8")
-                    +"&xsfs="+URLEncoder.encode("qbcj","UTF-8")
-                    +"&PageNum="+URLEncoder.encode("1","UTF-8");
-            outputStream.writeBytes(content2);
-            outputStream.flush();
-            outputStream.close();
-
-            InputStream inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
-            BufferedReader in=new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
-            Scanner scann=new Scanner(in);
-            StringBuilder stringBuilder=new StringBuilder();
-            while(scann.hasNextLine()){
-                stringBuilder.append(scann.nextLine()+"\n");
-            }
-            String result=stringBuilder.toString();
-            System.out.println(result.length());
-            Document doc= Jsoup.parse(result);
-            List<HashMap<String,String>> data=new ArrayList<>();
-            Integer i=1;
-            for(i=1;i<=10;i++){
-                HashMap<String,String> item=new HashMap<>();
-                Element elem;
-                if((elem=doc.getElementById(i.toString()))!=null){
-                    Element temp;
-                    temp=elem.select("td").get(3);
-                    item.put("kksj",temp.text());
-                    temp=elem.select("td").get(4);
-                    item.put("kcmc",temp.text());
-                    temp=elem.select("td").get(5);
-                    item.put("zcj",temp.text());
-                    temp=elem.select("td").get(10);
-                    item.put("xf",temp.text());
-                }else{
-                    break;
+                InputStream inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
+                BufferedReader in=new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+                StringBuffer stringBuffer=new StringBuffer();
+                Scanner scann=new Scanner(in);
+                while(scann.hasNextLine()){
+                    stringBuffer.append(scann.nextLine()+"\n");
                 }
-                data.add(item);
+                String result=stringBuffer.toString();
+                System.out.println(result.length());
+                //result=result.substring(0,result.length()-1);
+                //System.out.println(result);
+                httpURLConnection.disconnect();
+
+                Document doc=Jsoup.parse(result);
+                Element e=doc.getElementById("PageNavigation");
+                e=e.select("font").first();
+
+                Integer itemNum=new Integer(e.text());
+//                Integer times;
+//                if(itemNum%10==0){
+//                	times=itemNum/10;
+//                }else{
+//                	times=itemNum/10;
+//                }
+                System.out.println(itemNum);
+                List<HashMap<String,String>> data=new ArrayList<HashMap<String,String>>();
+
+                Integer num;
+                Integer pageNum=2;
+                if(itemNum>=10){
+                    do{
+                        if(itemNum>=10){
+                            num=10;
+                        }else{
+                            num=itemNum;
+                        }
+                        for(Integer i=1;i<=num;i++){
+                            HashMap<String,String> item=new HashMap<String,String>();
+                            Element elem;
+                            if((elem=doc.getElementById(i.toString()))!=null){
+                                Element temp;
+                                temp=elem.select("td").get(3);
+                                item.put("kksj",temp.text());
+                                temp=elem.select("td").get(4);
+                                item.put("kcmc",temp.text());
+                                temp=elem.select("td").get(5);
+                                item.put("zcj",temp.text());
+                                temp=elem.select("td").get(10);
+                                item.put("xf",temp.text());
+                            }else{
+                                break;
+                            }
+                            data.add(item);
+                        }
+                        httpURLConnection=(HttpURLConnection)searchScore.openConnection();
+                        httpURLConnection.setDoInput(true);
+                        httpURLConnection.setDoOutput(true);
+                        httpURLConnection.setRequestMethod("POST");
+                        httpURLConnection.setRequestProperty("Cookie",cookie);
+
+                        outputStream1=new DataOutputStream(httpURLConnection.getOutputStream());
+                        content2="kksj="+URLEncoder.encode(kksj,"UTF-8")
+                                +"&xsfs="+URLEncoder.encode("qbcj","UTF-8")
+                                +"&PageNum="+URLEncoder.encode(pageNum.toString(),"UTF-8");
+                        outputStream1.writeBytes(content2);
+                        outputStream1.flush();
+                        outputStream1.close();
+
+                        inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
+                        in=new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+                        stringBuffer=new StringBuffer();
+                        scann=new Scanner(in);
+                        while(scann.hasNextLine()){
+                            stringBuffer.append(scann.nextLine()+"\n");
+                        }
+                        result=stringBuffer.toString();
+                        System.out.println(result.length());
+                        httpURLConnection.disconnect();
+                        //result=result.substring(0,result.length()-1);
+                        //System.out.println(result);
+                        doc=Jsoup.parse(result);
+                        itemNum-=num;
+                        pageNum+=1;
+                    }while(itemNum>0);
+
+                }else{
+                    num=itemNum;
+                    for(Integer i=1;i<=num;i++){
+                        HashMap<String,String> item=new HashMap<String,String>();
+                        Element elem;
+                        if((elem=doc.getElementById(i.toString()))!=null){
+                            Element temp;
+                            temp=elem.select("td").get(3);
+                            item.put("kksj",temp.text());
+                            temp=elem.select("td").get(4);
+                            item.put("kcmc",temp.text());
+                            temp=elem.select("td").get(5);
+                            item.put("zcj",temp.text());
+                            temp=elem.select("td").get(10);
+                            item.put("xf",temp.text());
+                        }else{
+                            break;
+                        }
+                        data.add(item);
+                    }
+                }
+//                System.out.println(data.toString());
+                return data;
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                httpURLConnection.disconnect();
             }
-            return data;
+
         }catch (Exception e){
             e.printStackTrace();
         }
