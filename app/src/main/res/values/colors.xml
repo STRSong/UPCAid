@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#2f97d6</color>
     <color name="colorAccent">#FF4081</color>
     <color name="windowBackGround">#2C77B8</color>
+    <color name="courseWeek">#2f97d6</color>
 </resources>
