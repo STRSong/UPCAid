@@ -3,6 +3,8 @@ package jwxt.cacher.cc.jwxt;
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 
@@ -34,6 +37,8 @@ public class CourseActivity extends AppCompatActivity {
     private TextView textViewFri;
     private TextView textViewSat;
 
+    private Handler courseHandler;
+    private List<Course> courseList;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +52,8 @@ public class CourseActivity extends AppCompatActivity {
         textViewThu=(TextView)findViewById(R.id.course_thu);
         textViewFri=(TextView)findViewById(R.id.course_fri);
         textViewSat=(TextView)findViewById(R.id.course_sat);
+
+        initHandler();
 
         Calendar calendar=Calendar.getInstance();
         int month=calendar.get(Calendar.MONTH)+1;
@@ -68,7 +75,6 @@ public class CourseActivity extends AppCompatActivity {
         textViewSat.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
 
         textViewMonth.setText(String.valueOf(month)+"月");
-
 
         DisplayMetrics dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -105,6 +111,7 @@ public class CourseActivity extends AppCompatActivity {
                     textView.setBackgroundResource(R.drawable.course_first_textview);
                     @android.support.annotation.IdRes int id=(i+1)*12+j-2;
                     textView.setId(id);
+                    textView.setText(String.valueOf(id));
                     if(j==2){
                         lp.addRule(RelativeLayout.RIGHT_OF,j-1);
                     }else{
@@ -118,14 +125,33 @@ public class CourseActivity extends AppCompatActivity {
             }
         }
         TextView courseText=new TextView(context);
-        RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(courseColWidth-4,firstColHeight*2-6);
-        lp.addRule(RelativeLayout.RIGHT_OF,(2+1)*12+1);
-        lp.rightMargin=-courseColWidth+2;
-        lp.topMargin=3;
-        lp.bottomMargin=3;
-        lp.leftMargin=2;
+        RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(courseColWidth-6,firstColHeight*2-8);
+        lp.addRule(RelativeLayout.RIGHT_OF,24+5-1);
+        lp.addRule(RelativeLayout.BELOW,12*9);
+        lp.rightMargin=3;
+        lp.topMargin=4;
+        lp.bottomMargin=4;
+        lp.leftMargin=3;
         courseText.setBackgroundResource(R.drawable.course_info_green);
         courseRelative.addView(courseText,lp);
-    }
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+    }
+    private void getCourseInfo(){
+
+    }
+    private void initHandler(){
+        courseHandler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+            }
+        };
+    }
 }
