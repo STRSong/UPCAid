@@ -1,9 +1,15 @@
 package jwxt.cacher.cc.jwxt;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by xhaiben on 2016/8/20.
  */
-public class Course {
+public class Course implements Serializable {
     private String courseName;
     private String classRoom;
     private String teacherName;
@@ -12,14 +18,16 @@ public class Course {
     private int endLesson; //结束节数
     private int beginWeek; //开始周数
     private int endWeek; //节数周数
-    private int courseType; //1单周，2双周
+    private int courseType; //1单周，2双周,3有特殊周
+    private Set<Integer> expected;
 
     public Course(){
-
+        this(null);
     }
 
     public Course(String courseName) {
         this.courseName=courseName;
+        expected=new HashSet<>();
     }
 
     public String getCourseName() {
@@ -94,9 +102,20 @@ public class Course {
         this.courseType = courseType;
     }
 
+    public void addWeek(int week){
+        this.expected.add(week);
+    }
+
+    public boolean isThisWeek(int week){
+        if(expected.contains(week)){
+            return true;
+        }else{
+            return false;
+        }
+    }
     @Override
     public String toString() {
         return courseName+","+classRoom+","+day+","
-                +teacherName+","+beginLesson+","+endLesson+","+beginWeek+","+endWeek+","+courseType;
+                +teacherName+","+beginLesson+","+endLesson+","+expected+","+courseType;
     }
 }

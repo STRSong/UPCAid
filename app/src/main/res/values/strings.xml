@@ -5,6 +5,7 @@
     <string name="randomcode">验证码：</string>
     <string name="login">登录</string>
     <string name="search_hint">开课时间</string>
+    <string name="weekChoice">&#xe64c; </string>
     <string-array name="kksjChoice">
         <item>2016-2017-1</item>
         <item>2015-2016-3</item>

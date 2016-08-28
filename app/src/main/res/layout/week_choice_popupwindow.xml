@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    >
+    <ListView
+        android:id="@+id/listView_week"
+        android:layout_width="200dp"
+        android:layout_height="194dp"
+        android:layout_gravity="center_horizontal"
+        android:divider="@null"
+        android:scrollbars="none"
+        android:listSelector="@drawable/week_item_selector"
+        >
+    </ListView>
+    <Button
+        android:id="@+id/btn_weekSet"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_week_set_button"
+        android:textColor="#64ce64"
+        style="?android:attr/borderlessButtonStyle"
+        android:text="修改当前周"
+        android:textSize="15dp"/>
+</LinearLayout>

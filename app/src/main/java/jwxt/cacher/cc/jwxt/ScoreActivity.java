@@ -71,6 +71,7 @@ public class ScoreActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private AutoCompleteTextView mEdit;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +95,7 @@ public class ScoreActivity extends AppCompatActivity {
 //        searchView = (SearchView) findViewById(R.id.search_score_1);
         //setSearchViewProperties();
         listView = (ListView) this.findViewById(R.id.listView_Score);
+
         connection=(JWXTConnection)getIntent().getSerializableExtra("connection");
 
     }

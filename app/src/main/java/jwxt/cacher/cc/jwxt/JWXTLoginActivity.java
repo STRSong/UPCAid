@@ -49,6 +49,7 @@ public class JWXTLoginActivity extends AppCompatActivity {
     Handler handler;
     Handler handlerError;
     Handler handlerToScore;
+    Handler handlerToCourse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +108,9 @@ public class JWXTLoginActivity extends AppCompatActivity {
                         msg.obj=result;
                         handlerError.sendMessage(msg);
                     }else {
-                        Message msg=handlerToScore.obtainMessage();
+                        Message msg=handlerToCourse.obtainMessage();
                         msg.obj=jwxtConnection;
-                        handlerToScore.sendMessage(msg);
+                        handlerToCourse.sendMessage(msg);
                     }
 
 //                    Message msg=handler1.obtainMessage();
@@ -143,6 +144,16 @@ public class JWXTLoginActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 JWXTConnection conn=(JWXTConnection) msg.obj;
                 Intent intent=new Intent(JWXTLoginActivity.this,ScoreActivity.class);
+                intent.putExtra("connection",conn);
+                startActivityForResult(intent,1);
+            }
+        };
+        handlerToCourse=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                JWXTConnection conn=(JWXTConnection) msg.obj;
+                Intent intent=new Intent(JWXTLoginActivity.this,CourseActivity.class);
                 intent.putExtra("connection",conn);
                 startActivityForResult(intent,1);
             }

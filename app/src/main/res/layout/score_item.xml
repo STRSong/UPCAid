@@ -18,7 +18,7 @@ android:orientation="horizontal">
     android:layout_weight="130"
     android:gravity="center"
     android:textSize="18dp"
-    android:text="中国近代史纲要"
+    android:text=""
     android:id="@+id/kcmc"/>
 <TextView
     android:layout_width="0dp"
