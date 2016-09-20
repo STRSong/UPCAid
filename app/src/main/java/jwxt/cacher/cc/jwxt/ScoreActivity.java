@@ -64,7 +64,8 @@ import javax.xml.datatype.Duration;
 public class ScoreActivity extends AppCompatActivity {
     private Context context = null;
     private SearchView searchView=null;
-    private JWXTConnection connection;
+//    private JWXTConnection connection;
+    private SZSDConnection connection;
     private ListView listView;
     private Handler handlerListView;
     private Handler handlerProgressbar;
@@ -96,7 +97,7 @@ public class ScoreActivity extends AppCompatActivity {
         //setSearchViewProperties();
         listView = (ListView) this.findViewById(R.id.listView_Score);
 
-        connection=(JWXTConnection)getIntent().getSerializableExtra("connection");
+        connection=(SZSDConnection) getIntent().getSerializableExtra("connection");
 
     }
     @Override

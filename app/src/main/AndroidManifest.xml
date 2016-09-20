@@ -10,14 +10,11 @@
         android:theme="@style/AppTheme">
         <activity android:name=".JWXTLoginActivity">
 
-
-
         </activity>
         <activity android:name=".MainActivity">
 
         </activity>
         <activity android:name=".ScoreActivity">
-
 
         </activity>
         <activity android:name=".CourseActivity">

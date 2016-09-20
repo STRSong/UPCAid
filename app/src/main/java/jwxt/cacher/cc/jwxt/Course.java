@@ -21,17 +21,17 @@ public class Course implements Serializable {
     private int courseType; //1单周，2双周,3有特殊周
     private Set<Integer> expected;
 
-    public Course(){
-        this(null);
+    public Course() {
+        this((String)null);
     }
 
     public Course(String courseName) {
-        this.courseName=courseName;
-        expected=new HashSet<>();
+        this.courseName = courseName;
+        this.expected = new HashSet();
     }
 
     public String getCourseName() {
-        return courseName;
+        return this.courseName;
     }
 
     public void setCourseName(String courseName) {
@@ -39,7 +39,7 @@ public class Course implements Serializable {
     }
 
     public String getClassRoom() {
-        return classRoom;
+        return this.classRoom;
     }
 
     public void setClassRoom(String classRoom) {
@@ -47,7 +47,7 @@ public class Course implements Serializable {
     }
 
     public String getTeacherName() {
-        return teacherName;
+        return this.teacherName;
     }
 
     public void setTeacherName(String teacherName) {
@@ -55,7 +55,7 @@ public class Course implements Serializable {
     }
 
     public int getDay() {
-        return day;
+        return this.day;
     }
 
     public void setDay(int day) {
@@ -63,7 +63,7 @@ public class Course implements Serializable {
     }
 
     public int getBeginLesson() {
-        return beginLesson;
+        return this.beginLesson;
     }
 
     public void setBeginLesson(int beginLesson) {
@@ -71,7 +71,7 @@ public class Course implements Serializable {
     }
 
     public int getEndLesson() {
-        return endLesson;
+        return this.endLesson;
     }
 
     public void setEndLesson(int endLesson) {
@@ -79,7 +79,7 @@ public class Course implements Serializable {
     }
 
     public int getBeginWeek() {
-        return beginWeek;
+        return this.beginWeek;
     }
 
     public void setBeginWeek(int beginWeek) {
@@ -87,7 +87,7 @@ public class Course implements Serializable {
     }
 
     public int getEndWeek() {
-        return endWeek;
+        return this.endWeek;
     }
 
     public void setEndWeek(int endWeek) {
@@ -95,27 +95,30 @@ public class Course implements Serializable {
     }
 
     public int getCourseType() {
-        return courseType;
+        return this.courseType;
     }
 
     public void setCourseType(int courseType) {
         this.courseType = courseType;
     }
 
-    public void addWeek(int week){
-        this.expected.add(week);
+    public Set<Integer> getExpected() {
+        return expected;
     }
 
-    public boolean isThisWeek(int week){
-        if(expected.contains(week)){
-            return true;
-        }else{
-            return false;
-        }
+    public void setExpected(Set<Integer> expected) {
+        this.expected = expected;
     }
-    @Override
+
+    public void addWeek(int week) {
+        this.expected.add(Integer.valueOf(week));
+    }
+
+    public boolean isThisWeek(int week) {
+        return this.expected.contains(Integer.valueOf(week));
+    }
+
     public String toString() {
-        return courseName+","+classRoom+","+day+","
-                +teacherName+","+beginLesson+","+endLesson+","+expected+","+courseType;
+        return this.courseName + "," + this.classRoom + "," + this.day + "," + this.teacherName + "," + this.beginLesson + "," + this.endLesson + "," + this.expected + "," + this.courseType;
     }
 }

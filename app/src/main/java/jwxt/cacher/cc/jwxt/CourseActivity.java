@@ -51,7 +51,7 @@ public class CourseActivity extends AppCompatActivity {
     private TextView textViewWeek;
     private Handler courseHandler;
     private List<Course> courseList;
-    private JWXTConnection connection;
+    private SZSDConnection szsdConnection;
     private Toolbar toolbar;
     int firstColHeight;
     int firstColWidth;
@@ -91,8 +91,10 @@ public class CourseActivity extends AppCompatActivity {
 
 
 
-        connection = (JWXTConnection) getIntent().getSerializableExtra("connection");
-
+//        connection = (JWXTConnection) getIntent().getSerializableExtra("connection");
+        szsdConnection=(SZSDConnection)getIntent().getSerializableExtra("connection");
+        courseList=(ArrayList<Course>)getIntent().getSerializableExtra("course");
+        System.out.println(courseList);
         backDrawable=new int[9];
         backDrawable[0]=R.drawable.course_info_blue;
         backDrawable[1]=R.drawable.course_info_green;
@@ -177,7 +179,6 @@ public class CourseActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                courseList = connection.getCourseInfo("2016-2017-1","");
                 Message msg=courseHandler.obtainMessage();
                 msg.arg1=1;
                 courseHandler.sendMessage(msg);
