@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private SZSDConnection szsdConnection;
     private Handler handlerInfo;
     private Handler handlerCourse;
+    private Handler handlerClassRoom;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +99,19 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("connection",szsdConnection);
         startActivity(intent);
     }
+    public void onClassRoomClick(View view){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Map<String,String> classRoomMap=szsdConnection.getCurrentClassRoom();
+                Message msg=handlerClassRoom.obtainMessage();
+                msg.obj=classRoomMap;
+                handlerClassRoom.sendMessage(msg);
+            }
+        }).start();
+
+
+    }
     private void initHandler(){
         handlerInfo=new Handler(){
             @Override
@@ -117,6 +131,17 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent=new Intent(MainActivity.this,CourseActivity.class);
                 intent.putExtra("connection",szsdConnection);
                 intent.putExtra("course",courseList);
+                startActivity(intent);
+            }
+        };
+        handlerClassRoom=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                HashMap<String,String> classMap=(HashMap<String,String>)msg.obj;
+                Intent intent=new Intent(MainActivity.this,ClassRoomActivity.class);
+                intent.putExtra("connection",szsdConnection);
+                intent.putExtra("classRoomMap",classMap);
                 startActivity(intent);
             }
         };

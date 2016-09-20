@@ -183,4 +183,19 @@ public class SZSDConnection implements Serializable {
         }
         return courseList;
     }
+    public Map<String,String> getCurrentClassRoom(){
+        try{
+            URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getCurrentClassRoom");
+            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.connect();
+            ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
+            Map<String,String> classRoomMap=(Map<String,String>)inputStream.readObject();
+            inputStream.close();
+            return classRoomMap;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
