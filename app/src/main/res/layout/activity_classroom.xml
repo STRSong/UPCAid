@@ -35,16 +35,15 @@
                 android:text="南教"
                 android:textSize="30dp"
                 />
-            <TextView
-                android:id="@+id/tv_classroom_nj"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textSize="20dp"
-                android:gravity="center"
-                android:text=""/>
-
+             <TextView
+                 android:id="@+id/tv_classroom_nj"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="20dp"
+                 android:layout_marginRight="20dp"
+                 android:textSize="20dp"
+                 android:gravity="center"
+                 android:text=""/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -57,8 +56,9 @@
             <TextView
                 android:id="@+id/tv_classroom_nt"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:textSize="20dp"
                 android:gravity="center"
                 android:text=""/>
@@ -73,8 +73,9 @@
             <TextView
                 android:id="@+id/tv_classroom_dh"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:textSize="20dp"
                 android:gravity="center"
                 android:text=""/>
@@ -89,8 +90,9 @@
             <TextView
                 android:id="@+id/tv_classroom_xh"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:textSize="20dp"
                 android:gravity="center"
                 android:text=""/>
@@ -105,8 +107,9 @@
             <TextView
                 android:id="@+id/tv_classroom_dl"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:textSize="20dp"
                 android:gravity="center"
                 android:text=""/>
@@ -121,8 +124,9 @@
             <TextView
                 android:id="@+id/tv_classroom_xl"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:textSize="20dp"
                 android:gravity="center"
                 android:text=""/>

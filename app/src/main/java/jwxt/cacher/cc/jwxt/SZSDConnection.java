@@ -1,14 +1,18 @@
 package jwxt.cacher.cc.jwxt;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Debug;
 import android.os.HandlerThread;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
@@ -24,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -193,6 +198,51 @@ public class SZSDConnection implements Serializable {
             Map<String,String> classRoomMap=(Map<String,String>)inputStream.readObject();
             inputStream.close();
             return classRoomMap;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public int getVersionCode(){
+        try{
+            URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=checkUpdate");
+            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.connect();
+            InputStream inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
+            BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
+            Scanner scanner=new Scanner(bufferedReader);
+            StringBuilder stringBuilder=new StringBuilder();
+            while(scanner.hasNextLine()){
+                stringBuilder.append(scanner.nextLine());
+            }
+            return Integer.parseInt(stringBuilder.toString());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public Map<String,Object> getUpdateInfo(){
+        try {
+            URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getUpdateInfo");
+            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.connect();
+            InputStream inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
+            BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
+            Scanner scanner=new Scanner(bufferedReader);
+            StringBuilder stringBuilder=new StringBuilder();
+            while(scanner.hasNextLine()){
+                stringBuilder.append(scanner.nextLine());
+            }
+            JSONObject jsonObject=JSONObject.fromObject(stringBuilder.toString());
+            String info=jsonObject.getString("info");
+            String link=jsonObject.getString("link");
+            Map<String,Object> updateInfo=new HashMap<>();
+            String[] strings=info.split("[;]");
+            updateInfo.put("info",strings);
+            updateInfo.put("link",link);
+            return updateInfo;
         }catch (Exception e){
             e.printStackTrace();
         }
