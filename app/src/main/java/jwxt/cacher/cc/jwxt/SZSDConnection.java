@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.SecureRandom;
@@ -41,12 +42,12 @@ import javax.net.ssl.TrustManagerFactory;
 public class SZSDConnection implements Serializable {
     private String jwxtCookie;
     private String szsdCookie;
+    private int timeOut;
     public SZSDConnection(){
-
+        timeOut=3000;
     }
     public boolean szsdLogin(String username,String password,Context context){
         try{
-
             String loginURL="https://cacher.cc:8443/SZSDServlet2/szsd?command=logToSzsd"
                     +"&username="+username
                     +"&password="+password;
@@ -67,15 +68,20 @@ public class SZSDConnection implements Serializable {
             sslContext.init(null,trustManagerFactory.getTrustManagers(),new SecureRandom());
 
             httpsURLConnection.setSSLSocketFactory(sslContext.getSocketFactory());
-            httpsURLConnection.setConnectTimeout(3000);
+            httpsURLConnection.setConnectTimeout(timeOut);
+            httpsURLConnection.setReadTimeout(timeOut);
             httpsURLConnection.connect();
 
             jwxtCookie=httpsURLConnection.getHeaderField("jwxtCookie");
             szsdCookie=httpsURLConnection.getHeaderField("szsdCookie");
-            httpsURLConnection.disconnect();
             if(jwxtCookie!=null&&szsdCookie!=null){
                 return true;
             }
+            if(httpsURLConnection!=null){
+                httpsURLConnection.disconnect();
+            }
+        }catch (UnknownHostException e){
+            System.out.println("域名未解析，未联网？");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -88,11 +94,18 @@ public class SZSDConnection implements Serializable {
                     httpURLConnection=(HttpURLConnection)url.openConnection();
             httpURLConnection.setRequestProperty("szsdCookie",szsdCookie);
             httpURLConnection.setDoInput(true);
+            httpURLConnection.setConnectTimeout(timeOut);
+            httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.connect();
             ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
             Map<String,String> a=(Map<String,String>)inputStream.readObject();
-            inputStream.close();
-            httpURLConnection.disconnect();
+
+            if(inputStream!=null){
+                inputStream.close();
+            }
+            if(httpURLConnection!=null){
+                httpURLConnection.disconnect();
+            }
             return a;
         }catch (Exception e){
             e.printStackTrace();
@@ -105,12 +118,18 @@ public class SZSDConnection implements Serializable {
             HttpURLConnection
                     httpURLConnection=(HttpURLConnection)url.openConnection();
             httpURLConnection.setRequestProperty("szsdCookie",szsdCookie);
+            httpURLConnection.setConnectTimeout(timeOut);
+            httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
             ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
             Map<String,String> a=(Map<String,String>)inputStream.readObject();
-            inputStream.close();
-            httpURLConnection.disconnect();
+            if(inputStream!=null){
+                inputStream.close();
+            }
+            if(httpURLConnection!=null){
+                httpURLConnection.disconnect();
+            }
             return a;
         }catch (Exception e){
             e.printStackTrace();
@@ -129,12 +148,18 @@ public class SZSDConnection implements Serializable {
             httpURLConnection.setDoInput(true);
             httpURLConnection.setRequestProperty("jwxtCookie",jwxtCookie);
             httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.setConnectTimeout(timeOut);
+            httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.connect();
             ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
             String jsonStr=(String) inputStream.readObject();
             courseList=getCourseList(jsonStr);
-            inputStream.close();
-            httpURLConnection.disconnect();
+            if(inputStream!=null){
+                inputStream.close();
+            }
+            if(httpURLConnection!=null){
+                httpURLConnection.disconnect();
+            }
             return courseList;
         }catch (Exception e){
             e.printStackTrace();
@@ -150,12 +175,18 @@ public class SZSDConnection implements Serializable {
             HttpURLConnection
                     httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("jwxtCookie",jwxtCookie);
+            httpURLConnection.setConnectTimeout(timeOut);
+            httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
             ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
             data=(List<HashMap<String, String>>)inputStream.readObject();
-            inputStream.close();
-            httpURLConnection.disconnect();
+            if(inputStream!=null){
+                inputStream.close();
+            }
+            if(httpURLConnection!=null){
+                httpURLConnection.disconnect();
+            }
             return data;
         }catch (Exception e){
             e.printStackTrace();
@@ -192,11 +223,18 @@ public class SZSDConnection implements Serializable {
         try{
             URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getCurrentClassRoom");
             HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+            httpURLConnection.setConnectTimeout(timeOut);
+            httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
             ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
             Map<String,String> classRoomMap=(Map<String,String>)inputStream.readObject();
-            inputStream.close();
+            if(inputStream!=null){
+                inputStream.close();
+            }
+            if(httpURLConnection!=null){
+                httpURLConnection.disconnect();
+            }
             return classRoomMap;
         }catch (Exception e){
             e.printStackTrace();
@@ -207,6 +245,8 @@ public class SZSDConnection implements Serializable {
         try{
             URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=checkUpdate");
             HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+            httpURLConnection.setConnectTimeout(timeOut);
+            httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
             InputStream inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
@@ -215,6 +255,12 @@ public class SZSDConnection implements Serializable {
             StringBuilder stringBuilder=new StringBuilder();
             while(scanner.hasNextLine()){
                 stringBuilder.append(scanner.nextLine());
+            }
+            if(inputStream!=null){
+                inputStream.close();
+            }
+            if(httpURLConnection!=null){
+                httpURLConnection.disconnect();
             }
             return Integer.parseInt(stringBuilder.toString());
         }catch (Exception e){
@@ -226,6 +272,8 @@ public class SZSDConnection implements Serializable {
         try {
             URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getUpdateInfo");
             HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+            httpURLConnection.setConnectTimeout(timeOut);
+            httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
             InputStream inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
@@ -242,6 +290,12 @@ public class SZSDConnection implements Serializable {
             String[] strings=info.split("[;]");
             updateInfo.put("info",strings);
             updateInfo.put("link",link);
+            if(inputStream!=null){
+                inputStream.close();
+            }
+            if(httpURLConnection!=null){
+                httpURLConnection.disconnect();
+            }
             return updateInfo;
         }catch (Exception e){
             e.printStackTrace();

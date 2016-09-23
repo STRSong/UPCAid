@@ -1,5 +1,6 @@
 package jwxt.cacher.cc.jwxt;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -63,14 +64,22 @@ public class MainActivity extends AppCompatActivity {
     private Handler handlerInfo;
     private Handler handlerCourse;
     private Handler handlerClassRoom;
+    private Handler handlerProgressDialog;
+    private ProgressDialog progressDialog;
+    private Context context;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context=this;
 
         textViewLib=(TextView)findViewById(R.id.tv_main_lib);
         textViewCard=(TextView)findViewById(R.id.tv_main_card);
         textViewName=(TextView)findViewById(R.id.tv_main_name);
+
+        progressDialog=new ProgressDialog(context);
+        progressDialog.setMessage("正在加载，请稍后...");
+        progressDialog.setCancelable(false);
 
         szsdConnection=(SZSDConnection)getIntent().getSerializableExtra("connection");
         String name=(String)getIntent().getSerializableExtra("name");
@@ -83,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void onCoursesClick(View view){
+        progressDialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -100,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void onClassRoomClick(View view){
+        progressDialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -110,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
+    }
+    public void onLibClick(View view){
 
     }
     private void initHandler(){
@@ -128,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 ArrayList<Course> courseList=(ArrayList<Course>)msg.obj;
+
+                progressDialog.cancel();
+
                 Intent intent=new Intent(MainActivity.this,CourseActivity.class);
                 intent.putExtra("connection",szsdConnection);
                 intent.putExtra("course",courseList);
@@ -139,10 +155,19 @@ public class MainActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 HashMap<String,String> classMap=(HashMap<String,String>)msg.obj;
+
+                progressDialog.cancel();
+
                 Intent intent=new Intent(MainActivity.this,ClassRoomActivity.class);
                 intent.putExtra("connection",szsdConnection);
                 intent.putExtra("classRoomMap",classMap);
                 startActivity(intent);
+            }
+        };
+        handlerProgressDialog=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
             }
         };
     }
