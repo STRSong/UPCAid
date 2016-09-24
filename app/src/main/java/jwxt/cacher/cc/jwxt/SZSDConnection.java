@@ -44,7 +44,7 @@ public class SZSDConnection implements Serializable {
     private String szsdCookie;
     private int timeOut;
     public SZSDConnection(){
-        timeOut=3000;
+        timeOut=10000;
     }
     public boolean szsdLogin(String username,String password,Context context){
         try{
@@ -176,8 +176,8 @@ public class SZSDConnection implements Serializable {
             HttpURLConnection
                     httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("jwxtCookie",jwxtCookie);
-            httpURLConnection.setConnectTimeout(timeOut);
-            httpURLConnection.setReadTimeout(timeOut);
+            //httpURLConnection.setConnectTimeout(timeOut);
+            //httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
             ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
