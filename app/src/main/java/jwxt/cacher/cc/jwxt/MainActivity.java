@@ -156,11 +156,26 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<Course> courseList=(ArrayList<Course>)msg.obj;
 
                 progressDialog.cancel();
+                if(courseList.size()<1){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("");
+                    builder.setMessage("评教未完成，无法获取课表。");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                Intent intent=new Intent(MainActivity.this,CourseActivity.class);
-                intent.putExtra("connection",szsdConnection);
-                intent.putExtra("course",courseList);
-                startActivity(intent);
+                        }
+                    });
+
+                    builder.create().show();
+                }else{
+                    Intent intent=new Intent(MainActivity.this,CourseActivity.class);
+                    intent.putExtra("connection",szsdConnection);
+                    intent.putExtra("course",courseList);
+                    startActivity(intent);
+                }
+
             }
         };
         handlerClassRoom=new Handler(){

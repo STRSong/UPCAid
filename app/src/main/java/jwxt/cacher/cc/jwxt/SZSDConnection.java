@@ -148,8 +148,8 @@ public class SZSDConnection implements Serializable {
             httpURLConnection.setDoInput(true);
             httpURLConnection.setRequestProperty("jwxtCookie",jwxtCookie);
             httpURLConnection.setRequestMethod("GET");
-            //httpURLConnection.setConnectTimeout(timeOut);
-            //httpURLConnection.setReadTimeout(timeOut);
+            httpURLConnection.setConnectTimeout(timeOut);
+            httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.connect();
             System.out.println(httpURLConnection.getContentLength());
             ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
@@ -176,8 +176,8 @@ public class SZSDConnection implements Serializable {
             HttpURLConnection
                     httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("jwxtCookie",jwxtCookie);
-            //httpURLConnection.setConnectTimeout(timeOut);
-            //httpURLConnection.setReadTimeout(timeOut);
+            httpURLConnection.setConnectTimeout(timeOut);
+            httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
             ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
