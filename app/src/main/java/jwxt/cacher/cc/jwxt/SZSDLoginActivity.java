@@ -1,5 +1,6 @@
 package jwxt.cacher.cc.jwxt;
 
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;

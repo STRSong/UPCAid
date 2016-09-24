@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.MatrixCursor;
@@ -21,6 +22,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ExpandedMenuView;
 import android.support.v7.widget.ButtonBarLayout;
@@ -140,13 +142,23 @@ public class ScoreActivity extends AppCompatActivity {
                                 msg1.obj=progressDialog;
                                 handlerProgressbar.sendMessage(msg1);
                                 List<HashMap<String,String>> data=connection.getScore(kksj);
-                                SimpleAdapter adapter=new SimpleAdapter(context,data,R.layout.score_item,new String[]{
-                                        "kksj","kcmc","zcj","xf"},new int[]{R.id.kksj,R.id.kcmc,R.id.zjc,R.id.xf});
+                                if(data.size()<1){
+                                    //评教未完成不能查成绩
+                                    Message msg=handlerListView.obtainMessage();
+                                    msg.arg1=1;
+                                    handlerListView.sendMessage(msg);
 
-                                Message msg=handlerListView.obtainMessage();
-                                msg.obj=adapter;
-                                handlerListView.sendMessage(msg);
 
+                                }else{
+                                    SimpleAdapter adapter=new SimpleAdapter(context,data,R.layout.score_item,new String[]{
+                                            "kksj","kcmc","zcj","xf"},new int[]{R.id.kksj,R.id.kcmc,R.id.zjc,R.id.xf});
+
+                                    Message msg=handlerListView.obtainMessage();
+                                    msg.obj=adapter;
+                                    handlerListView.sendMessage(msg);
+
+
+                                }
                                 msg1=handlerProgressbar.obtainMessage();
                                 msg1.arg1=2;
                                 msg1.obj=progressDialog;
@@ -225,16 +237,24 @@ public class ScoreActivity extends AppCompatActivity {
                         msg1.obj=progressDialog;
                         handlerProgressbar.sendMessage(msg1);
                         List<HashMap<String,String>> data=connection.getScore(kksj);
-                        SimpleAdapter adapter=new SimpleAdapter(context,data,R.layout.score_item,new String[]{
-                                "kksj","kcmc","zcj","xf"},new int[]{R.id.kksj,R.id.kcmc,R.id.zjc,R.id.xf});
+                        if(data.size()<1){
+                            //评教未完成不能查成绩
+                            Message msg=handlerListView.obtainMessage();
+                            msg.arg1=1;
+                            handlerListView.sendMessage(msg);
+                        }else {
+                            SimpleAdapter adapter = new SimpleAdapter(context, data, R.layout.score_item, new String[]{
+                                    "kksj", "kcmc", "zcj", "xf"}, new int[]{R.id.kksj, R.id.kcmc, R.id.zjc, R.id.xf});
 
-                        Message msg=handlerListView.obtainMessage();
-                        msg.obj=adapter;
-                        handlerListView.sendMessage(msg);
+                            Message msg = handlerListView.obtainMessage();
+                            msg.obj = adapter;
+                            handlerListView.sendMessage(msg);
 
-                        msg1=handlerProgressbar.obtainMessage();
-                        msg1.arg1=2;
-                        msg1.obj=progressDialog;
+
+                        }
+                        msg1 = handlerProgressbar.obtainMessage();
+                        msg1.arg1 = 2;
+                        msg1.obj = progressDialog;
                         handlerProgressbar.sendMessage(msg1);
                     }
                 }).start();
@@ -251,12 +271,28 @@ public class ScoreActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                SimpleAdapter adapter=(SimpleAdapter)msg.obj;
-                listView.setAdapter(adapter);
-                mEdit.setFocusable(false);
-                mEdit.setFocusableInTouchMode(true);
-                InputMethodManager imm=(InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(listView.getWindowToken(),0);
+                //评教未完成
+                if(msg.arg1==1){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("");
+                    builder.setMessage("评教未完成，无法获取成绩。");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    builder.create().show();
+                }else{
+                    SimpleAdapter adapter=(SimpleAdapter)msg.obj;
+                    listView.setAdapter(adapter);
+                    mEdit.setFocusable(false);
+                    mEdit.setFocusableInTouchMode(true);
+                    InputMethodManager imm=(InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(listView.getWindowToken(),0);
+                }
+
             }
         };
         handlerProgressbar=new Handler(){
