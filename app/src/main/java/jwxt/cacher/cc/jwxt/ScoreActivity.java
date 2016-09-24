@@ -74,6 +74,7 @@ public class ScoreActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private AutoCompleteTextView mEdit;
 
+    private String updategittest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
