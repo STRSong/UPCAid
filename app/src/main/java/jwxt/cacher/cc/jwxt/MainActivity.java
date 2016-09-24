@@ -2,6 +2,7 @@ package jwxt.cacher.cc.jwxt;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,7 @@ import android.os.Message;
 import android.provider.DocumentsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.graphics.BitmapCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ButtonBarLayout;
@@ -123,7 +125,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void onLibClick(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("");
+        builder.setMessage("开发中...");
+        builder.setCancelable(false);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+
+        builder.create().show();
     }
     private void initHandler(){
         handlerInfo=new Handler(){

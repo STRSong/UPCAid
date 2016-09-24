@@ -175,8 +175,8 @@ public class SZSDConnection implements Serializable {
             HttpURLConnection
                     httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("jwxtCookie",jwxtCookie);
-            httpURLConnection.setConnectTimeout(timeOut);
-            httpURLConnection.setReadTimeout(timeOut);
+            //httpURLConnection.setConnectTimeout(timeOut);
+            //httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
             ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
@@ -287,7 +287,12 @@ public class SZSDConnection implements Serializable {
             String info=jsonObject.getString("info");
             String link=jsonObject.getString("link");
             Map<String,Object> updateInfo=new HashMap<>();
-            String[] strings=info.split("[;]");
+            String[] strings;
+            if(info.contains(";")){
+                strings=info.split("[;]");
+            }else{
+                strings=new String[]{info};
+            }
             updateInfo.put("info",strings);
             updateInfo.put("link",link);
             if(inputStream!=null){

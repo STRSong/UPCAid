@@ -223,7 +223,6 @@ public class SZSDLoginActivity extends AppCompatActivity {
         };
 
     }
-
     private void showUpdateDialog(final Map<String, Object> updateInfo) {
         String[] info = (String[]) updateInfo.get("info");
         final String link = (String) updateInfo.get("link");
@@ -231,10 +230,16 @@ public class SZSDLoginActivity extends AppCompatActivity {
             System.out.println(str);
         }
         System.out.println(link);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("有更新啦~");
-        builder.setMessage(info[0] + "\n" + info[1]);
+        StringBuilder message=new StringBuilder();
+        for(int i=0;i<info.length;i++){
+            message.append(info[i]);
+            if(i<info.length-1){
+                message.append("\n");
+            }
+        }
+        builder.setMessage(message.toString());
         builder.setCancelable(false);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
