@@ -56,4 +56,5 @@ public class WeekChoiceAdapter extends BaseAdapter {
         textView.setText(weekList.get(position));
         return linearLayout;
     }
+
 }
