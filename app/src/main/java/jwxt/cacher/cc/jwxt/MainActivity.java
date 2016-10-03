@@ -57,6 +57,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import jwxt.cacher.cc.jwxt.util.ObjectSaveUtils;
+
 public class MainActivity extends AppCompatActivity {
     private TextView textViewLib;
     private TextView textViewCard;
@@ -99,7 +101,12 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<Course> courseList=szsdConnection.getCourseInfo("2016-2017-1","");
+                ObjectSaveUtils objectSaveUtils=new ObjectSaveUtils(context,"courseInfo");
+                List<Course> courseList=objectSaveUtils.getObject("courseList");
+                if(courseList==null){
+                    courseList=szsdConnection.getCourseInfo("2016-2017-1","");
+                    objectSaveUtils.setObject("courseList",courseList);
+                }
                 Message msg=handlerCourse.obtainMessage();
                 msg.obj=courseList;
                 handlerCourse.sendMessage(msg);

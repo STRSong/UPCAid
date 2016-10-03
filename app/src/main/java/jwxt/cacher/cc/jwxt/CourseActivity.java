@@ -1,5 +1,6 @@
 package jwxt.cacher.cc.jwxt;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,8 +27,18 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+
+import org.json.JSONObject;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,6 +46,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import jwxt.cacher.cc.jwxt.picker.MyOptionPicker;
+import jwxt.cacher.cc.jwxt.picker.OptionPicker;
+import jwxt.cacher.cc.jwxt.util.ObjectSaveUtils;
 
 
 /**
@@ -71,21 +87,23 @@ public class CourseActivity extends AppCompatActivity {
     private ListView listViewWeek;
     private WeekChoiceAdapter adapter;
     private Calendar calendar;
-
+    private Activity activity;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_course);
         context = this;
-
+        activity=this;
         toolbar = (Toolbar) findViewById(R.id.toolbar_course);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(getNavigationOnClickListener());
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
         textViewMonth = (TextView) findViewById(R.id.course_month);
         textViewSun = (TextView) findViewById(R.id.course_sun);
         textViewMon = (TextView) findViewById(R.id.course_mon);
@@ -132,8 +150,25 @@ public class CourseActivity extends AppCompatActivity {
         /*设置当前周*/
         currentWeek = sharedPreferences.getInt("currentWeek", 0);
         if (currentWeek == 0) {
-            currentWeek = 1;
-            sharedPreferences.edit().putInt("currentWeek", 1).commit();
+            ArrayList<String> data=new ArrayList<>();
+            for(int i=1;i<=25;i++){
+                data.add(String.valueOf(i));
+            }
+            MyOptionPicker picker=new MyOptionPicker(this,data);
+            picker.setOffset(2);
+            picker.setGravity(Gravity.CENTER);
+            picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
+                @Override
+                public void onOptionPicked(int position, String option) {
+                    currentWeek=Integer.parseInt(option);
+                    sharedPreferences.edit().putInt("currentWeek", currentWeek).commit();
+                    textViewWeek.setText("第" + currentWeek + "周");
+                    Message msg = courseHandler.obtainMessage();
+                    msg.arg1 = currentWeek;
+                    courseHandler.sendMessage(msg);
+                }
+            });
+            picker.show();
         }
         if (calendar.get(Calendar.WEEK_OF_YEAR) > currentWeekOfYear) {
             currentWeek += 1;
@@ -151,7 +186,6 @@ public class CourseActivity extends AppCompatActivity {
 //        connection = (JWXTConnection) getIntent().getSerializableExtra("connection");
         szsdConnection = (SZSDConnection) getIntent().getSerializableExtra("connection");
         courseList = (ArrayList<Course>) getIntent().getSerializableExtra("course");
-        System.out.println(courseList);
         backDrawable = new int[9];
         backDrawable[0] = R.drawable.course_info_blue;
         backDrawable[1] = R.drawable.course_info_green;
@@ -227,6 +261,14 @@ public class CourseActivity extends AppCompatActivity {
 
     }
 
+    private View.OnClickListener getNavigationOnClickListener(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CourseActivity.this.finish();
+            }
+        };
+    }
 
     private void initHandler() {
         courseHandler = new Handler() {
@@ -308,6 +350,7 @@ public class CourseActivity extends AppCompatActivity {
                 /*添加当前周String*/
                 int cWeek = sharedPreferences.getInt("currentWeek", 0);
                 int lWeek = sharedPreferences.getInt("lastCurrentWeek", 0);
+                System.out.println("cWeek:"+cWeek);
                 if (cWeek != 0) {
                     adapter.weekList.set(cWeek - 1, "第" + cWeek + "周" + "(本周)");
                 }
@@ -382,24 +425,76 @@ public class CourseActivity extends AppCompatActivity {
         weekSetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String week = textViewWeek.getText().toString();
-                System.out.println(week);
-                week = week.substring(1, week.indexOf("周"));
-                int cWeek = 0;
-                try {
-                    cWeek = Integer.parseInt(week);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                int lWeek = sharedPreferences.getInt("currentWeek", 0);
-                //是否已是当前周
-                if(lWeek!=cWeek){
-                    sharedPreferences.edit().putInt("currentWeek", cWeek).commit();
-                    sharedPreferences.edit().putInt("lastCurrentWeek", lWeek).commit();
-                }
                 if (weekChoicePopup != null) {
                     weekChoicePopup.dismiss();
                 }
+                ArrayList<String> data=new ArrayList<>();
+                for(int i=1;i<=25;i++){
+                    data.add(String.valueOf(i));
+                }
+                MyOptionPicker picker=new MyOptionPicker(activity,data);
+                picker.setOffset(2);
+                picker.setCancelable(true);
+                picker.setCanceledOnTouchOutside(true);
+                picker.setGravity(Gravity.CENTER);
+                picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
+                    @Override
+                    public void onOptionPicked(int position, String option) {
+                        currentWeek=Integer.parseInt(option);
+                        textViewWeek.setText("第" + currentWeek + "周");
+                        Message msg = courseHandler.obtainMessage();
+                        msg.arg1 = currentWeek;
+                        courseHandler.sendMessage(msg);
+
+                        int cWeek=currentWeek;
+                        int lWeek = sharedPreferences.getInt("currentWeek", 0);
+                        if(lWeek!=cWeek){
+                            sharedPreferences.edit().putInt("currentWeek", cWeek).commit();
+                            sharedPreferences.edit().putInt("lastCurrentWeek", lWeek).commit();
+                        }
+                        calendar = Calendar.getInstance();
+                        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+                        int month = calendar.get(Calendar.MONTH) + 1;
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int week = calendar.get(Calendar.DAY_OF_WEEK);
+                        calendar.add(Calendar.DAY_OF_WEEK, -week + 1);
+                        textViewSun.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                        textViewMon.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                        textViewTue.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                        textViewWed.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                        textViewThu.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                        textViewFri.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                        textViewSat.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+
+                        textViewMonth.setText(String.valueOf(month) + "月");
+                    }
+                });
+                picker.show();
+
+//                String week = textViewWeek.getText().toString();
+//                System.out.println(week);
+//                week = week.substring(1, week.indexOf("周"));
+//                int cWeek = 0;
+//                try {
+//                    cWeek = Integer.parseInt(week);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                int lWeek = sharedPreferences.getInt("currentWeek", 0);
+//                //是否已是当前周
+//                if(lWeek!=cWeek){
+//                    sharedPreferences.edit().putInt("currentWeek", cWeek).commit();
+//                    sharedPreferences.edit().putInt("lastCurrentWeek", lWeek).commit();
+//                }
+//                if (weekChoicePopup != null) {
+//                    weekChoicePopup.dismiss();
+//                }
 
             }
         });

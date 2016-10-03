@@ -23,6 +23,6 @@
         android:background="@drawable/ic_week_set_button"
         android:textColor="#64ce64"
         style="?android:attr/borderlessButtonStyle"
-        android:text="设置为当前周"
+        android:text="设置当前周"
         android:textSize="15dp"/>
 </LinearLayout>

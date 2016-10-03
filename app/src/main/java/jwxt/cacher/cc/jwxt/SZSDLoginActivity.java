@@ -1,6 +1,5 @@
 package jwxt.cacher.cc.jwxt;
 
-import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,32 +12,31 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.ExpandedMenuView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.EventListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.Exchanger;
+
+import jwxt.cacher.cc.jwxt.picker.MyOptionPicker;
+import jwxt.cacher.cc.jwxt.picker.OptionPicker;
+
 
 /**
  * Created by xhaiben on 2016/8/28.
@@ -116,6 +114,10 @@ public class SZSDLoginActivity extends AppCompatActivity {
 
             }
         }).start();
+
+
+
+
     }
 
     public void onSZSDLoginClick(View view) {

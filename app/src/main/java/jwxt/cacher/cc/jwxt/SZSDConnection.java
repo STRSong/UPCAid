@@ -151,7 +151,6 @@ public class SZSDConnection implements Serializable {
             httpURLConnection.setConnectTimeout(timeOut);
             httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.connect();
-            System.out.println(httpURLConnection.getContentLength());
             ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
             String jsonStr=(String) inputStream.readObject();
             courseList=getCourseList(jsonStr);
