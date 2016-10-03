@@ -1,6 +1,7 @@
 package jwxt.cacher.cc.jwxt;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -17,6 +18,8 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,17 +31,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
-import net.sf.json.JSON;
-import net.sf.json.JSONArray;
-
-import org.json.JSONObject;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,6 +80,7 @@ public class CourseActivity extends AppCompatActivity {
     private WeekChoiceAdapter adapter;
     private Calendar calendar;
     private Activity activity;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +91,7 @@ public class CourseActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar_course);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(getNavigationOnClickListener());
+        toolbar.setOnMenuItemClickListener(getMenuItemClickListener());
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
@@ -247,6 +241,10 @@ public class CourseActivity extends AppCompatActivity {
             }
         }
         /******************/
+        progressDialog=new ProgressDialog(context);
+        progressDialog.setMessage("正在加载，请稍后...");
+        progressDialog.setCancelable(false);
+
         initHandler();
         new Thread(new Runnable() {
             @Override
@@ -259,6 +257,42 @@ public class CourseActivity extends AppCompatActivity {
 
         initPopup();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.course_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+    private Toolbar.OnMenuItemClickListener getMenuItemClickListener(){
+        return new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.update_course:
+                        progressDialog.show();
+//                        Toast.makeText(context,"AA",Toast.LENGTH_SHORT).show();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ObjectSaveUtils objectSaveUtils=new ObjectSaveUtils(context,"courseInfo");
+                                courseList=szsdConnection.getCourseInfo("2016-2017-1","");
+                                objectSaveUtils.setObject("courseList",courseList);
+                                Message msg=courseHandler.obtainMessage();
+                                msg.arg1=currentWeek;
+                                courseHandler.sendMessage(msg);
+                            }
+                        }).start();
+                        break;
+                }
+                return false;
+            }
+        };
     }
 
     private View.OnClickListener getNavigationOnClickListener(){
@@ -276,7 +310,9 @@ public class CourseActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
 //                List<Course> courses = (List<Course>) msg.obj;
-
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
                 if (currentCourses.size() != 0) {
                     for (int i = 0; i < currentCourses.size(); i++) {
                         courseRelative.removeView(currentCourses.get(i));
@@ -330,6 +366,7 @@ public class CourseActivity extends AppCompatActivity {
             }
 
         };
+
     }
 
     public void on_ChoiceWeek_Click(View view) {
@@ -476,26 +513,6 @@ public class CourseActivity extends AppCompatActivity {
                     }
                 });
                 picker.show();
-
-//                String week = textViewWeek.getText().toString();
-//                System.out.println(week);
-//                week = week.substring(1, week.indexOf("周"));
-//                int cWeek = 0;
-//                try {
-//                    cWeek = Integer.parseInt(week);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                int lWeek = sharedPreferences.getInt("currentWeek", 0);
-//                //是否已是当前周
-//                if(lWeek!=cWeek){
-//                    sharedPreferences.edit().putInt("currentWeek", cWeek).commit();
-//                    sharedPreferences.edit().putInt("lastCurrentWeek", lWeek).commit();
-//                }
-//                if (weekChoicePopup != null) {
-//                    weekChoicePopup.dismiss();
-//                }
-
             }
         });
         weekChoicePopup = new PopupWindow(weekChoice);

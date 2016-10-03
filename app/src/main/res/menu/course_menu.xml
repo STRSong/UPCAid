@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".CourseActivity">
+    <!--<item-->
+    <!--android:id="@+id/search_score_1"-->
+    <!--android:title="搜索"-->
+    <!--app:showAsAction="ifRoom"-->
+    <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
+    <!--&gt;</item>-->
+    <item
+        android:id="@+id/update_course"
+        android:orderInCategory="80"
+        android:title="刷新课表"
+        android:icon="@drawable/search_16px"
+        app:showAsAction="collapseActionView">
+    </item>
+</menu>

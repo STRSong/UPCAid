@@ -31,15 +31,7 @@
                 android:textSize="12dp"
                 android:onClick="on_ChoiceWeek_Click"
                 android:textColor="@color/courseNameColor"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp"
-                android:text="设置"
-                android:textSize="18dp"
-                android:textColor="@color/courseNameColor"
-                />
+
     </android.support.v7.widget.Toolbar>
     <include layout="@layout/view_course">
 
