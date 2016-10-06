@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 ObjectSaveUtils objectSaveUtils=new ObjectSaveUtils(context,"courseInfo");
                 List<Course> courseList=objectSaveUtils.getObject("courseList");
-                if(courseList==null){
+                if(courseList==null||courseList.get(0).getCourseName().equals("评教未完成")){
                     courseList=szsdConnection.getCourseInfo("2016-2017-1","");
                     objectSaveUtils.setObject("courseList",courseList);
                 }
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<Course> courseList=(ArrayList<Course>)msg.obj;
 
                 progressDialog.cancel();
-                if(courseList.size()<1){
+                if(courseList.size()==1&&courseList.get(0).getCourseName().equals("评教未完成")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("");
                     builder.setMessage("评教未完成，无法获取课表。");
