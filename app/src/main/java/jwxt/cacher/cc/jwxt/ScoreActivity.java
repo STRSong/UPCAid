@@ -66,15 +66,12 @@ import javax.xml.datatype.Duration;
 public class ScoreActivity extends AppCompatActivity {
     private Context context = null;
     private SearchView searchView=null;
-//    private JWXTConnection connection;
     private SZSDConnection connection;
     private ListView listView;
     private Handler handlerListView;
     private Handler handlerProgressbar;
     private ProgressDialog progressDialog;
     private AutoCompleteTextView mEdit;
-
-    private String updategittest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
