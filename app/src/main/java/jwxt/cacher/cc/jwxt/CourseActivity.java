@@ -177,7 +177,6 @@ public class CourseActivity extends AppCompatActivity {
         /**************/
 
 
-//        connection = (JWXTConnection) getIntent().getSerializableExtra("connection");
         szsdConnection = (SZSDConnection) getIntent().getSerializableExtra("connection");
         courseList = (ArrayList<Course>) getIntent().getSerializableExtra("course");
         backDrawable = new int[9];
