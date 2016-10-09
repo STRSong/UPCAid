@@ -3,7 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@android:color/white">
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toolbar_main"
@@ -26,7 +27,7 @@
         android:layout_height="100dp"
         android:layout_marginTop="30dp"
         android:layout_gravity="center"
-        android:src="@mipmap/upclogo1"
+        android:src="@mipmap/upclogo3"
         android:id="@+id/imageView"/>
 
     <EditText
@@ -82,7 +83,7 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:textColor="@color/courseNameColor"
-        android:background="@drawable/logininbutton"
+        android:background="@drawable/ic_szsd_login_button"
         android:onClick="onSZSDLoginClick"
         android:textSize="20dp"
         android:text="确认"
