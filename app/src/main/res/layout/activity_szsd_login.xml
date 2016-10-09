@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+              android:background="@drawable/picture_logininbackground"
     android:weightSum="1">
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,12 +20,15 @@
             android:textSize="20dp"
             android:textColor="@color/courseNameColor"/>
     </android.support.v7.widget.Toolbar>
+
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="30dp"
         android:layout_gravity="center"
-        android:src="@mipmap/upclogo1" />
+        android:src="@mipmap/upclogo1"
+        android:id="@+id/imageView"/>
+
     <EditText
         android:id="@+id/tv_szsd_username"
         android:layout_width="match_parent"
@@ -36,6 +40,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp" />
+
     <EditText
         android:id="@+id/tv_szsd_password"
         android:layout_width="match_parent"
@@ -47,7 +52,9 @@
         android:hint="数字石大密码"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp" />
+        android:layout_marginRight="40dp"
+        android:layout_weight="0.01"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -70,13 +77,14 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:textColor="@color/courseNameColor"
-        android:background="@drawable/ic_szsd_login_button"
+        android:background="@drawable/logininbutton"
         android:onClick="onSZSDLoginClick"
         android:textSize="20dp"
-        android:text="确认"/>
+        android:text="确认"
+        android:id="@+id/button"/>
 </LinearLayout>

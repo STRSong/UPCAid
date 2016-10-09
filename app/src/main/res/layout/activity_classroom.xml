@@ -27,12 +27,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="@color/greybackground"
+                    />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="南教"
+                android:textColor="@color/colorAccent"
                 android:textSize="30dp"
                 />
              <TextView
@@ -46,13 +56,22 @@
                  android:text=""/>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="8dp"
+                android:background="@color/greybackground"
+                />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="南堂"
+                android:textColor="@color/colorAccent"
                 android:textSize="30dp"
                 />
-
             <TextView
                 android:id="@+id/tv_classroom_nt"
                 android:layout_width="match_parent"
@@ -64,12 +83,24 @@
                 android:text=""/>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="8dp"
+                android:background="@color/greybackground"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="东环"
+                android:textColor="@color/colorAccent"
                 android:textSize="30dp"
-                />
+                android:id="@+id/textView3"/>
+
             <TextView
                 android:id="@+id/tv_classroom_dh"
                 android:layout_width="match_parent"
@@ -81,10 +112,20 @@
                 android:text=""/>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="8dp"
+                android:background="@color/greybackground"
+                />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="西环"
+                android:textColor="@color/colorAccent"
                 android:textSize="30dp"
                 />
             <TextView
@@ -98,10 +139,20 @@
                 android:text=""/>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="8dp"
+                android:background="@color/greybackground"
+                />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="东廊"
+                android:textColor="@color/colorAccent"
                 android:textSize="30dp"
                 />
             <TextView
@@ -115,10 +166,20 @@
                 android:text=""/>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="8dp"
+                android:background="@color/greybackground"
+                />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="西廊"
+                android:textColor="@color/colorAccent"
                 android:textSize="30dp"
                 />
             <TextView
@@ -130,7 +191,12 @@
                 android:textSize="20dp"
                 android:gravity="center"
                 android:text=""/>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/greybackground"
+                />
+        </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

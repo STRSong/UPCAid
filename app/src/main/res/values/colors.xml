@@ -5,5 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="windowBackGround">#2C77B8</color>
     <color name="courseWeek">#2f97d6</color>
+    <color name="Lightblue">#053a51</color>
+    <color name="Black">#000000</color>
     <color name="courseNameColor">#ffffff</color>
+    <color name="greybackground">#e4e4e4</color>
 </resources>

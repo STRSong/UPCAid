@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handlerProgressDialog;
     private ProgressDialog progressDialog;
     private Context context;
-    private String test;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
