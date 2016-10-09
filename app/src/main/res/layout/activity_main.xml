@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:weightSum="1"
               android:orientation="vertical">
@@ -16,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="掌上石大"
+            android:text="UPCAid"
             android:textSize="20dp"
             android:textColor="@color/courseNameColor"/>
     </android.support.v7.widget.Toolbar>
@@ -28,16 +29,17 @@
             android:layout_height="match_parent"
             android:background="@color/greybackground"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.8"
+            android:layout_height="142dp"
             android:background="@drawable/self_background"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="0.07">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -145,21 +147,7 @@
             </LinearLayout>
 
         </LinearLayout>
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="8dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/greybackground"/>
-    </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.2"
-            android:background="@drawable/upcscenery">
 
-        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="8dp">
@@ -170,9 +158,9 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.9"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -302,8 +290,25 @@
                 android:layout_height="match_parent"
                 android:background="@color/greybackground"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/greybackground"/>
+        </LinearLayout>
     </LinearLayout>
-    </LinearLayout>
+</LinearLayout>
 
         <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->

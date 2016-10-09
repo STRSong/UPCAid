@@ -40,7 +40,7 @@ public class WelcomeActivity extends Activity {
                public void run() {
                     //在子线程里停留三秒钟
                     try {
-                         Thread.sleep(3000);
+                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                          //把异常信息打印在控制台上
                          e.printStackTrace();
