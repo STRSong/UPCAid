@@ -2,63 +2,31 @@ package jwxt.cacher.cc.jwxt;
 
 import android.app.ProgressDialog;
 import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.ExpandedMenuView;
-import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.lang.reflect.Field;
-
-import java.lang.reflect.Method;
-import java.security.PrivilegedExceptionAction;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-
-import javax.xml.datatype.Duration;
 
 /**
  * Created by xhaiben on 2016/8/8.

@@ -4,58 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.DocumentsContract;
 import android.support.annotation.Nullable;
-import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ButtonBarLayout;
-import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.w3c.dom.Text;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import jwxt.cacher.cc.jwxt.util.ObjectSaveUtils;
 
@@ -65,10 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewName;
 
     private SZSDConnection szsdConnection;
-    private Handler handlerInfo;
     private Handler handlerCourse;
     private Handler handlerClassRoom;
-    private Handler handlerProgressDialog;
     private ProgressDialog progressDialog;
     private Context context;
 
@@ -147,16 +105,6 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
     private void initHandler(){
-        handlerInfo=new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                Map<String,String> info=(HashMap<String, String>)msg.obj;
-                textViewName.setText(info.get("name"));
-                textViewCard.setText(info.get("card"));
-                textViewLib.setText(info.get("lib"));
-            }
-        };
         handlerCourse=new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -200,11 +148,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         };
-        handlerProgressDialog=new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-            }
-        };
+
     }
 }

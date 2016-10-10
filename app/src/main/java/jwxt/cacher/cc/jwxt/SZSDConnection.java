@@ -1,25 +1,19 @@
 package jwxt.cacher.cc.jwxt;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Debug;
-import android.os.HandlerThread;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
-import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.security.Key;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;

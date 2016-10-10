@@ -15,11 +15,8 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,14 +26,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import jwxt.cacher.cc.jwxt.picker.MyOptionPicker;
-import jwxt.cacher.cc.jwxt.picker.OptionPicker;
-
 
 /**
  * Created by xhaiben on 2016/8/28.
