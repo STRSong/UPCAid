@@ -124,6 +124,16 @@ public class SZSDLoginActivity extends AppCompatActivity {
             sharedPreferences.edit().putString("ACCOUNT", "").commit();
             sharedPreferences.edit().putString("PASSWORD", "").commit();
         }
+
+        String lastUser=sharedPreferences.getString("lastUser","");
+        //当前用户与上一用户对比
+        if(lastUser.equals(username)){
+            sharedPreferences.edit().putBoolean("sameUser",true).commit();
+        }else{
+            sharedPreferences.edit().putString("lastUser",username).commit();
+            sharedPreferences.edit().putBoolean("sameUser",false).commit();
+        }
+
         new Thread(new Runnable() {
             @Override
             public void run() {
