@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.renderscript.ScriptGroup;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jwxt.cacher.cc.jwxt.info.BookInfo;
+import jwxt.cacher.cc.jwxt.info.Course;
 import jwxt.cacher.cc.jwxt.util.ObjectSaveUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,8 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private SZSDConnection szsdConnection;
     private Handler handlerCourse;
     private Handler handlerClassRoom;
+    private Handler handlerLibrary;
     private ProgressDialog progressDialog;
     private Context context;
+    private Bitmap checkBitmap;
 
     private SharedPreferences sharedPreferences;
     private boolean isSameUser;
@@ -100,18 +106,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void onLibClick(View view){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("");
-        builder.setMessage("开发中...");
-        builder.setCancelable(false);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        progressDialog.show();
+        new Thread(new Runnable() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-
+            public void run() {
+                ArrayList<BookInfo> bookInfoArrayList = szsdConnection.getBookList();
+                checkBitmap=szsdConnection.getLibCaptcha();
+                if(bookInfoArrayList==null){
+                    bookInfoArrayList=new ArrayList<BookInfo>();
+                }
+                Message msg=handlerLibrary.obtainMessage();
+                msg.obj=bookInfoArrayList;
+                handlerLibrary.sendMessage(msg);
             }
-        });
-
-        builder.create().show();
+        }).start();
     }
     private void initHandler(){
         handlerCourse=new Handler(){
@@ -157,6 +165,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         };
-
+        handlerLibrary=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                ArrayList<BookInfo> bookInfoArrayList=(ArrayList<BookInfo>)msg.obj;
+                progressDialog.cancel();
+                Intent intent=new Intent(MainActivity.this,LibraryActivity.class);
+                intent.putExtra("connection",szsdConnection);
+                intent.putExtra("bookInfoArrayList",bookInfoArrayList);
+                intent.putExtra("captcha",checkBitmap);
+                startActivity(intent);
+            }
+        };
     }
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:orientation="horizontal"
+    android:gravity="center">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:textSize="15dp"
+        android:text="默克尔传:德国总理安格拉·默克尔和她的权力世界:die kanzlerin und ihre welt"
+        android:gravity="center"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="15dp"
+        android:text="(德) 斯蒂凡·柯内琉斯著"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.2"
+        android:gravity="center"
+        android:textSize="15dp"
+        android:text="2016-11-04"
+        android:layout_marginLeft="5dp" />
+
+    <Button
+        android:layout_width="45dp"
+        android:layout_height="30dp"
+        android:textColor="@color/courseNameColor"
+        android:background="@drawable/ic_szsd_login_button"
+        android:text="续借"
+        android:layout_margin="5dp" />
+</LinearLayout>

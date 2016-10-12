@@ -190,6 +190,7 @@ public class SZSDLoginActivity extends AppCompatActivity {
                         intent.putExtra("card", info.get("card"));
                         intent.putExtra("lib", info.get("lib"));
                         startActivity(intent);
+                        SZSDLoginActivity.this.finish();
                         break;
                     case 3:
                         Toast.makeText(context, "用户名或密码不能为空", Toast.LENGTH_SHORT).show();

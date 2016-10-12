@@ -1,4 +1,4 @@
-package jwxt.cacher.cc.jwxt;
+package jwxt.cacher.cc.jwxt.info;
 
 import java.io.Serializable;
 import java.util.HashSet;

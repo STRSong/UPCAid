@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jwxt.cacher.cc.jwxt.info.Course;
 import jwxt.cacher.cc.jwxt.picker.MyOptionPicker;
 import jwxt.cacher.cc.jwxt.picker.OptionPicker;
 import jwxt.cacher.cc.jwxt.util.ObjectSaveUtils;
