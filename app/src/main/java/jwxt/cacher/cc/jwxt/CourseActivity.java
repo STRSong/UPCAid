@@ -132,6 +132,9 @@ public class CourseActivity extends AppCompatActivity {
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         textViewSat.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
 
+        //星期天是1，星期六是7
+        sharedPreferences.edit().putInt("currentDayOfWeek",week).commit();
+
         textViewMonth.setText(String.valueOf(month) + "月");
         currentWeekOfYear = sharedPreferences.getInt("currentWeekOfYear", 0);
         if (currentWeekOfYear == 0) {

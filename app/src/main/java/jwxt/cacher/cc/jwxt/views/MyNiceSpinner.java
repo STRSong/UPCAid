@@ -331,12 +331,8 @@ public class MyNiceSpinner extends TextView {
 
             int[] n = new int[2];
             this.getLocationOnScreen(n);
-//            popupWindow.showAsDropDown(centerView,
-//                    this.getLeft() - centerView.getLeft() + (screenWidth - windowWidth) / 2,
-//                    (screenHeight - windowHeight) / 2);
-//            System.out.println(screenHeight);
-//            System.out.println(windowHeight);
             popupWindow.showAsDropDown(centerView, n[0], n[1] - centerView.getHeight() - WelcomeActivity.statusBarHeight + this.getHeight() - 1);
+
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

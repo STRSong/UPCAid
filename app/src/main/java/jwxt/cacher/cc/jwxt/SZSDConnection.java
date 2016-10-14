@@ -251,6 +251,33 @@ public class SZSDConnection implements Serializable {
         return null;
     }
 
+    public Map<String,String> getClassRoom(String week,String day,String n){
+        try{
+            String classRoomUrl="http://120.27.117.34:4549/SZSDServlet2/szsd?command=getAvailableClassRoom"
+                    +"&week="+week
+                    +"&day="+day
+                    +"&n="+n;
+            URL url=new URL(classRoomUrl);
+            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+            httpURLConnection.setConnectTimeout(timeOut);
+            httpURLConnection.setReadTimeout(timeOut);
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.connect();
+            ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
+            Map<String,String> classRoomMap=(Map<String,String>)inputStream.readObject();
+            if(inputStream!=null){
+                inputStream.close();
+            }
+            if(httpURLConnection!=null){
+                httpURLConnection.disconnect();
+            }
+            return classRoomMap;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public int getVersionCode() {
         try {
             URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=checkUpdate");

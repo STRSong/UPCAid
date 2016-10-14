@@ -15,4 +15,8 @@
         <item name="android:windowEnterAnimation">@animator/popup_topin</item>
         <item name="android:windowExitAnimation">@animator/popup_topout</item>
     </style>
+    <style name="PopupAnimationClassRoomSearch" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@animator/popup_classroom_search_in</item>
+        <item name="android:windowExitAnimation">@animator/popup_classroom_search_out</item>
+    </style>
 </resources>

@@ -112,15 +112,17 @@
         </LinearLayout>
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/btn_renewBook"
-            android:layout_width="match_parent"
+            android:id="@+id/btn_classroom_current"
+            android:layout_width="0dp"
             android:layout_height="40dp"
-            android:text="确定"
+            android:layout_weight="1"
+            android:text="当前教室"
             android:background="@drawable/ic_week_set_button"
             android:textColor="@color/colorPrimary"
             android:layout_marginLeft="5dp"
@@ -129,6 +131,19 @@
             android:textSize="18dp"
             android:layout_marginBottom="5dp" />
 
+        <Button
+            android:id="@+id/btn_classroom_search"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="搜索"
+            android:background="@drawable/ic_week_set_button"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:textSize="18dp"
+            android:layout_marginBottom="5dp" />
     </LinearLayout>
 
 </LinearLayout>

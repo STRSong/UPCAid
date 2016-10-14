@@ -2,6 +2,7 @@ package jwxt.cacher.cc.jwxt;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -14,6 +15,7 @@ public class WelcomeActivity extends Activity {
     public static int screenWidth;
     public static int screenHeight;
     public static int statusBarHeight;
+    private Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +25,9 @@ public class WelcomeActivity extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         WelcomeActivity.screenHeight = dm.heightPixels;
         WelcomeActivity.screenWidth = dm.widthPixels;
+        System.out.println(WelcomeActivity.screenWidth);
+        System.out.println(WelcomeActivity.screenHeight);
+        activity=this;
 
         //在界面上显示一个提示框
 //        Toast.makeText(WelcomeActivity.this, "欢迎使用！", Toast.LENGTH_LONG).show();
@@ -34,6 +39,11 @@ public class WelcomeActivity extends Activity {
                 //跳转到新的页面
                 Intent intent = new Intent(WelcomeActivity.this, SZSDLoginActivity.class);
                 startActivity(intent);
+
+                //获取状态栏高度
+                Rect rect=new Rect();
+                activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+                WelcomeActivity.statusBarHeight=rect.top;
 
                 //增加一个页面跳转的动画
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
