@@ -408,8 +408,6 @@ public class CourseActivity extends AppCompatActivity {
                 msg.arg1 = position + 1;
                 courseHandler.sendMessage(msg);
                 int deltaWeek = position + 1 - timeWeek;
-                System.out.println(deltaWeek);
-                System.out.println(timeWeek);
                 calendar.add(Calendar.WEEK_OF_YEAR, deltaWeek);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 System.out.println(simpleDateFormat.format(calendar.getTime()));

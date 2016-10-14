@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:niceSpinner="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="275dp">
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/course_info_blue"
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="自习室查询"
+            android:textSize="18dp"
+            android:textColor="@color/courseNameColor"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingRight="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="周数"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+
+            <jwxt.cacher.cc.jwxt.views.MyNiceSpinner
+                android:id="@+id/niceSpinner_week"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:layout_margin="5dp"
+                android:textSize="18dp"
+                android:background="@drawable/myspinner_background"
+                niceSpinner:textTint="@color/colorPrimary"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingRight="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="星期"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+
+            <jwxt.cacher.cc.jwxt.views.MyNiceSpinner
+                android:id="@+id/niceSpinner_day"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:layout_margin="5dp"
+                android:textSize="18dp"
+                android:background="@drawable/myspinner_background"
+                niceSpinner:textTint="@color/colorPrimary"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingRight="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text="课时"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+
+            <jwxt.cacher.cc.jwxt.views.MyNiceSpinner
+                android:id="@+id/niceSpinner_n"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textSize="18dp"
+                android:background="@drawable/myspinner_background"
+                niceSpinner:textTint="@color/colorPrimary"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_renewBook"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="确定"
+            android:background="@drawable/ic_week_set_button"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:textSize="18dp"
+            android:layout_marginBottom="5dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
