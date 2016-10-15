@@ -198,7 +198,26 @@ public class ClassRoomActivity extends AppCompatActivity {
         if(day!=0){
             spinnerDay.setSelectedIndex(day-1);
         }
-
+        int hour=calendar.get(Calendar.HOUR_OF_DAY);
+        if(hour<=8||hour>22){
+            spinnerN.setSelectedIndex(0);
+        }else if(hour<=10){
+            spinnerN.setSelectedIndex(1);
+        }else if(hour<=12){
+            spinnerN.setSelectedIndex(3);
+        }else if(hour<=14){
+            spinnerN.setSelectedIndex(4);
+        }else if(hour<=16){
+            spinnerN.setSelectedIndex(6);
+        }else if(hour<=18){
+            spinnerN.setSelectedIndex(7);
+        }else if(hour<=20){
+            spinnerN.setSelectedIndex(8);
+        }else if(hour<=21){
+            spinnerN.setSelectedIndex(9);
+        }else if(hour<=22){
+            spinnerN.setSelectedIndex(10);
+        }
 
         Button button=(Button)dialogView.findViewById(R.id.btn_classroom_search);
         button.setOnTouchListener(new View.OnTouchListener() {
