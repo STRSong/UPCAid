@@ -147,7 +147,7 @@ public class ScoreActivity extends AppCompatActivity {
     private void setSearchViewProperties(){
         searchView=(SearchView)findViewById(R.id.search_score_1);
         searchView.setIconified(false);
-        searchView.setQueryHint("开课时间");
+        searchView.setQueryHint("开课学期");
         searchView.setIconifiedByDefault(false);
         searchView.setSubmitButtonEnabled(true);
 
@@ -159,6 +159,9 @@ public class ScoreActivity extends AppCompatActivity {
 
         mEdit=(SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         mEdit.setThreshold(1);
+        String initStr="2016-2017-1";
+        mEdit.setText(initStr);
+        mEdit.setSelection(initStr.length());
         mEdit.setTextColor(Color.WHITE);
 
         String[] columnNames = {"_id", "text"};
