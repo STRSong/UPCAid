@@ -436,7 +436,7 @@ public class SZSDConnection implements Serializable {
 
     public void feedback(String account,String feedback,String connect){
         try{
-            URL url=new URL("http://localhost:8080/szsd?command=feedback");
+            URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=feedback");
             HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setDoInput(true);
