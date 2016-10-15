@@ -10,11 +10,25 @@ import android.os.Handler;
 import android.os.Message;
 import android.renderscript.ScriptGroup;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,12 +47,16 @@ public class MainActivity extends AppCompatActivity {
     private Handler handlerCourse;
     private Handler handlerClassRoom;
     private Handler handlerLibrary;
+    private Handler handlerFeedback;
     private ProgressDialog progressDialog;
     private Context context;
     private Bitmap checkBitmap;
+    private Toolbar toolbar;
 
     private SharedPreferences sharedPreferences;
     private boolean isSameUser;
+    private PopupWindow popupWindow;
+    private View popupView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +66,15 @@ public class MainActivity extends AppCompatActivity {
         textViewLib=(TextView)findViewById(R.id.tv_main_lib);
         textViewCard=(TextView)findViewById(R.id.tv_main_card);
         textViewName=(TextView)findViewById(R.id.tv_main_name);
+        toolbar=(Toolbar)findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+//        ActionBar actionBar=getSupportActionBar();
+        toolbar.setOnMenuItemClickListener(getMenuItemClickListener());
 
         progressDialog=new ProgressDialog(context);
         progressDialog.setMessage("正在加载，请稍后...");
@@ -63,8 +90,42 @@ public class MainActivity extends AppCompatActivity {
         textViewLib.setText(lib);
         textViewCard.setText(card);
         initHandler();
-
+        initPopupWindow();
+//        System.out.println("account:"+sharedPreferences.getString("lastUser",""));
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+    private Toolbar.OnMenuItemClickListener getMenuItemClickListener(){
+        return new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.main_feedback:
+//                        Toast.makeText(context,"AA",Toast.LENGTH_SHORT).show();
+                        if(popupWindow!=null&&!popupWindow.isShowing()){
+                            popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+                            WindowManager.LayoutParams lp=getWindow().getAttributes();
+                            lp.alpha=0.6f;
+                            getWindow().setAttributes(lp);
+                        }
+                        break;
+                }
+                return false;
+            }
+        };
+    }
+
     public void onCoursesClick(View view){
         progressDialog.show();
         new Thread(new Runnable() {
@@ -178,5 +239,69 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         };
+        handlerFeedback=new Handler(){
+
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Toast.makeText(context,"谢谢您的支持！ ^_^",Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+    private void initPopupWindow(){
+        popupView=View.inflate(context,R.layout.feedback_popupwindow,null);
+        final EditText editTextContent=(EditText)popupView.findViewById(R.id.main_feedback_content);
+        final EditText editTextConnect=(EditText)popupView.findViewById(R.id.main_feedback_connect);
+        Button button=(Button)popupView.findViewById(R.id.btn_main_feedback);
+        button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    v.setBackgroundResource(R.drawable.ic_week_set_button_press);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    v.setBackgroundResource(R.drawable.ic_week_set_button);
+                }
+                return false;
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String account=sharedPreferences.getString("lastUser","");
+                final String content=editTextContent.getText().toString();
+                final String connect=editTextConnect.getText().toString();
+                if(content.length()==0){
+                    Toast.makeText(context,"没有什么问题吗？O_O",Toast.LENGTH_SHORT).show();
+                }else{
+                    if(popupWindow.isShowing()){
+                        popupWindow.dismiss();
+                    }
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            szsdConnection.feedback(account,content,connect);
+                            Message msg=handlerFeedback.obtainMessage();
+                            handlerFeedback.sendMessage(msg);
+                        }
+                    }).start();
+                }
+            }
+        });
+
+        popupWindow=new PopupWindow(context);
+        popupWindow.setContentView(popupView);
+        popupWindow.setAnimationStyle(R.style.PopupAnimationClassRoomSearch);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context,R.drawable.classroom_search_white));
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp=getWindow().getAttributes();
+                lp.alpha=1f;
+                getWindow().setAttributes(lp);
+            }
+        });
     }
 }
