@@ -8,11 +8,15 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -428,5 +432,27 @@ public class SZSDConnection implements Serializable {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void feedback(String account,String feedback,String connect){
+        try{
+            URL url=new URL("http://localhost:8080/szsd?command=feedback");
+            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.setDoOutput(true);
+            String content="&account="+account
+                    +"&feedback="+feedback
+                    +"&connect="+connect;
+            OutputStream outputStream=new BufferedOutputStream(httpURLConnection.getOutputStream());
+            BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+            bufferedWriter.write(content);
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            InputStream inputStream=httpURLConnection.getInputStream();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }
