@@ -18,6 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +36,8 @@ import java.util.Map;
  */
 public class SZSDLoginActivity extends AppCompatActivity {
     private SZSDConnection szsdConnection;
-    private TextView textViewUsername;
-    private TextView textViewPassword;
+    private EditText textViewUsername;
+    private EditText textViewPassword;
     private CheckBox checkBoxRememberPass;
     private CheckBox checkBoxAutoLog;
 
@@ -58,8 +59,8 @@ public class SZSDLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_szsd_login);
         szsdConnection = new SZSDConnection();
         context = this;
-        textViewUsername = (TextView) findViewById(R.id.tv_szsd_username);
-        textViewPassword = (TextView) findViewById(R.id.tv_szsd_password);
+        textViewUsername = (EditText) findViewById(R.id.tv_szsd_username);
+        textViewPassword = (EditText) findViewById(R.id.tv_szsd_password);
         checkBoxRememberPass = (CheckBox) findViewById(R.id.checkbox_rememberPass);
         checkBoxAutoLog = (CheckBox) findViewById(R.id.checkbox_autoLogin);
         sharedPreferences = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
@@ -71,6 +72,7 @@ public class SZSDLoginActivity extends AppCompatActivity {
         if (sharedPreferences.getBoolean("IS_CHECKED", false)) {
             checkBoxRememberPass.setChecked(true);
             textViewUsername.setText(sharedPreferences.getString("ACCOUNT", ""));
+            textViewUsername.setSelection(sharedPreferences.getString("ACCOUNT", "").length());
             textViewPassword.setText(sharedPreferences.getString("PASSWORD", ""));
         } else {
             checkBoxRememberPass.setChecked(false);

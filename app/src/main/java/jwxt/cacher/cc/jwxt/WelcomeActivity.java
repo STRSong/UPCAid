@@ -25,8 +25,7 @@ public class WelcomeActivity extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         WelcomeActivity.screenHeight = dm.heightPixels;
         WelcomeActivity.screenWidth = dm.widthPixels;
-        System.out.println(WelcomeActivity.screenWidth);
-        System.out.println(WelcomeActivity.screenHeight);
+
         activity=this;
 
         //在界面上显示一个提示框

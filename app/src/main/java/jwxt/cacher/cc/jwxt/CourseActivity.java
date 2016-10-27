@@ -3,36 +3,47 @@ package jwxt.cacher.cc.jwxt;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +51,8 @@ import jwxt.cacher.cc.jwxt.info.Course;
 import jwxt.cacher.cc.jwxt.picker.MyOptionPicker;
 import jwxt.cacher.cc.jwxt.picker.OptionPicker;
 import jwxt.cacher.cc.jwxt.util.ObjectSaveUtils;
+import jwxt.cacher.cc.jwxt.views.CourseAdapter;
+import jwxt.cacher.cc.jwxt.views.RotateTransformer;
 
 
 /**
@@ -68,6 +81,7 @@ public class CourseActivity extends AppCompatActivity {
     private PopupWindow weekChoicePopup;
     int[] backDrawable;
     List<TextView> currentCourses;
+    private Map<String, Integer> back;
 
     private SharedPreferences sharedPreferences;
     private int currentWeek;
@@ -79,13 +93,18 @@ public class CourseActivity extends AppCompatActivity {
     private Calendar calendar;
     private Activity activity;
     private ProgressDialog progressDialog;
+    private Thread threadFlushCourse;
+    private ViewPager viewPager;
+
+    private PopupWindow courseInfoPopup;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_course);
         context = this;
-        activity=this;
+        activity = this;
         toolbar = (Toolbar) findViewById(R.id.toolbar_course);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(getNavigationOnClickListener());
@@ -133,7 +152,7 @@ public class CourseActivity extends AppCompatActivity {
         textViewSat.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
 
         //星期天是1，星期六是7
-        sharedPreferences.edit().putInt("currentDayOfWeek",week).commit();
+        sharedPreferences.edit().putInt("currentDayOfWeek", week).commit();
 
         textViewMonth.setText(String.valueOf(month) + "月");
         currentWeekOfYear = sharedPreferences.getInt("currentWeekOfYear", 0);
@@ -145,17 +164,17 @@ public class CourseActivity extends AppCompatActivity {
         /*设置当前周*/
         currentWeek = sharedPreferences.getInt("currentWeek", 0);
         if (currentWeek == 0) {
-            ArrayList<String> data=new ArrayList<>();
-            for(int i=1;i<=25;i++){
+            ArrayList<String> data = new ArrayList<>();
+            for (int i = 1; i <= 25; i++) {
                 data.add(String.valueOf(i));
             }
-            MyOptionPicker picker=new MyOptionPicker(this,data);
+            MyOptionPicker picker = new MyOptionPicker(this, data);
             picker.setOffset(2);
             picker.setGravity(Gravity.CENTER);
             picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
                 @Override
                 public void onOptionPicked(int position, String option) {
-                    currentWeek=Integer.parseInt(option);
+                    currentWeek = Integer.parseInt(option);
                     sharedPreferences.edit().putInt("currentWeek", currentWeek).commit();
                     textViewWeek.setText("第" + currentWeek + "周");
                     Message msg = courseHandler.obtainMessage();
@@ -180,18 +199,26 @@ public class CourseActivity extends AppCompatActivity {
 
         szsdConnection = (SZSDConnection) getIntent().getSerializableExtra("connection");
         courseList = (ArrayList<Course>) getIntent().getSerializableExtra("course");
-        backDrawable = new int[9];
-        backDrawable[0] = R.drawable.course_info_blue;
-        backDrawable[1] = R.drawable.course_info_green;
-        backDrawable[2] = R.drawable.course_info_pink;
-        backDrawable[3] = R.drawable.course_info_red;
-        backDrawable[4] = R.drawable.course_info_yellow;
-        backDrawable[5] = R.drawable.course_info_greedyellow;
-        backDrawable[6] = R.drawable.course_info_qing;
-        backDrawable[7] = R.drawable.course_info_purple;
-        backDrawable[8] = R.drawable.course_info_brown;
-
-
+        backDrawable = new int[18];
+        //正常 0,2,4,6,8 多个1,3,5,7,9
+        backDrawable[0] = R.drawable.ic_course_bg_lv;
+        backDrawable[1] = R.drawable.ic_course_bg_lv_multi;
+        backDrawable[2] = R.drawable.ic_course_bg_cheng;
+        backDrawable[3] = R.drawable.ic_course_bg_cheng_multi;
+        backDrawable[4] = R.drawable.ic_course_bg_lan;
+        backDrawable[5] = R.drawable.ic_course_bg_lan_multi;
+        backDrawable[6] = R.drawable.ic_course_bg_qing;
+        backDrawable[7] = R.drawable.ic_course_bg_qing_multi;
+        backDrawable[8] = R.drawable.ic_course_bg_fen;
+        backDrawable[9] = R.drawable.ic_course_bg_fen_multi;
+        backDrawable[10] = R.drawable.ic_course_bg_huang;
+        backDrawable[11] = R.drawable.ic_course_bg_huang_multi;
+        backDrawable[12] = R.drawable.ic_course_bg_cyan;
+        backDrawable[13] = R.drawable.ic_course_bg_cyan_multi;
+        backDrawable[14] = R.drawable.ic_course_bg_bohelv;
+        backDrawable[15] = R.drawable.ic_course_bg_bohelv_multi;
+        backDrawable[16] = R.drawable.ic_course_bg_molan;
+        backDrawable[17] = R.drawable.ic_course_bg_molan_multi;
         /*绘制课程格子*/
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -199,8 +226,6 @@ public class CourseActivity extends AppCompatActivity {
         firstColWidth = dm.widthPixels / 30 * 2;
         courseColWidth = dm.widthPixels / 30 * 4;
         courseRelative = (RelativeLayout) findViewById(R.id.course_relative);
-        System.out.println(firstColWidth);
-        System.out.println(firstColHeight);
         for (int i = 1; i <= 12; i++) {
             for (int j = 1; j <= 8; j++) {
                 if (j == 1) {
@@ -241,9 +266,24 @@ public class CourseActivity extends AppCompatActivity {
             }
         }
         /******************/
-        progressDialog=new ProgressDialog(context);
+        progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("正在加载，请稍后...");
         progressDialog.setCancelable(false);
+        progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                        if (threadFlushCourse != null && !threadFlushCourse.isInterrupted()) {
+                            threadFlushCourse.interrupt();
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         initHandler();
         new Thread(new Runnable() {
@@ -261,7 +301,7 @@ public class CourseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.course_menu,menu);
+        getMenuInflater().inflate(R.menu.course_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -269,25 +309,27 @@ public class CourseActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
     }
-    private Toolbar.OnMenuItemClickListener getMenuItemClickListener(){
+
+    private Toolbar.OnMenuItemClickListener getMenuItemClickListener() {
         return new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.update_course:
                         progressDialog.show();
 //                        Toast.makeText(context,"AA",Toast.LENGTH_SHORT).show();
-                        new Thread(new Runnable() {
+                        threadFlushCourse = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                ObjectSaveUtils objectSaveUtils=new ObjectSaveUtils(context,"courseInfo");
-                                courseList=szsdConnection.getCourseInfo("2016-2017-1","");
-                                objectSaveUtils.setObject("courseList",courseList);
-                                Message msg=courseHandler.obtainMessage();
-                                msg.arg1=currentWeek;
+                                ObjectSaveUtils objectSaveUtils = new ObjectSaveUtils(context, "courseInfo");
+                                courseList = szsdConnection.getCourseInfo("2016-2017-1", "");
+                                objectSaveUtils.setObject("courseList", courseList);
+                                Message msg = courseHandler.obtainMessage();
+                                msg.arg1 = currentWeek;
                                 courseHandler.sendMessage(msg);
                             }
-                        }).start();
+                        });
+                        threadFlushCourse.start();
                         break;
                 }
                 return false;
@@ -295,7 +337,7 @@ public class CourseActivity extends AppCompatActivity {
         };
     }
 
-    private View.OnClickListener getNavigationOnClickListener(){
+    private View.OnClickListener getNavigationOnClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -310,7 +352,7 @@ public class CourseActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
 //                List<Course> courses = (List<Course>) msg.obj;
-                if(progressDialog.isShowing()){
+                if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
                 if (currentCourses.size() != 0) {
@@ -321,24 +363,50 @@ public class CourseActivity extends AppCompatActivity {
                 }
                 int week = msg.arg1;
                 List<Course> thisWeekCourses = new ArrayList<>();
-                Map<String, Integer> back = new HashMap<>();
+                final Map<String, List<Course>> multiCourse = new HashMap<>();
+                back = new HashMap<>();
                 //获取本周课程
-                for (int i = 0, b = 0; i < courseList.size(); i++) {
-                    Course course = courseList.get(i);
-                    if (course.isThisWeek(week)) {
-                        thisWeekCourses.add(course);
-                        if (!back.containsKey(course.getCourseName())) {
-                            back.put(course.getCourseName(), b);
-                            b++;
-                            if (b > 8) {
-                                b = 0;
+                if (courseList != null) {
+                    for (int i = 0, b = 0; i < courseList.size(); i++) {
+                        Course course = courseList.get(i);
+                        if (course.isThisWeek(week)) {
+                            thisWeekCourses.add(course);
+                            if (!back.containsKey(course.getCourseName())) {
+                                back.put(course.getCourseName(), b * 2);
+                                b++;
+                                if (b > 8) {
+                                    b = 0;
+                                }
                             }
                         }
                     }
                 }
+                for (int i = 0; i < thisWeekCourses.size() - 1; i++) {
+                    List<Course> sameTimeList = new ArrayList<>();
+                    for (int j = i + 1; j < thisWeekCourses.size(); j++) {
+                        //如果是同一天
+                        if (thisWeekCourses.get(i).getDay() == thisWeekCourses.get(j).getDay()) {
+                            //如果是同一时间
+                            if (thisWeekCourses.get(i).getBeginLesson() == thisWeekCourses.get(j).getBeginLesson()) {
+                                thisWeekCourses.get(i).setMulti(true);
+                                if (!sameTimeList.contains(thisWeekCourses.get(i))) {
+                                    sameTimeList.add(thisWeekCourses.get(i));
+                                }
+                                sameTimeList.add(thisWeekCourses.get(j));
+                                thisWeekCourses.remove(j);
+                                j--;
+                            }
+                        }
+                    }
+                    if (sameTimeList.size() > 0) {
+                        multiCourse.put(thisWeekCourses.get(i).getCourseName(), sameTimeList);
+                    }
+                }
+                for (int i = 0; i < multiCourse.size(); i++) {
+                    System.out.println(multiCourse.get(i));
+                }
                 for (int i = 0; i < thisWeekCourses.size(); i++) {
-                    Course course = thisWeekCourses.get(i);
-
+                    final Course course = thisWeekCourses.get(i);
                     TextView courseText = new TextView(context);
                     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(courseColWidth - 6, firstColHeight * 2 - 8);
                     courseText.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -358,10 +426,43 @@ public class CourseActivity extends AppCompatActivity {
                     lp.topMargin = 4;
                     lp.bottomMargin = 4;
                     lp.leftMargin = 3;
-                    courseText.setBackgroundResource(backDrawable[back.get(course.getCourseName())]);
                     courseText.setText(course.getCourseName() + "@" + course.getClassRoom());
+
                     currentCourses.add(courseText);
                     courseRelative.addView(courseText, lp);
+
+                    if (course.isMulti() == true) {
+                        //如果有重课
+                        courseText.setBackgroundResource(backDrawable[back.get(course.getCourseName()) + 1]);
+                        courseText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Toast.makeText(context,"AAA",Toast.LENGTH_SHORT).show();
+                                showMultiCourseDialog(multiCourse, course.getCourseName());
+                                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                                lp.alpha = 0.5f;
+                                getWindow().setAttributes(lp);
+                            }
+                        });
+                    } else {
+                        //无重课
+                        courseText.setBackgroundResource(backDrawable[back.get(course.getCourseName())]);
+                        courseText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Toast.makeText(context,"AAA",Toast.LENGTH_SHORT).show();
+                                showCourseInfoDialog(course);
+                                if (courseInfoPopup != null && !courseInfoPopup.isShowing()) {
+                                    courseInfoPopup.showAtLocation(courseInfoPopup.getContentView(), Gravity.CENTER, 0, 0);
+                                    WindowManager.LayoutParams lp = getWindow().getAttributes();
+                                    lp.alpha = 0.5f;
+                                    getWindow().setAttributes(lp);
+                                }
+
+                            }
+                        });
+                    }
+
                 }
             }
 
@@ -387,7 +488,7 @@ public class CourseActivity extends AppCompatActivity {
                 /*添加当前周String*/
                 int cWeek = sharedPreferences.getInt("currentWeek", 0);
                 int lWeek = sharedPreferences.getInt("lastCurrentWeek", 0);
-                System.out.println("cWeek:"+cWeek);
+                System.out.println("cWeek:" + cWeek);
                 if (cWeek != 0) {
                     adapter.weekList.set(cWeek - 1, "第" + cWeek + "周" + "(本周)");
                 }
@@ -463,11 +564,11 @@ public class CourseActivity extends AppCompatActivity {
                 if (weekChoicePopup != null) {
                     weekChoicePopup.dismiss();
                 }
-                ArrayList<String> data=new ArrayList<>();
-                for(int i=1;i<=25;i++){
+                ArrayList<String> data = new ArrayList<>();
+                for (int i = 1; i <= 25; i++) {
                     data.add(String.valueOf(i));
                 }
-                MyOptionPicker picker=new MyOptionPicker(activity,data);
+                MyOptionPicker picker = new MyOptionPicker(activity, data);
                 picker.setOffset(2);
                 picker.setCancelable(true);
                 picker.setCanceledOnTouchOutside(true);
@@ -475,15 +576,15 @@ public class CourseActivity extends AppCompatActivity {
                 picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
                     @Override
                     public void onOptionPicked(int position, String option) {
-                        currentWeek=Integer.parseInt(option);
+                        currentWeek = Integer.parseInt(option);
                         textViewWeek.setText("第" + currentWeek + "周");
                         Message msg = courseHandler.obtainMessage();
                         msg.arg1 = currentWeek;
                         courseHandler.sendMessage(msg);
 
-                        int cWeek=currentWeek;
+                        int cWeek = currentWeek;
                         int lWeek = sharedPreferences.getInt("currentWeek", 0);
-                        if(lWeek!=cWeek){
+                        if (lWeek != cWeek) {
                             sharedPreferences.edit().putInt("currentWeek", cWeek).commit();
                             sharedPreferences.edit().putInt("lastCurrentWeek", lWeek).commit();
                         }
@@ -520,5 +621,104 @@ public class CourseActivity extends AppCompatActivity {
 
         weekChoicePopup.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.ic_dropdown_week_bg));
 
+    }
+
+    private void showMultiCourseDialog(Map<String, List<Course>> multiCourse, String courseName) {
+        final PopupWindow popupWindow = new PopupWindow(context);
+        final View dialogView = View.inflate(context, R.layout.more_course_dialog, null);
+        List<View> viewList = new ArrayList<>();
+        List<Course> courseList = multiCourse.get(courseName);
+        Iterator iterator = courseList.iterator();
+        while (iterator.hasNext()) {
+            View view = View.inflate(context, R.layout.multi_course_textview, null);
+            TextView courseText = (TextView) view.findViewById(R.id.course_textView);
+
+            final Course course = (Course) iterator.next();
+            courseText.setText(course.getCourseName() + "@" + course.getClassRoom());
+            courseText.setBackgroundResource(backDrawable[back.get(course.getCourseName())]);
+            courseText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    Toast.makeText(context,"AAA",Toast.LENGTH_SHORT).show();
+                    showCourseInfoDialog(course);
+                    if (popupWindow != null && popupWindow.isShowing()) {
+                        popupWindow.dismiss();
+                    }
+                    if (courseInfoPopup != null && !courseInfoPopup.isShowing()) {
+                        courseInfoPopup.showAtLocation(courseInfoPopup.getContentView(), Gravity.CENTER, 0, 0);
+                        WindowManager.LayoutParams lp = getWindow().getAttributes();
+                        lp.alpha = 0.5f;
+                        getWindow().setAttributes(lp);
+                    }
+                }
+            });
+            viewList.add(view);
+        }
+
+        viewPager = (ViewPager) dialogView.findViewById(R.id.viewpager);
+        viewPager.setPageTransformer(true, new RotateTransformer());
+        viewPager.setPageMargin(dip2px(this, -30));
+        dialogView.findViewById(R.id.page_container).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return viewPager.dispatchTouchEvent(event);
+            }
+        });
+        CourseAdapter adapter = new CourseAdapter(context);
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(viewList.size());
+        adapter.addAll(viewList);
+
+        popupWindow.setContentView(dialogView);
+        popupWindow.setFocusable(true);
+        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setAnimationStyle(R.style.PopupAnimationCourseInfo);
+
+        popupWindow.showAtLocation(popupWindow.getContentView(), Gravity.CENTER, 0, 0);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha = 1f;
+                getWindow().setAttributes(lp);
+
+            }
+        });
+    }
+
+    private int dip2px(Context context, float dipValue) {
+        float m = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * m + 0.5f);
+    }
+
+    private void showCourseInfoDialog(Course course) {
+        View popupView = View.inflate(context, R.layout.course_info_popupwindow, null);
+        TextView textViewCourseName = (TextView) popupView.findViewById(R.id.course_info_courseName);
+        TextView textViewClassRoom = (TextView) popupView.findViewById(R.id.course_info_classRoom);
+        TextView textViewTeacherName = (TextView) popupView.findViewById(R.id.course_info_teacherName);
+        textViewCourseName.setText(course.getCourseName());
+        textViewClassRoom.setText(course.getClassRoom());
+        textViewTeacherName.setText(course.getTeacherName());
+
+        courseInfoPopup = new PopupWindow(context);
+        courseInfoPopup.setContentView(popupView);
+        courseInfoPopup.setAnimationStyle(R.style.PopupAnimationClassRoomSearch);
+        courseInfoPopup.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        courseInfoPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        courseInfoPopup.setFocusable(true);
+
+        courseInfoPopup.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.classroom_search_white));
+//        courseInfoPopup.setBackgroundDrawable(new ColorDrawable());
+
+        courseInfoPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha = 1f;
+                getWindow().setAttributes(lp);
+            }
+        });
     }
 }

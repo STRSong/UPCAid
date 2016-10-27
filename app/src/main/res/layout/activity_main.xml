@@ -2,95 +2,106 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:weightSum="1"
-              android:orientation="vertical">
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toolbar_main"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        >
+        android:minHeight="?attr/actionBarSize">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="UPCAid"
-            android:textSize="20dp"
-            android:textColor="@color/courseNameColor"/>
+            android:textColor="@color/courseNameColor"
+            android:textSize="20dp" />
     </android.support.v7.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="8dp">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/greybackground"/>
+            android:background="@color/greybackground" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="@android:color/white"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="20dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_name"/>
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/ic_name" />
 
                     <TextView
                         android:id="@+id/tv_main_name"
                         android:layout_width="100dp"
                         android:layout_height="35dp"
                         android:layout_marginLeft="15dp"
-                        android:textSize="30dp"
+                        android:text="李祥璞"
                         android:textColor="@color/Black"
-                        android:text="周娜"/>
+                        android:textSize="30dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/linear_main_lib"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_library"/>
+                        android:src="@drawable/ic_library" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="图书馆"
                         android:layout_marginLeft="20dp"
+                        android:text="图书馆"
                         android:textColor="@color/Black"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:text="已借"
                         android:textColor="@color/Black"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp" />
+
                     <TextView
                         android:id="@+id/tv_main_lib"
                         android:layout_width="wrap_content"
@@ -98,40 +109,46 @@
                         android:layout_marginLeft="10dp"
                         android:text="0"
                         android:textColor="@color/Black"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:textColor="@color/Black"
                         android:text="本"
-                        android:textSize="20dp"/>
+                        android:textColor="@color/Black"
+                        android:textSize="20dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_card"/>
+                        android:src="@drawable/ic_card" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="一卡通"
                         android:layout_marginLeft="20dp"
+                        android:text="一卡通"
                         android:textColor="@color/Black"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:text="余额"
                         android:textColor="@color/Black"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp" />
+
                     <TextView
                         android:id="@+id/tv_main_card"
                         android:layout_width="wrap_content"
@@ -139,14 +156,15 @@
                         android:layout_marginLeft="10dp"
                         android:text="0"
                         android:textColor="@color/Black"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:text="元"
                         android:textColor="@color/Black"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -156,68 +174,73 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="8dp">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/greybackground"/>
+                android:background="@color/greybackground" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@android:color/white">
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="horizontal"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <Button
-                        android:layout_width="50dp"
-                        android:onClick="onCoursesClick"
-                        android:background="@drawable/ic_classorder1"
                         android:id="@+id/button2"
-                        android:layout_height="50dp" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/ic_classorder1"
+                        android:onClick="onCoursesClick" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical|center_horizontal"
-                        android:text="课表"
-                        android:paddingTop="5dp" />
+                        android:paddingTop="5dp"
+                        android:text="课表" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
                     <Button
-                        android:onClick="onScoreClick"
-                        android:background="@drawable/ic_score1"
+                        android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_width="50dp" />
+                        android:background="@drawable/ic_score1"
+                        android:onClick="onScoreClick" />
 
                     <TextView
+                        android:id="@+id/textView"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:gravity="center_horizontal|center_vertical"
-                        android:text="成绩"
-                        android:id="@+id/textView"
-                        android:paddingTop="5dp" />
+                        android:paddingTop="5dp"
+                        android:text="成绩" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -225,63 +248,68 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="horizontal"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
                 <LinearLayout
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <Button
-                        android:background="@drawable/ic_library1"
-                        android:onClick="onLibClick"
+                        android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_width="50dp" />
+                        android:background="@drawable/ic_library1"
+                        android:onClick="onLibClick" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="图书馆"
                         android:gravity="center"
-                        android:paddingTop="5dp" />
+                        android:paddingTop="5dp"
+                        android:text="图书馆" />
                 </LinearLayout>
+
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <Button
-                        android:onClick="onClassRoomClick"
-                        android:background="@drawable/ic_classroom1"
                         android:layout_width="50dp"
-                        android:layout_height="50dp" />
+                        android:layout_height="50dp"
+                        android:background="@drawable/ic_classroom1"
+                        android:onClick="onClassRoomClick" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="自习教室"
                         android:gravity="center"
-                        android:paddingTop="5dp" />
+                        android:paddingTop="5dp"
+                        android:text="自习教室" />
 
                 </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="8dp">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/greybackground"/>
+                android:background="@color/greybackground" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -290,89 +318,25 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"/>
+                android:background="@android:color/white" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="8dp">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/greybackground"/>
+                android:background="@color/greybackground" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="2"-->
-            <!--android:orientation="vertical">-->
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:onClick="onCoursesClick">-->
-                <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:gravity="center"-->
-                    <!--android:text="我的课表"-->
-                    <!--android:layout_marginTop="60dp"-->
-                    <!--android:textColor="@color/Lightblue"-->
-                    <!--android:layout_weight="2"-->
-                    <!--android:textSize="20dp"/>-->
-            <!--</LinearLayout>-->
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:onClick="onScoreClick">-->
+    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="0dp"--><!--android:layout_weight="2"--><!--android:orientation="vertical">--><!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="0dp"--><!--android:layout_weight="1"--><!--android:onClick="onCoursesClick">--><!--<TextView--><!--android:layout_width="0dp"--><!--android:layout_height="match_parent"--><!--android:gravity="center"--><!--android:text="我的课表"--><!--android:layout_marginTop="60dp"--><!--android:textColor="@color/Lightblue"--><!--android:layout_weight="2"--><!--android:textSize="20dp"/>--><!--</LinearLayout>--><!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="0dp"--><!--android:layout_weight="1"--><!--android:onClick="onScoreClick">-->
 
-                <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:gravity="center"-->
-                    <!--android:text="我的成绩"-->
-                    <!--android:layout_marginTop="10dp"-->
-                    <!--android:textColor="@color/Lightblue"-->
-                    <!--android:layout_weight="2"-->
-                    <!--android:textSize="20dp"-->
-                    <!--android:id="@+id/textView"/>-->
-            <!--</LinearLayout>-->
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:onClick="onLibClick">-->
+    <!--<TextView--><!--android:layout_width="0dp"--><!--android:layout_height="match_parent"--><!--android:gravity="center"--><!--android:text="我的成绩"--><!--android:layout_marginTop="10dp"--><!--android:textColor="@color/Lightblue"--><!--android:layout_weight="2"--><!--android:textSize="20dp"--><!--android:id="@+id/textView"/>--><!--</LinearLayout>--><!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="0dp"--><!--android:layout_weight="1"--><!--android:onClick="onLibClick">-->
 
-                <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:gravity="center"-->
-                    <!--android:text="我的图书馆"-->
-                    <!--android:layout_marginBottom="10dp"-->
-                    <!--android:textColor="@color/Lightblue"-->
-                    <!--android:layout_weight="2"-->
-                    <!--android:textSize="20dp"-->
-                    <!--android:id="@+id/textView2"/>-->
-            <!--</LinearLayout>-->
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:onClick="onClassRoomClick">-->
-                <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:gravity="center_horizontal"-->
-                    <!--android:text="自习教室查询"-->
-                    <!--android:layout_marginBottom="20dp"-->
-                    <!--android:textColor="@color/Lightblue"-->
-                    <!--android:layout_weight="2"-->
-                    <!--android:textSize="20dp"/>-->
-            <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
+    <!--<TextView--><!--android:layout_width="0dp"--><!--android:layout_height="match_parent"--><!--android:gravity="center"--><!--android:text="我的图书馆"--><!--android:layout_marginBottom="10dp"--><!--android:textColor="@color/Lightblue"--><!--android:layout_weight="2"--><!--android:textSize="20dp"--><!--android:id="@+id/textView2"/>--><!--</LinearLayout>--><!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="0dp"--><!--android:layout_weight="1"--><!--android:onClick="onClassRoomClick">--><!--<TextView--><!--android:layout_width="0dp"--><!--android:layout_height="match_parent"--><!--android:gravity="center_horizontal"--><!--android:text="自习教室查询"--><!--android:layout_marginBottom="20dp"--><!--android:textColor="@color/Lightblue"--><!--android:layout_weight="2"--><!--android:textSize="20dp"/>--><!--</LinearLayout>--><!--</LinearLayout>-->
 
-    <!--</LinearLayout>-->
-<!--</LinearLayout>-->
+    <!--</LinearLayout>--><!--</LinearLayout>-->

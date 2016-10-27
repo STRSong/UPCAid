@@ -19,8 +19,18 @@ public class Course implements Serializable {
     private int courseType; //1单周，2双周,3有特殊周
     private Set<Integer> expected;
 
+    public boolean isMulti() {
+        return isMulti;
+    }
+
+    public void setMulti(boolean multi) {
+        isMulti = multi;
+    }
+
+    private boolean isMulti;
+
     public Course() {
-        this((String)null);
+        this((String) null);
     }
 
     public Course(String courseName) {

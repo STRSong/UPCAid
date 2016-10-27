@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,13 +35,14 @@ import java.util.List;
  */
 public class ScoreActivity extends AppCompatActivity {
     private Context context = null;
-    private SearchView searchView=null;
+    private SearchView searchView = null;
     private SZSDConnection connection;
     private ListView listView;
     private Handler handlerListView;
     private Handler handlerProgressbar;
     private ProgressDialog progressDialog;
     private AutoCompleteTextView mEdit;
+    private Thread threadWholeScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +50,30 @@ public class ScoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_score);
         context = this;
 
-        progressDialog=new ProgressDialog(context);
+        progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("正在加载，请稍后...");
         progressDialog.setCancelable(false);
+        progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                        if (threadWholeScore != null && !threadWholeScore.isInterrupted()) {
+                            threadWholeScore.interrupt();
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_score);
         setSupportActionBar(toolbar);
-        ActionBar actionBar=getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         this.initHandler();
-        if(actionBar!=null){
+        if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -65,14 +83,16 @@ public class ScoreActivity extends AppCompatActivity {
         //setSearchViewProperties();
         listView = (ListView) this.findViewById(R.id.listView_Score);
 
-        connection=(SZSDConnection) getIntent().getSerializableExtra("connection");
+        connection = (SZSDConnection) getIntent().getSerializableExtra("connection");
 
     }
+
     @Override
     protected void onStart() {
         super.onStart();
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -81,7 +101,7 @@ public class ScoreActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.score_menu,menu);
+        getMenuInflater().inflate(R.menu.score_menu, menu);
         this.setSearchViewProperties();
 
         return super.onCreateOptionsMenu(menu);
@@ -93,50 +113,51 @@ public class ScoreActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    private Toolbar.OnMenuItemClickListener getMenuItemClickListener(){
+    private Toolbar.OnMenuItemClickListener getMenuItemClickListener() {
         return new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.whole_score:
-                        final String kksj="";
-                        new Thread(new Runnable() {
+                        final String kksj = "";
+                        threadWholeScore = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Message msg1=handlerProgressbar.obtainMessage();
-                                msg1.arg1=1;
-                                msg1.obj=progressDialog;
+                                Message msg1 = handlerProgressbar.obtainMessage();
+                                msg1.arg1 = 1;
+                                msg1.obj = progressDialog;
                                 handlerProgressbar.sendMessage(msg1);
-                                List<HashMap<String,String>> data=connection.getScore(kksj);
-                                if(data.size()==1&&data.get(0).get("评教未完成").equals("")){
+                                List<HashMap<String, String>> data = connection.getScore(kksj);
+                                if (data.size() == 1 && data.get(0).get("评教未完成").equals("")) {
                                     //评教未完成不能查成绩
-                                    Message msg=handlerListView.obtainMessage();
-                                    msg.arg1=1;
+                                    Message msg = handlerListView.obtainMessage();
+                                    msg.arg1 = 1;
                                     handlerListView.sendMessage(msg);
+                                } else {
+                                    SimpleAdapter adapter = new SimpleAdapter(context, data, R.layout.score_item, new String[]{
+                                            "kksj", "kcmc", "zcj", "xf"}, new int[]{R.id.kksj, R.id.kcmc, R.id.zjc, R.id.xf});
 
-                                }else{
-                                    SimpleAdapter adapter=new SimpleAdapter(context,data,R.layout.score_item,new String[]{
-                                            "kksj","kcmc","zcj","xf"},new int[]{R.id.kksj,R.id.kcmc,R.id.zjc,R.id.xf});
-
-                                    Message msg=handlerListView.obtainMessage();
-                                    msg.obj=adapter;
+                                    Message msg = handlerListView.obtainMessage();
+                                    msg.obj = adapter;
                                     handlerListView.sendMessage(msg);
 
 
                                 }
-                                msg1=handlerProgressbar.obtainMessage();
-                                msg1.arg1=2;
-                                msg1.obj=progressDialog;
+                                msg1 = handlerProgressbar.obtainMessage();
+                                msg1.arg1 = 2;
+                                msg1.obj = progressDialog;
                                 handlerProgressbar.sendMessage(msg1);
                             }
-                        }).start();
+                        });
+                        threadWholeScore.start();
                         break;
                 }
                 return false;
             }
         };
     }
-    private View.OnClickListener getNavigationOnClickListener(){
+
+    private View.OnClickListener getNavigationOnClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,22 +165,23 @@ public class ScoreActivity extends AppCompatActivity {
             }
         };
     }
-    private void setSearchViewProperties(){
-        searchView=(SearchView)findViewById(R.id.search_score_1);
+
+    private void setSearchViewProperties() {
+        searchView = (SearchView) findViewById(R.id.search_score_1);
         searchView.setIconified(false);
         searchView.setQueryHint("开课学期");
         searchView.setIconifiedByDefault(false);
         searchView.setSubmitButtonEnabled(true);
 
-        ImageView ico=(ImageView) searchView.findViewById(android.support.v7.appcompat.R.id.search_mag_icon);
-        ImageView mGoButton=(ImageView)searchView.findViewById(android.support.v7.appcompat.R.id.search_go_btn);
+        ImageView ico = (ImageView) searchView.findViewById(android.support.v7.appcompat.R.id.search_mag_icon);
+        ImageView mGoButton = (ImageView) searchView.findViewById(android.support.v7.appcompat.R.id.search_go_btn);
         mGoButton.setImageDrawable(ico.getDrawable());
         ico.setVisibility(View.GONE);
         ico.setImageDrawable(null);
 
-        mEdit=(SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        mEdit = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         mEdit.setThreshold(1);
-        String initStr="2016-2017-1";
+        String initStr = "2016-2017-1";
         mEdit.setText(initStr);
         mEdit.setSelection(initStr.length());
         mEdit.setTextColor(Color.WHITE);
@@ -177,7 +199,7 @@ public class ScoreActivity extends AppCompatActivity {
         String[] from = {"text"};
         int[] to = {R.id.search_textView};
 
-        final SearchManager searchManager=(SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final CursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(context, R.layout.search_item, cursor, from, to, 0);
         searchView.setSuggestionsAdapter(simpleCursorAdapter);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -186,31 +208,32 @@ public class ScoreActivity extends AppCompatActivity {
             public boolean onSuggestionSelect(int position) {
                 return true;
             }
+
             @Override
             public boolean onSuggestionClick(int position) {
-                Cursor cursor1=simpleCursorAdapter.getCursor();
-                searchView.setQuery(cursor1.getString(1),false);
+                Cursor cursor1 = simpleCursorAdapter.getCursor();
+                searchView.setQuery(cursor1.getString(1), false);
                 return true;
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                final String kksj=query;
+                final String kksj = query;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Message msg1=handlerProgressbar.obtainMessage();
-                        msg1.arg1=1;
-                        msg1.obj=progressDialog;
+                        Message msg1 = handlerProgressbar.obtainMessage();
+                        msg1.arg1 = 1;
+                        msg1.obj = progressDialog;
                         handlerProgressbar.sendMessage(msg1);
-                        List<HashMap<String,String>> data=connection.getScore(kksj);
-                        if(data.size()==1&&data.get(0).containsKey("评教未完成")){
+                        List<HashMap<String, String>> data = connection.getScore(kksj);
+                        if (data.size() == 1 && data.get(0).containsKey("评教未完成")) {
                             //评教未完成不能查成绩
-                            Message msg=handlerListView.obtainMessage();
-                            msg.arg1=1;
+                            Message msg = handlerListView.obtainMessage();
+                            msg.arg1 = 1;
                             handlerListView.sendMessage(msg);
-                        }else {
+                        } else {
                             SimpleAdapter adapter = new SimpleAdapter(context, data, R.layout.score_item, new String[]{
                                     "kksj", "kcmc", "zcj", "xf"}, new int[]{R.id.kksj, R.id.kcmc, R.id.zjc, R.id.xf});
 
@@ -228,19 +251,21 @@ public class ScoreActivity extends AppCompatActivity {
                 }).start();
                 return true;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
         });
     }
-    private void initHandler(){
-        handlerListView=new Handler(){
+
+    private void initHandler() {
+        handlerListView = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 //评教未完成
-                if(msg.arg1==1){
+                if (msg.arg1 == 1) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("");
                     builder.setMessage("评教未完成，无法获取成绩。");
@@ -252,23 +277,23 @@ public class ScoreActivity extends AppCompatActivity {
                         }
                     });
                     builder.create().show();
-                }else{
-                    SimpleAdapter adapter=(SimpleAdapter)msg.obj;
+                } else {
+                    SimpleAdapter adapter = (SimpleAdapter) msg.obj;
                     listView.setAdapter(adapter);
                     mEdit.setFocusable(false);
                     mEdit.setFocusableInTouchMode(true);
-                    InputMethodManager imm=(InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(listView.getWindowToken(),0);
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(listView.getWindowToken(), 0);
                 }
 
             }
         };
-        handlerProgressbar=new Handler(){
+        handlerProgressbar = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 //ProgressBar progressBar=(ProgressBar)msg.obj;
-                int command=msg.arg1;
+                int command = msg.arg1;
                 switch (command) {
                     case 1:
                         ProgressDialog dialog = (ProgressDialog) msg.obj;
@@ -282,4 +307,5 @@ public class ScoreActivity extends AppCompatActivity {
             }
         };
     }
+
 }
