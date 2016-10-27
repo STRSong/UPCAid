@@ -1,7 +1,9 @@
 package jwxt.cacher.cc.jwxt;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +18,7 @@ public class WelcomeActivity extends Activity {
     public static int screenHeight;
     public static int statusBarHeight;
     private Activity activity;
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +30,8 @@ public class WelcomeActivity extends Activity {
         WelcomeActivity.screenWidth = dm.widthPixels;
 
         activity=this;
+
+        sharedPreferences = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
 
         //在界面上显示一个提示框
 //        Toast.makeText(WelcomeActivity.this, "欢迎使用！", Toast.LENGTH_LONG).show();

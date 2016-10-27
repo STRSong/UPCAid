@@ -171,7 +171,6 @@ public class SZSDLoginActivity extends AppCompatActivity {
             }
         }).start();
 
-
     }
 
     private void initHandler() {
