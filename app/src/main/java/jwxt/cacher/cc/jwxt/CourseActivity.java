@@ -472,7 +472,8 @@ public class CourseActivity extends AppCompatActivity {
 
     public void on_ChoiceWeek_Click(View view) {
         if (weekChoicePopup != null) {
-            weekChoicePopup.showAsDropDown(toolbar, 233, 0);
+            int moveX = WelcomeActivity.screenWidth / 2 - dip2px(context, 200.0f) / 2;
+            weekChoicePopup.showAsDropDown(toolbar, moveX, 0);
             if (listViewWeek != null) {
                 /*设置list position*/
                 String week = textViewWeek.getText().toString();
@@ -488,7 +489,6 @@ public class CourseActivity extends AppCompatActivity {
                 /*添加当前周String*/
                 int cWeek = sharedPreferences.getInt("currentWeek", 0);
                 int lWeek = sharedPreferences.getInt("lastCurrentWeek", 0);
-                System.out.println("cWeek:" + cWeek);
                 if (cWeek != 0) {
                     adapter.weekList.set(cWeek - 1, "第" + cWeek + "周" + "(本周)");
                 }
