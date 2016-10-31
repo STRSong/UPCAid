@@ -255,28 +255,28 @@ public class SZSDConnection implements Serializable {
         return null;
     }
 
-    public Map<String,String> getClassRoom(String week,String day,String n){
-        try{
-            String classRoomUrl="http://120.27.117.34:4549/SZSDServlet2/szsd?command=getAvailableClassRoom"
-                    +"&week="+week
-                    +"&day="+day
-                    +"&n="+n;
-            URL url=new URL(classRoomUrl);
-            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+    public Map<String, String> getClassRoom(String week, String day, String n) {
+        try {
+            String classRoomUrl = "http://120.27.117.34:4549/SZSDServlet2/szsd?command=getAvailableClassRoom"
+                    + "&week=" + week
+                    + "&day=" + day
+                    + "&n=" + n;
+            URL url = new URL(classRoomUrl);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(timeOut);
             httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
-            ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
-            Map<String,String> classRoomMap=(Map<String,String>)inputStream.readObject();
-            if(inputStream!=null){
+            ObjectInputStream inputStream = new ObjectInputStream(httpURLConnection.getInputStream());
+            Map<String, String> classRoomMap = (Map<String, String>) inputStream.readObject();
+            if (inputStream != null) {
                 inputStream.close();
             }
-            if(httpURLConnection!=null){
+            if (httpURLConnection != null) {
                 httpURLConnection.disconnect();
             }
             return classRoomMap;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -363,19 +363,19 @@ public class SZSDConnection implements Serializable {
                 e.printStackTrace();
             }
         }
-        try{
-            URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getBookList&cookie="+libCookie);
-            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+        try {
+            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getBookList&cookie=" + libCookie);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setDoInput(true);
-            ObjectInputStream inputStream=new ObjectInputStream(httpURLConnection.getInputStream());
-            String listStr=(String) inputStream.readObject();
+            ObjectInputStream inputStream = new ObjectInputStream(httpURLConnection.getInputStream());
+            String listStr = (String) inputStream.readObject();
             inputStream.close();
             httpURLConnection.disconnect();
-            ArrayList<BookInfo> bookInfoList=new ArrayList<>();
-            JSONArray jsonArray=JSONArray.fromObject(listStr);
-            for(int i=0;i<jsonArray.size();i++){
-                BookInfo item=new BookInfo();
-                JSONObject jsonObject=jsonArray.getJSONObject(i);
+            ArrayList<BookInfo> bookInfoList = new ArrayList<>();
+            JSONArray jsonArray = JSONArray.fromObject(listStr);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                BookInfo item = new BookInfo();
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
                 item.setBookName(jsonObject.getString("bookName"));
                 item.setAuthorName(jsonObject.getString("authorName"));
                 item.setBarCode(jsonObject.getString("barCode"));
@@ -385,72 +385,74 @@ public class SZSDConnection implements Serializable {
                 bookInfoList.add(item);
             }
             return bookInfoList;
-        }catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             e.printStackTrace();
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println("没有借书");
-        }catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public Bitmap getLibCaptcha(){
-        try{
-            URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getLibCaptcha&cookie="+libCookie);
-            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
-            httpURLConnection.setDoInput(true);
-            httpURLConnection.connect();
-            InputStream inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
-            Bitmap bitmap=BitmapFactory.decodeStream(inputStream);
-            inputStream.close();
-            httpURLConnection.disconnect();
-            return bitmap;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public String renewBook(String bar_code,String check,String captcha){
-        try{
-            URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=renewBook&cookie="+libCookie
-                    +"&bar_code="+bar_code
-                    +"&check="+check
-                    +"&captcha="+captcha);
-            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
-            httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.setDoInput(true);
-            httpURLConnection.connect();
-            InputStream inputStream=new BufferedInputStream(httpURLConnection.getInputStream());
-            BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
-            Scanner scanner=new Scanner(bufferedReader);
-            StringBuilder stringBuilder=new StringBuilder();
-            while(scanner.hasNextLine()){
-                stringBuilder.append(scanner.nextLine());
-            }
-            return stringBuilder.toString();
-        }catch (Exception e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public void feedback(String account,String feedback,String connect){
-        try{
-            URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=feedback");
-            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+    public Bitmap getLibCaptcha() {
+        try {
+            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getLibCaptcha&cookie=" + libCookie);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.connect();
+            InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            inputStream.close();
+            httpURLConnection.disconnect();
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String renewBook(String bar_code, String check, String captcha) {
+        try {
+            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=renewBook&cookie=" + libCookie
+                    + "&bar_code=" + bar_code
+                    + "&check=" + check
+                    + "&captcha=" + captcha);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.connect();
+            InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            Scanner scanner = new Scanner(bufferedReader);
+            StringBuilder stringBuilder = new StringBuilder();
+            while (scanner.hasNextLine()) {
+                stringBuilder.append(scanner.nextLine());
+            }
+            return stringBuilder.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void feedback(String account, String feedback, String connect) {
+        try {
+            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=feedback");
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
-            String content="&account="+account
-                    +"&feedback="+feedback
-                    +"&connect="+connect;
-            OutputStream outputStream=new BufferedOutputStream(httpURLConnection.getOutputStream());
-            BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+            String content = "&account=" + account
+                    + "&feedback=" + feedback
+                    + "&connect=" + connect;
+            OutputStream outputStream = new BufferedOutputStream(httpURLConnection.getOutputStream());
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
             bufferedWriter.write(content);
             bufferedWriter.flush();
             bufferedWriter.close();
-            InputStream inputStream=httpURLConnection.getInputStream();
-        }catch (Exception e){
+            InputStream inputStream = httpURLConnection.getInputStream();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
