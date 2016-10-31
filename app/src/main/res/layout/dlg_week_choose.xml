@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="296.0dip"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textView_weekChoiceTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="42.0dip"
+        android:layout_marginLeft="16.0dip"
+        android:layout_marginTop="4.0dip"
+        android:gravity="center"
+        android:text="周数选择"
+        android:textSize="18.0dip" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/textView_weekChoiceTitle">
+
+        <GridView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16.0dip"
+            android:layout_marginRight="16.0dip"
+            android:gravity="center"
+            android:listSelector="#00000000"
+            android:numColumns="5"
+            android:stretchMode="columnWidth"
+            android:id="@+id/gridView_week" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="36.0dip"
+            android:layout_marginLeft="17.0dip"
+            android:layout_marginRight="17.0dip"
+            android:layout_marginTop="8.0dip"
+            android:background="@drawable/shape_week_choose"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/btn_week_control_selector"
+                android:gravity="center"
+                android:text="单周"
+                android:textColor="@color/week_control_text"
+                android:textSize="16.0dip" />
+
+            <TextView
+                android:layout_width="1.0px"
+                android:layout_height="fill_parent"
+                android:background="@color/select_course_time_divider" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/btn_week_control_selector"
+                android:gravity="center"
+                android:text="双周"
+                android:textColor="@color/week_control_text"
+                android:textSize="16.0dip" />
+
+            <TextView
+                android:layout_width="1.0px"
+                android:layout_height="fill_parent"
+                android:background="@color/select_course_time_divider" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/btn_week_control_selector"
+                android:gravity="center"
+                android:text="全选"
+                android:textColor="@color/week_control_text"
+                android:textSize="16.0dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8.0dip"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="1.0px"
+                android:background="@drawable/dlg_line_repeat" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="44.0dip"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/dlg_btn_left_selector"
+                    android:gravity="center"
+                    android:text="取消"
+                    android:textColor="@color/dlg_blue"
+                    android:textSize="16.0dip" />
+
+                <TextView
+                    android:layout_width="1.0px"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/dlg_line_repeat" />
+
+                <Button
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/dlg_btn_right_selector"
+                    android:gravity="center"
+                    android:text="确定"
+                    android:textColor="@color/dlg_blue"
+                    android:textSize="16.0dip" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

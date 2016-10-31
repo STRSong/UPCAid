@@ -12,4 +12,10 @@
     <color name="light_gray">#fff5f5f5</color>
     <color name="classroom_search">#2f97d6</color>
     <color name="classroom_search2">#6ec6fc</color>
+    <color name="white">#ffffffff</color>
+    <color name="week_control_text">#ff495468</color>
+    <color name="select_course_time_divider">#ffdddddd</color>
+    <color name="lucency_white">#00ffffff</color>
+    <color name="dlg_blue">#ff3b97e9</color>
+    <color name="choose_item">#ffa2d317</color>
 </resources>
