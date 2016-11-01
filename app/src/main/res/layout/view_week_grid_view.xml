@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_week_choose3"
     android:gravity="center">
-<TextView
-    android:tag="text"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:textSize="16dp"
-    android:text="1"
-    android:gravity="center"
-    android:padding="5dp" />
+
+    <TextView
+        android:tag="text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/btn_week_control_selector"
+        android:textSize="16dp"
+        android:text="1"
+        android:gravity="center"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp" />
 </LinearLayout>

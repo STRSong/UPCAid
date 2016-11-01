@@ -41,6 +41,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/dlg_week_choose_odd"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1.0"
@@ -56,6 +57,7 @@
                 android:background="@color/select_course_time_divider" />
 
             <Button
+                android:id="@+id/dlg_week_choose_Even"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1.0"
@@ -71,6 +73,7 @@
                 android:background="@color/select_course_time_divider" />
 
             <Button
+                android:id="@+id/dlg_week_choose_Full"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1.0"

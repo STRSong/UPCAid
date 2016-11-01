@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.drawable.shapes.RectShape;
 import android.graphics.drawable.shapes.Shape;
 import android.support.v4.content.ContextCompat;
+import android.view.DragEvent;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -25,21 +27,22 @@ import jwxt.cacher.cc.jwxt.R;
 public class WeekGridViewAdapter extends BaseAdapter {
     private List<View> viewList;
     private Context context;
+
     public WeekGridViewAdapter(Context context) {
-        this.context=context;
-        viewList=new ArrayList<>();
-        for(int i=1;i<=25;i++){
-            View view=View.inflate(context, R.layout.view_week_grid_view,null);
-            if(i%5==1){
+        this.context = context;
+        viewList = new ArrayList<>();
+        for (int i = 1; i <= 25; i++) {
+            View view = View.inflate(context, R.layout.view_week_grid_view, null);
+            if (i % 5 == 1) {
                 view.setBackgroundResource(R.drawable.shape_week_choose2);
             }
-            if(i==21){
-                view.setBackgroundResource(R.drawable.shape_week_choose);
+            if (i == 21) {
+                view.setBackgroundResource(R.drawable.shape_week_choose1);
             }
             if(i>21){
                 view.setBackgroundResource(R.drawable.shape_week_choose4);
             }
-            TextView textView=(TextView) view.findViewWithTag("text");
+            final TextView textView = (TextView) view.findViewWithTag("text");
             textView.setText(String.valueOf(i));
             viewList.add(view);
         }
@@ -52,7 +55,7 @@ public class WeekGridViewAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return this.viewList.get(position);
     }
 
     @Override
@@ -62,12 +65,17 @@ public class WeekGridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView==null){
+        if (convertView == null) {
             return viewList.get(position);
-        }else{
+        } else {
             return convertView;
         }
     }
+
+    public List<View> getViewList() {
+        return this.viewList;
+    }
+
     private int dip2px(Context context, float dipValue) {
         float m = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * m + 0.5f);

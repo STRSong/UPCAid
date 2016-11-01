@@ -5,8 +5,8 @@
         android:width="1.0px"
         android:color="#ffa0a0a0" />
     <padding
-        android:bottom="1.0dip"
-        android:left="1.0dip"
-        android:right="1.0dip"
-        android:top="1.0dip" />
+        android:bottom="1.0px"
+        android:left="1.0px"
+        android:right="1.0px"
+        android:top="1.0px" />
 </shape>
