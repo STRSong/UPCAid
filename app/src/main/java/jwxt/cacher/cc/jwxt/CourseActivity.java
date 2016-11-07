@@ -11,8 +11,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.print.PrintAttributes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.media.RatingCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -31,10 +33,12 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Gallery;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +50,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TooManyListenersException;
 
 import jwxt.cacher.cc.jwxt.info.Course;
 import jwxt.cacher.cc.jwxt.picker.MyOptionPicker;
@@ -53,6 +59,7 @@ import jwxt.cacher.cc.jwxt.picker.OptionPicker;
 import jwxt.cacher.cc.jwxt.util.ObjectSaveUtils;
 import jwxt.cacher.cc.jwxt.views.CourseAdapter;
 import jwxt.cacher.cc.jwxt.views.RotateTransformer;
+import jwxt.cacher.cc.jwxt.views.WeekGridViewAdapter;
 
 
 /**
@@ -95,8 +102,9 @@ public class CourseActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Thread threadFlushCourse;
     private ViewPager viewPager;
-
+    private List<TextView> wkTextViewList;
     private PopupWindow courseInfoPopup;
+    private ScrollView courseScroll;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,6 +122,8 @@ public class CourseActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        wkTextViewList = new ArrayList<>();
 
         textViewMonth = (TextView) findViewById(R.id.course_month);
         textViewSun = (TextView) findViewById(R.id.course_sun);
@@ -226,6 +236,20 @@ public class CourseActivity extends AppCompatActivity {
         firstColWidth = dm.widthPixels / 30 * 2;
         courseColWidth = dm.widthPixels / 30 * 4;
         courseRelative = (RelativeLayout) findViewById(R.id.course_relative);
+        courseScroll = (ScrollView) findViewById(R.id.course_info_scroll);
+        courseScroll.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    for (TextView tv : wkTextViewList) {
+                        if (tv.getText().equals("+")) {
+                            tv.setText(" ");
+                        }
+                    }
+                }
+                return false;
+            }
+        });
         for (int i = 1; i <= 12; i++) {
             for (int j = 1; j <= 8; j++) {
                 if (j == 1) {
@@ -248,8 +272,28 @@ public class CourseActivity extends AppCompatActivity {
                 } else {
                     //课程信息
                     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(courseColWidth, firstColHeight);
-                    TextView textView = new TextView(context);
-                    //textView.setBackgroundResource(R.drawable.course_first_textview);
+                    final TextView textView = new TextView(context);
+//                    textView.setBackgroundResource(R.drawable.course_first_textview);
+                    textView.setTextSize(23);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setText(" ");
+                    textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            TextView t = (TextView) v;
+                            if (t.getText().equals("+")) {
+                                Toast.makeText(context, "两次点击", Toast.LENGTH_SHORT).show();
+                            } else {
+                                for (TextView tv : wkTextViewList) {
+                                    if (tv.getText().equals("+")) {
+                                        tv.setText(" ");
+                                    }
+                                }
+                                t.setText("+");
+                            }
+                        }
+                    });
+
                     @android.support.annotation.IdRes int id = (i + 1) * 12 + j - 2;
                     textView.setId(id);
                     //textView.setText(String.valueOf(id));
@@ -262,6 +306,7 @@ public class CourseActivity extends AppCompatActivity {
                         lp.addRule(RelativeLayout.BELOW, (i) * 12 + j - 2);
                     }
                     courseRelative.addView(textView, lp);
+                    wkTextViewList.add(textView);
                 }
             }
         }
@@ -365,6 +410,7 @@ public class CourseActivity extends AppCompatActivity {
                 List<Course> thisWeekCourses = new ArrayList<>();
                 final Map<String, List<Course>> multiCourse = new HashMap<>();
                 back = new HashMap<>();
+                System.out.println(courseList);
                 //获取本周课程
                 if (courseList != null) {
                     for (int i = 0, b = 0; i < courseList.size(); i++) {
@@ -698,9 +744,25 @@ public class CourseActivity extends AppCompatActivity {
         TextView textViewCourseName = (TextView) popupView.findViewById(R.id.course_info_courseName);
         TextView textViewClassRoom = (TextView) popupView.findViewById(R.id.course_info_classRoom);
         TextView textViewTeacherName = (TextView) popupView.findViewById(R.id.course_info_teacherName);
+        GridView gridView = (GridView) popupView.findViewById(R.id.gridView_week_show);
         textViewCourseName.setText(course.getCourseName());
         textViewClassRoom.setText(course.getClassRoom());
         textViewTeacherName.setText(course.getTeacherName());
+        WeekGridViewAdapter adapter = new WeekGridViewAdapter(context);
+        Set<Integer> expected = course.getExpected();
+        Iterator iterator = expected.iterator();
+        while (iterator.hasNext()) {
+            int n = (int) iterator.next();
+            adapter.setTextViewSelected(n - 1, true);
+            System.out.println(n);
+        }
+        System.out.println(expected);
+        gridView.setAdapter(adapter);
+        /*修复少1像素Bug*/
+        gridView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        ViewGroup.LayoutParams params = gridView.getLayoutParams();
+        params.height = gridView.getMeasuredHeight() * 5 + 1;
+        gridView.setLayoutParams(params);
 
         courseInfoPopup = new PopupWindow(context);
         courseInfoPopup.setContentView(popupView);

@@ -15,7 +15,7 @@ public class Course implements Serializable {
     private int beginLesson; //开始节数
     private int endLesson; //结束节数
     private int beginWeek; //开始周数
-    private int endWeek; //节数周数
+    private int endWeek; //结束周数
     private int courseType; //1单周，2双周,3有特殊周
     private Set<Integer> expected;
 

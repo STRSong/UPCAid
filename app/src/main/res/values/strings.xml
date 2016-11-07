@@ -15,4 +15,7 @@
         <item>2014-2015-2</item>
         <item>2014-2015-1</item>
     </string-array>
+    <string name="add_course_name_hint">(未填写)</string>
+    <string name="edit_course_teacher_hint">(未填写)</string>
+
 </resources>

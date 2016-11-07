@@ -101,6 +101,7 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/dlg_week_choose_btn_cancel"
                     android:layout_width="0.0dip"
                     android:layout_height="fill_parent"
                     android:layout_weight="1.0"
@@ -116,6 +117,7 @@
                     android:background="@drawable/dlg_line_repeat" />
 
                 <Button
+                    android:id="@+id/dlg_week_choose_btn_confirm"
                     android:layout_width="0.0dip"
                     android:layout_height="fill_parent"
                     android:layout_weight="1.0"

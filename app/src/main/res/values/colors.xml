@@ -18,4 +18,14 @@
     <color name="lucency_white">#00ffffff</color>
     <color name="dlg_blue">#ff3b97e9</color>
     <color name="choose_item">#ffa2d317</color>
+    <color name="black">#ff000000</color>
+    <color name="background">#ffffffff</color>
+    <color name="tip_bar_text_normal">#ffdf9d1f</color>
+    <color name="list_tab_blue">#ff3b95e8</color>
+    <color name="detail_course_info_tips">#ff333333</color>
+    <color name="detail_course_info_text">#ff666666</color>
+    <color name="setting_unset_text">#ffffa100</color>
+    <color name="add_item_text_green">#ff00b500</color>
+    <color name="lucency_black">#00000000</color>
+    <color name="grey">#ff666666</color>
 </resources>

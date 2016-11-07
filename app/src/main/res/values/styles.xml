@@ -23,4 +23,37 @@
         <item name="android:windowEnterAnimation">@animator/popup_classroom_search_in</item>
         <item name="android:windowExitAnimation">@null</item>
     </style>
+    <style name="general_wrap">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="general_list_tab" parent="@style/general_wrap">
+        <item name="android:textSize">14.0dip</item>
+        <item name="android:paddingLeft">2.0dip</item>
+        <item name="android:paddingBottom">4.0dip</item>
+        <item name="android:clickable">false</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_marginTop">12.0dip</item>
+    </style>
+    <style name="general_list_tab_blue" parent="@style/general_list_tab">
+        <item name="android:textColor">@color/list_tab_blue</item>
+        <item name="android:background">@drawable/ic_tab_background_blue</item>
+    </style>
+    <style name="general_item_layout" parent="@style/general_wrap">
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:minHeight">50.0dip</item>
+    </style>
+    <style name="general_item_layout_top" parent="@style/general_item_layout">
+        <item name="android:background">@drawable/list_item_top_selector</item>
+    </style>
+    <style name="general_item_layout_top_unclick" parent="@style/general_item_layout_top">
+        <item name="android:clickable">false</item>
+    </style>
+    <style name="general_item_layout_middle" parent="@style/general_item_layout">
+        <item name="android:background">@drawable/list_item_middle_selector</item>
+    </style>
+    <style name="general_item_layout_middle_unclick" parent="@style/general_item_layout_middle">
+        <item name="android:clickable">false</item>
+    </style>
 </resources>

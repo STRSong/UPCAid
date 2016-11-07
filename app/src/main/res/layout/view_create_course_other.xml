@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_tab_background_blue"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/view_header"
+        style="@style/general_list_tab_blue"
+        android:background="@null"
+        android:layout_width="wrap_content"
+        android:drawableRight="@drawable/ic_multi_title_del"
+        android:text="其他时段 1 " />
+</LinearLayout>
