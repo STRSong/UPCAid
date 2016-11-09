@@ -51,7 +51,7 @@ public class CreateCourseActivity extends AppCompatActivity {
     private TextView tvTeacherName;
 
     private List<Course> courseList;
-    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +70,6 @@ public class CreateCourseActivity extends AppCompatActivity {
         }
 
         courseList = (ArrayList<Course>) getIntent().getSerializableExtra("course");
-        sharedPreferences = this.getSharedPreferences("courseInfo", Context.MODE_PRIVATE);
 
         tvCourseName = (TextView) findViewById(R.id.add_course_edt_courseName);
         tvTeacherName = (TextView) findViewById(R.id.add_course_edt_teacher);
@@ -102,6 +101,9 @@ public class CreateCourseActivity extends AppCompatActivity {
                     case R.id.create_course_menu_confirm:
                         String courseName = tvCourseName.getText().toString();
                         String teacherName = tvTeacherName.getText().toString();
+                        if (teacherName.isEmpty()) {
+                            teacherName = "未知";
+                        }
                         boolean isError = false;
                         if (courseName.isEmpty()) {
                             showHintDialog("课程名不能为空");
@@ -145,7 +147,7 @@ public class CreateCourseActivity extends AppCompatActivity {
                                 course.setBeginLesson(Integer.parseInt(sections[1]));
                                 course.setEndLesson(Integer.parseInt(sections[2]));
                                 if (infos[2].isEmpty()) {
-                                    course.setClassRoom("未知教室");
+                                    course.setClassRoom("未知");
                                 } else {
                                     course.setClassRoom(infos[2]);
                                 }

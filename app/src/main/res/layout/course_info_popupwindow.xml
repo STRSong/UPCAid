@@ -28,6 +28,7 @@
             android:gravity="right"
             android:weightSum="1">
             <Button
+                android:id="@+id/course_info_btn_edit"
                 android:layout_width="41dp"
                 android:layout_height="34dp"
                 android:textColor="@color/courseNameColor"
@@ -147,20 +148,47 @@
         android:layout_marginBottom="20dp"
         android:gravity="top"
         android:layout_marginRight="10dp">
-        <ImageView
+
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_detail_course_week_icon"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="5dp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="周数"
-            android:textSize="18dp"
-            android:gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_detail_course_week_icon"
+                    android:layout_marginRight="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="周数"
+                    android:textSize="18dp"
+                    android:gravity="center"
+                    android:layout_marginLeft="10dp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/course_info_btn_delete"
+                android:layout_width="65dp"
+                android:layout_height="34dp"
+                android:text="删除"
+                android:textColor="@color/white"
+                android:background="@drawable/course_info_edit_pressed"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp" />
+        </RelativeLayout>
+
 
         <GridView
             android:layout_width="wrap_content"

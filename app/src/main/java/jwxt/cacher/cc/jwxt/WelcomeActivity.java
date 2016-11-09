@@ -24,10 +24,10 @@ public class WelcomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         //计算屏幕大小
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        WelcomeActivity.screenHeight = dm.heightPixels;
-        WelcomeActivity.screenWidth = dm.widthPixels;
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(dm);
+//        WelcomeActivity.screenHeight = dm.heightPixels;
+//        WelcomeActivity.screenWidth = dm.widthPixels;
 
         activity=this;
 

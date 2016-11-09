@@ -97,6 +97,7 @@ public class CourseActivity extends AppCompatActivity {
     private int lastCurrentWeek;
     private int currentWeekOfYear;
     private int timeWeek;
+    private int currentShowWeek;
     private ListView listViewWeek;
     private WeekChoiceAdapter adapter;
     private Calendar calendar;
@@ -175,6 +176,7 @@ public class CourseActivity extends AppCompatActivity {
         /***********************/
         /*设置当前周*/
         currentWeek = sharedPreferences.getInt("currentWeek", 0);
+        currentShowWeek = currentWeek;
         if (currentWeek == 0) {
             ArrayList<String> data = new ArrayList<>();
             for (int i = 1; i <= 25; i++) {
@@ -367,7 +369,7 @@ public class CourseActivity extends AppCompatActivity {
         ObjectSaveUtils objectSaveUtils = new ObjectSaveUtils(context, "courseInfo");
         courseList = objectSaveUtils.getObject("courseList");
         Message msg = courseHandler.obtainMessage();
-        msg.arg1 = currentWeek;
+        msg.arg1 = currentShowWeek;
         courseHandler.sendMessage(msg);
     }
 
@@ -432,6 +434,7 @@ public class CourseActivity extends AppCompatActivity {
                         Course course = courseList.get(i);
                         if (course.isThisWeek(week)) {
                             thisWeekCourses.add(course);
+                            course.setMulti(false);
                             if (!back.containsKey(course.getCourseName())) {
                                 back.put(course.getCourseName(), b * 2);
                                 b++;
@@ -450,6 +453,7 @@ public class CourseActivity extends AppCompatActivity {
                             //如果是同一时间
                             if (thisWeekCourses.get(i).getBeginLesson() == thisWeekCourses.get(j).getBeginLesson()) {
                                 thisWeekCourses.get(i).setMulti(true);
+
                                 if (!sameTimeList.contains(thisWeekCourses.get(i))) {
                                     sameTimeList.add(thisWeekCourses.get(i));
                                 }
@@ -570,7 +574,8 @@ public class CourseActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 Message msg = courseHandler.obtainMessage();
-                msg.arg1 = position + 1;
+                currentShowWeek = position + 1;
+                msg.arg1 = currentShowWeek;
                 courseHandler.sendMessage(msg);
                 int deltaWeek = position + 1 - timeWeek;
                 calendar.add(Calendar.WEEK_OF_YEAR, deltaWeek);
@@ -600,7 +605,8 @@ public class CourseActivity extends AppCompatActivity {
                 TextView textView = (TextView) linearLayout.getChildAt(0);
                 String contentWeek = textView.getText().toString();
                 if (contentWeek.contains("(")) {
-                    contentWeek = contentWeek.substring(0, 3);
+                    contentWeek = contentWeek.substring(0, contentWeek.indexOf("(本"));
+
                 }
                 textViewWeek.setText(contentWeek);
                 weekChoicePopup.dismiss();
@@ -754,7 +760,7 @@ public class CourseActivity extends AppCompatActivity {
         return (int) (dipValue * m + 0.5f);
     }
 
-    private void showCourseInfoDialog(Course course) {
+    private void showCourseInfoDialog(final Course course) {
         View popupView = View.inflate(context, R.layout.course_info_popupwindow, null);
         TextView textViewCourseName = (TextView) popupView.findViewById(R.id.course_info_courseName);
         TextView textViewClassRoom = (TextView) popupView.findViewById(R.id.course_info_classRoom);
@@ -778,6 +784,47 @@ public class CourseActivity extends AppCompatActivity {
         ViewGroup.LayoutParams params = gridView.getLayoutParams();
         params.height = gridView.getMeasuredHeight() * 5 + 1;
         gridView.setLayoutParams(params);
+
+        Button btnDelete = (Button) popupView.findViewById(R.id.course_info_btn_delete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("提示");
+                builder.setMessage("确定要删除该课程？");
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        courseList.remove(course);
+                        ObjectSaveUtils objectSaveUtils = new ObjectSaveUtils(context, "courseInfo");
+                        objectSaveUtils.setObject("courseList", courseList);
+                        courseInfoPopup.dismiss();
+                        Message msg = courseHandler.obtainMessage();
+                        msg.arg1 = currentShowWeek;
+                        courseHandler.sendMessage(msg);
+                    }
+                });
+                builder.create().show();
+            }
+        });
+
+        Button buttonEdit=(Button)popupView.findViewById(R.id.course_info_btn_edit);
+        buttonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CourseActivity.this, EditCourseActivity.class);
+                intent.putExtra("course", (ArrayList<Course>) courseList);
+                intent.putExtra("courseIndex",courseList.indexOf(course));
+                startActivity(intent);
+                courseInfoPopup.dismiss();
+            }
+        });
 
         courseInfoPopup = new PopupWindow(context);
         courseInfoPopup.setContentView(popupView);

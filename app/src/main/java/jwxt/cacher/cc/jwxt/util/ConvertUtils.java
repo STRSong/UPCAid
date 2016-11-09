@@ -528,11 +528,11 @@ public class ConvertUtils {
 
     /**
      * int转中文 1-6
-     *
-     *
      */
-    public static String intToZH(int n){
-        switch (n){
+    public static String intToZH(int n) {
+        switch (n) {
+            case 0:
+                return "日";
             case 1:
                 return "一";
             case 2:
@@ -548,13 +548,14 @@ public class ConvertUtils {
         }
         return null;
     }
+
     /**
      * 中文转int 1-6
-     *
-     *
      */
-    public static int ZHToint(char n){
-        switch (n){
+    public static int ZHToint(char n) {
+        switch (n) {
+            case '日':
+                return 0;
             case '一':
                 return 1;
             case '二':

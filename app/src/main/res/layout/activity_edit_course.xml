@@ -13,7 +13,7 @@
         android:background="@color/white">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_create_course"
+            android:id="@+id/toolbar_edit_course"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
@@ -180,34 +180,11 @@
                         <TextView
                             style="@style/general_list_tab_blue"
                             android:text="课程时间" />
-                        <RelativeLayout
-                            android:id="@+id/add_course_rlyt_week"
-                            style="@style/general_item_layout_middle">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="周数"
-                                android:textColor="@color/detail_course_info_tips"
-                                android:textSize="16.0dip" />
-
-                            <TextView
-                                android:id="@+id/edit_course_txv_week"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="90.0dip"
-                                android:layout_marginRight="34.0dip"
-                                android:gravity="center|left"
-                                android:text="选择上课周数"
-                                android:textColor="@color/grey"
-                                android:textSize="16.0dip" />
-                        </RelativeLayout>
 
                         <RelativeLayout
                             android:id="@+id/add_course_rlyt_section"
-                            style="@style/general_item_layout_middle">
+                            style="@style/general_item_layout_middle"
+                            android:onClick="on_edit_section_click">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -227,8 +204,40 @@
                                 android:gravity="center|left"
                                 android:text="选择上课节数"
                                 android:textColor="@color/grey"
-                                android:textSize="16.0dip" />
+                                android:textSize="16.0dip"
+
+                                />
                         </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/add_course_rlyt_week"
+                            style="@style/general_item_layout_middle"
+                            android:onClick="on_edit_week_click">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="周数"
+                                android:textColor="@color/detail_course_info_tips"
+                                android:textSize="16.0dip" />
+
+                            <TextView
+                                android:id="@+id/edit_course_txv_week"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="90.0dip"
+                                android:layout_marginRight="34.0dip"
+                                android:gravity="center|left"
+                                android:text="选择上课周数"
+                                android:textColor="@color/grey"
+                                android:textSize="16.0dip"
+
+                                />
+                        </RelativeLayout>
+
+
                     </LinearLayout>
 
                 </LinearLayout>
