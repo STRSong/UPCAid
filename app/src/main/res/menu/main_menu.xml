@@ -9,4 +9,10 @@
         android:title="意见反馈"
         app:showAsAction="collapseActionView">
     </item>
+    <item
+        android:id="@+id/main_changeAccount"
+        android:orderInCategory="80"
+        android:title="切换账号"
+        app:showAsAction="collapseActionView">
+    </item>
 </menu>

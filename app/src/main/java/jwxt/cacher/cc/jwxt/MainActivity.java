@@ -169,6 +169,11 @@ public class MainActivity extends AppCompatActivity {
                             getWindow().setAttributes(lp);
                         }
                         break;
+                    case R.id.main_changeAccount:
+                        Intent intent = new Intent(MainActivity.this, SZSDLoginActivity.class);
+                        startActivity(intent);
+                        MainActivity.this.finish();
+                        break;
                 }
                 return false;
             }

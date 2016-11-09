@@ -142,7 +142,7 @@ public class SZSDLoginActivity extends AppCompatActivity {
             sharedPreferences.edit().putString("ACCOUNT", "").commit();
             sharedPreferences.edit().putString("PASSWORD", "").commit();
         }
-        if (checkBoxAutoLog.isSelected()) {
+        if (checkBoxAutoLog.isChecked()) {
             checkBoxRememberPass.setChecked(true);
             sharedPreferences.edit().putBoolean("IS_AUTOLOG", true).commit();
         } else {
@@ -160,7 +160,6 @@ public class SZSDLoginActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 Message msg = handlerLogin.obtainMessage();
                 Message msgProcess = handlerProcessDialog.obtainMessage();
                 msgProcess.arg1 = 1;
@@ -169,8 +168,10 @@ public class SZSDLoginActivity extends AppCompatActivity {
 
                 if (username.length() == 0 || password.length() == 0) {
                     msg.arg1 = 3;//用户名或密码为空
+                    sharedPreferences.edit().putBoolean("IS_AUTOLOG", false).commit();
                 } else if (loginResult == false) {
                     msg.arg1 = 1;//登陆失败
+                    sharedPreferences.edit().putBoolean("IS_AUTOLOG", false).commit();
                 } else {
                     msg.arg1 = 2;//登陆成功
                     Map<String, String> infoMap1 = szsdConnection.getSelfInfo();
