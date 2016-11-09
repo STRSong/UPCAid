@@ -16,7 +16,7 @@ public class Course implements Serializable {
     private int endLesson; //结束节数
     private int beginWeek; //开始周数
     private int endWeek; //结束周数
-    private int courseType; //1单周，2双周,3有特殊周
+    private int courseType = 1; //1单周，2双周,3有特殊周
     private Set<Integer> expected;
 
     public boolean isMulti() {
@@ -128,5 +128,44 @@ public class Course implements Serializable {
 
     public String toString() {
         return this.courseName + "," + this.classRoom + "," + this.day + "," + this.teacherName + "," + this.beginLesson + "," + this.endLesson + "," + this.expected + "," + this.courseType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Course course = (Course) o;
+
+        if (day != course.day) return false;
+        if (beginLesson != course.beginLesson) return false;
+        if (endLesson != course.endLesson) return false;
+        if (beginWeek != course.beginWeek) return false;
+        if (endWeek != course.endWeek) return false;
+        if (courseType != course.courseType) return false;
+        if (isMulti != course.isMulti) return false;
+        if (!courseName.equals(course.courseName)) return false;
+        if (classRoom != null ? !classRoom.equals(course.classRoom) : course.classRoom != null)
+            return false;
+        if (teacherName != null ? !teacherName.equals(course.teacherName) : course.teacherName != null)
+            return false;
+        return expected.equals(course.expected);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = courseName.hashCode();
+        result = 31 * result + (classRoom != null ? classRoom.hashCode() : 0);
+        result = 31 * result + (teacherName != null ? teacherName.hashCode() : 0);
+        result = 31 * result + day;
+        result = 31 * result + beginLesson;
+        result = 31 * result + endLesson;
+        result = 31 * result + beginWeek;
+        result = 31 * result + endWeek;
+        result = 31 * result + courseType;
+        result = 31 * result + expected.hashCode();
+        result = 31 * result + (isMulti ? 1 : 0);
+        return result;
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -57,6 +58,7 @@ import jwxt.cacher.cc.jwxt.info.Course;
 import jwxt.cacher.cc.jwxt.picker.MyOptionPicker;
 import jwxt.cacher.cc.jwxt.picker.OptionPicker;
 import jwxt.cacher.cc.jwxt.util.ObjectSaveUtils;
+import jwxt.cacher.cc.jwxt.util.ScreenUtils;
 import jwxt.cacher.cc.jwxt.views.CourseAdapter;
 import jwxt.cacher.cc.jwxt.views.RotateTransformer;
 import jwxt.cacher.cc.jwxt.views.WeekGridViewAdapter;
@@ -282,7 +284,11 @@ public class CourseActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             TextView t = (TextView) v;
                             if (t.getText().equals("+")) {
-                                Toast.makeText(context, "两次点击", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(context, "两次点击", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(CourseActivity.this, CreateCourseActivity.class);
+                                intent.putExtra("course", (ArrayList<Course>) courseList);
+                                startActivity(intent);
+                                t.setText(" ");
                             } else {
                                 for (TextView tv : wkTextViewList) {
                                     if (tv.getText().equals("+")) {
@@ -355,6 +361,16 @@ public class CourseActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ObjectSaveUtils objectSaveUtils = new ObjectSaveUtils(context, "courseInfo");
+        courseList = objectSaveUtils.getObject("courseList");
+        Message msg = courseHandler.obtainMessage();
+        msg.arg1 = currentWeek;
+        courseHandler.sendMessage(msg);
+    }
+
     private Toolbar.OnMenuItemClickListener getMenuItemClickListener() {
         return new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -410,7 +426,6 @@ public class CourseActivity extends AppCompatActivity {
                 List<Course> thisWeekCourses = new ArrayList<>();
                 final Map<String, List<Course>> multiCourse = new HashMap<>();
                 back = new HashMap<>();
-                System.out.println(courseList);
                 //获取本周课程
                 if (courseList != null) {
                     for (int i = 0, b = 0; i < courseList.size(); i++) {
@@ -448,9 +463,9 @@ public class CourseActivity extends AppCompatActivity {
                         multiCourse.put(thisWeekCourses.get(i).getCourseName(), sameTimeList);
                     }
                 }
-                for (int i = 0; i < multiCourse.size(); i++) {
-                    System.out.println(multiCourse.get(i));
-                }
+//                for (int i = 0; i < multiCourse.size(); i++) {
+//                    System.out.println(multiCourse.get(i));
+//                }
                 for (int i = 0; i < thisWeekCourses.size(); i++) {
                     final Course course = thisWeekCourses.get(i);
                     TextView courseText = new TextView(context);
@@ -518,7 +533,7 @@ public class CourseActivity extends AppCompatActivity {
 
     public void on_ChoiceWeek_Click(View view) {
         if (weekChoicePopup != null) {
-            int moveX = WelcomeActivity.screenWidth / 2 - dip2px(context, 200.0f) / 2;
+            int moveX = ScreenUtils.widthPixels(context) / 2 - dip2px(context, 200.0f) / 2;
             weekChoicePopup.showAsDropDown(toolbar, moveX, 0);
             if (listViewWeek != null) {
                 /*设置list position*/
@@ -560,7 +575,7 @@ public class CourseActivity extends AppCompatActivity {
                 int deltaWeek = position + 1 - timeWeek;
                 calendar.add(Calendar.WEEK_OF_YEAR, deltaWeek);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                System.out.println(simpleDateFormat.format(calendar.getTime()));
+                //System.out.println(simpleDateFormat.format(calendar.getTime()));
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 int week = calendar.get(Calendar.DAY_OF_WEEK);
@@ -754,9 +769,9 @@ public class CourseActivity extends AppCompatActivity {
         while (iterator.hasNext()) {
             int n = (int) iterator.next();
             adapter.setTextViewSelected(n - 1, true);
-            System.out.println(n);
+            //System.out.println(n);
         }
-        System.out.println(expected);
+        //System.out.println(expected);
         gridView.setAdapter(adapter);
         /*修复少1像素Bug*/
         gridView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);

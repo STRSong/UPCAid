@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".CreateCourseActivity">
+    <item
+        android:id="@+id/create_course_menu_confirm"
+        android:orderInCategory="80"
+        android:title="确定"
+        app:showAsAction="always">
+    </item>
+</menu>

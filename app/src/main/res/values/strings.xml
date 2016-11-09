@@ -17,5 +17,6 @@
     </string-array>
     <string name="add_course_name_hint">(未填写)</string>
     <string name="edit_course_teacher_hint">(未填写)</string>
-
+    <string name="general_cancle">取消</string>
+    <string name="general_confirm">确定</string>
 </resources>

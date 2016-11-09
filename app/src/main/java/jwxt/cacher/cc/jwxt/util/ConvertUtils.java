@@ -526,4 +526,48 @@ public class ConvertUtils {
         return toStateListDrawable(normalColor, pressedColor, pressedColor, normalColor);
     }
 
+    /**
+     * int转中文 1-6
+     *
+     *
+     */
+    public static String intToZH(int n){
+        switch (n){
+            case 1:
+                return "一";
+            case 2:
+                return "二";
+            case 3:
+                return "三";
+            case 4:
+                return "四";
+            case 5:
+                return "五";
+            case 6:
+                return "六";
+        }
+        return null;
+    }
+    /**
+     * 中文转int 1-6
+     *
+     *
+     */
+    public static int ZHToint(char n){
+        switch (n){
+            case '一':
+                return 1;
+            case '二':
+                return 2;
+            case '三':
+                return 3;
+            case '四':
+                return 4;
+            case '五':
+                return 5;
+            case '六':
+                return 6;
+        }
+        return 0;
+    }
 }

@@ -45,9 +45,7 @@ public class WeekChoiceAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater=LayoutInflater.from(context);
         LinearLayout linearLayout=(LinearLayout)inflater.inflate(R.layout.week_item,null);
-
         TextView textView=(TextView)linearLayout.getChildAt(0);
-
         textView.setText(weekList.get(position));
         return linearLayout;
     }

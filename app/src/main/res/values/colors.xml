@@ -28,4 +28,6 @@
     <color name="add_item_text_green">#ff00b500</color>
     <color name="lucency_black">#00000000</color>
     <color name="grey">#ff666666</color>
+    <color name="lucency_black_20">#33000000</color>
+    <color name="dlg_title">#ff666666</color>
 </resources>

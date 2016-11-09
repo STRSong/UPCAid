@@ -14,7 +14,7 @@
         android:textSize="18.0dip" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="296.0dip"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_below="@id/textView_weekChoiceTitle">

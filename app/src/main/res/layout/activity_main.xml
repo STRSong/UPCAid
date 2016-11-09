@@ -58,10 +58,10 @@
 
                     <TextView
                         android:id="@+id/tv_main_name"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="35dp"
                         android:layout_marginLeft="15dp"
-                        android:text="李祥璞"
+                        android:text="马左崇骥"
                         android:textColor="@color/Black"
                         android:textSize="30dp" />
                 </LinearLayout>

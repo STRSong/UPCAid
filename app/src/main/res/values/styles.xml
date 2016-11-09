@@ -6,6 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:listPreferredItemHeight">30dip</item>
+    </style>
+    <style name="ToolbarMenuTextColor" parent="AppTheme">
+        <item name="android:actionMenuTextColor">@color/white</item>
     </style>
     <style name="Animation.Popup" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>

@@ -27,7 +27,11 @@
 
         </activity>
         <activity android:name=".WelcomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".LibraryActivity">
 
@@ -36,11 +40,10 @@
 
         </activity>
         <activity android:name=".CreateCourseActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity android:name=".EditCourseActivity">
+
         </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
