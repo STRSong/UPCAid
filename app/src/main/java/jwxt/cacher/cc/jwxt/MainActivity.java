@@ -5,7 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.renderscript.ScriptGroup;
@@ -29,6 +33,12 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
     private Handler handlerClassRoom;
     private Handler handlerLibrary;
     private Handler handlerFeedback;
+    private Handler handlerUpdate;
+    private Handler handlerProcessDialog;
+
     private ProgressDialog progressDialog;
     private Context context;
     private Bitmap checkBitmap;
@@ -57,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean isSameUser;
     private PopupWindow popupWindow;
     private View popupView;
+    private int currentVersion;
+    private int updateVersion;
+    private ProgressDialog downFileDialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +109,38 @@ public class MainActivity extends AppCompatActivity {
         initHandler();
         initPopupWindow();
 //        System.out.println("account:"+sharedPreferences.getString("lastUser",""));
+
+        //获取当前版本号
+        PackageManager packageManager = getPackageManager();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+            currentVersion = packageInfo.versionCode;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        initHandler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    updateVersion = szsdConnection.getVersionCode();
+                    if (updateVersion != 0) {
+                        if (updateVersion > currentVersion) {
+                            Map<String, Object> updateInfo = szsdConnection.getUpdateInfo();
+                            Message msg = handlerUpdate.obtainMessage();
+                            msg.obj = updateInfo;
+                            handlerUpdate.sendMessage(msg);
+                        }
+                    } else {
+                        //获取版本号失败
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -247,6 +296,34 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(context,"谢谢您的支持！ ^_^",Toast.LENGTH_SHORT).show();
             }
         };
+        handlerUpdate = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Map<String, Object> updateInfo = (Map<String, Object>) msg.obj;
+                showUpdateDialog(updateInfo);
+            }
+        };
+        handlerProcessDialog = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                int result = msg.arg1;
+                //1登录显示，2登录隐藏，3下载隐藏
+                switch (result) {
+                    case 1:
+                        progressDialog.show();
+                        break;
+                    case 2:
+                        progressDialog.cancel();
+                        break;
+                    case 3:
+                        downFileDialog.cancel();
+                        update();
+                        break;
+                }
+            }
+        };
     }
     private void initPopupWindow(){
         popupView=View.inflate(context,R.layout.feedback_popupwindow,null);
@@ -303,5 +380,98 @@ public class MainActivity extends AppCompatActivity {
                 getWindow().setAttributes(lp);
             }
         });
+    }
+
+    private void showUpdateDialog(final Map<String, Object> updateInfo) {
+        String[] info = (String[]) updateInfo.get("info");
+        final String link = (String) updateInfo.get("link");
+        for (String str : info) {
+            System.out.println(str);
+        }
+        System.out.println(link);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("有更新啦~");
+        StringBuilder message = new StringBuilder();
+        for (int i = 0; i < info.length; i++) {
+            message.append(info[i]);
+            if (i < info.length - 1) {
+                message.append("\n");
+            }
+        }
+        builder.setMessage(message.toString());
+        builder.setCancelable(false);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                downFile(link);
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create().show();
+    }
+    private void downFile(final String downUrl) {
+        downFileDialog = new ProgressDialog(context);
+        downFileDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        downFileDialog.setTitle("正在下载");
+        downFileDialog.setMessage("请稍后...");
+        downFileDialog.setProgress(0);
+        downFileDialog.setCancelable(false);
+        downFileDialog.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(downUrl);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setDoInput(true);
+                    httpURLConnection.connect();
+                    InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+
+                    int fileLength = httpURLConnection.getContentLength();
+                    System.out.println("文件大小:" + fileLength);
+                    //设置进度条总进度
+                    downFileDialog.setMax(fileLength);
+
+                    File file = new File(Environment.getExternalStorageDirectory(), "SZSD");
+                    if (!file.exists()) {
+                        file.mkdir();
+                    }
+                    File apkFile = new File(file, "UPCAid.apk");
+                    FileOutputStream fileOutputStream = new FileOutputStream(apkFile);
+                    byte[] buf = new byte[1024];
+                    int length = inputStream.read(buf);
+                    int process = 0;
+                    while (length != -1) {
+                        fileOutputStream.write(buf, 0, length);
+                        length = inputStream.read(buf);
+                        process += length;
+                        downFileDialog.setProgress(process);
+                    }
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                    inputStream.close();
+                    Message msg = handlerProcessDialog.obtainMessage();
+                    msg.arg1 = 3;
+                    handlerProcessDialog.sendMessage(msg);
+                    if (httpURLConnection != null) {
+                        httpURLConnection.disconnect();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    //打开apk安装界面
+    private void update() {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
+                "SZSD" + File.separator + "UPCAid.apk")), "application/vnd.android.package-archive");
+        startActivity(intent);
     }
 }

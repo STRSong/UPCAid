@@ -14,11 +14,13 @@ import android.util.DisplayMetrics;
  */
 
 public class WelcomeActivity extends Activity {
-    public static int screenWidth;
-    public static int screenHeight;
     public static int statusBarHeight;
     private Activity activity;
     private SharedPreferences sharedPreferences;
+    private String account;
+    private String password;
+    private boolean isAutoLog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,9 +31,15 @@ public class WelcomeActivity extends Activity {
 //        WelcomeActivity.screenHeight = dm.heightPixels;
 //        WelcomeActivity.screenWidth = dm.widthPixels;
 
-        activity=this;
-
+        activity = this;
         sharedPreferences = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        isAutoLog = sharedPreferences.getBoolean("IS_AUTOLOG", false);
+        if(isAutoLog){
+            account = sharedPreferences.getString("ACCOUNT", "");
+            password = sharedPreferences.getString("PASSWORD", "");
+
+        }
+
 
         //在界面上显示一个提示框
 //        Toast.makeText(WelcomeActivity.this, "欢迎使用！", Toast.LENGTH_LONG).show();
@@ -45,9 +53,9 @@ public class WelcomeActivity extends Activity {
                 startActivity(intent);
 
                 //获取状态栏高度
-                Rect rect=new Rect();
+                Rect rect = new Rect();
                 activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-                WelcomeActivity.statusBarHeight=rect.top;
+                WelcomeActivity.statusBarHeight = rect.top;
 
                 //增加一个页面跳转的动画
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

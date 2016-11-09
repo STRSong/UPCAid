@@ -18,6 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,10 +66,20 @@ public class SZSDLoginActivity extends AppCompatActivity {
         checkBoxAutoLog = (CheckBox) findViewById(R.id.checkbox_autoLogin);
         sharedPreferences = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
 
+        checkBoxAutoLog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    checkBoxRememberPass.setChecked(isChecked);
+                }
+            }
+        });
+
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("正在登录，请稍后...");
         progressDialog.setCancelable(false);
 
+        //记住账号
         if (sharedPreferences.getBoolean("IS_CHECKED", false)) {
             checkBoxRememberPass.setChecked(true);
             textViewUsername.setText(sharedPreferences.getString("ACCOUNT", ""));
@@ -77,39 +88,43 @@ public class SZSDLoginActivity extends AppCompatActivity {
         } else {
             checkBoxRememberPass.setChecked(false);
         }
-        //获取当前版本号
-        PackageManager packageManager = getPackageManager();
-        try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
-            currentVersion = packageInfo.versionCode;
-        } catch (Exception e) {
-            e.printStackTrace();
+        //自动登录
+        if (sharedPreferences.getBoolean("IS_AUTOLOG", false)) {
+            checkBoxAutoLog.setChecked(true);
+        } else {
+            checkBoxAutoLog.setChecked(false);
         }
+        //获取当前版本号
+//        PackageManager packageManager = getPackageManager();
+//        try {
+//            PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+//            currentVersion = packageInfo.versionCode;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         initHandler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    updateVersion = szsdConnection.getVersionCode();
-                    if (updateVersion != 0) {
-                        if (updateVersion > currentVersion) {
-                            Map<String, Object> updateInfo = szsdConnection.getUpdateInfo();
-                            Message msg = handlerUpdate.obtainMessage();
-                            msg.obj = updateInfo;
-                            handlerUpdate.sendMessage(msg);
-                        }
-                    } else {
-                        //获取版本号失败
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-        }).start();
-
-
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    updateVersion = szsdConnection.getVersionCode();
+//                    if (updateVersion != 0) {
+//                        if (updateVersion > currentVersion) {
+//                            Map<String, Object> updateInfo = szsdConnection.getUpdateInfo();
+//                            Message msg = handlerUpdate.obtainMessage();
+//                            msg.obj = updateInfo;
+//                            handlerUpdate.sendMessage(msg);
+//                        }
+//                    } else {
+//                        //获取版本号失败
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        }).start();
 
 
     }
@@ -127,14 +142,19 @@ public class SZSDLoginActivity extends AppCompatActivity {
             sharedPreferences.edit().putString("ACCOUNT", "").commit();
             sharedPreferences.edit().putString("PASSWORD", "").commit();
         }
-
-        String lastUser=sharedPreferences.getString("lastUser","");
+        if (checkBoxAutoLog.isSelected()) {
+            checkBoxRememberPass.setChecked(true);
+            sharedPreferences.edit().putBoolean("IS_AUTOLOG", true).commit();
+        } else {
+            sharedPreferences.edit().putBoolean("IS_AUTOLOG", false).commit();
+        }
+        String lastUser = sharedPreferences.getString("lastUser", "");
         //当前用户与上一用户对比
-        if(lastUser.equals(username)){
-            sharedPreferences.edit().putBoolean("sameUser",true).commit();
-        }else{
-            sharedPreferences.edit().putString("lastUser",username).commit();
-            sharedPreferences.edit().putBoolean("sameUser",false).commit();
+        if (lastUser.equals(username)) {
+            sharedPreferences.edit().putBoolean("sameUser", true).commit();
+        } else {
+            sharedPreferences.edit().putString("lastUser", username).commit();
+            sharedPreferences.edit().putBoolean("sameUser", false).commit();
         }
 
         new Thread(new Runnable() {
@@ -230,6 +250,7 @@ public class SZSDLoginActivity extends AppCompatActivity {
         };
 
     }
+
     private void showUpdateDialog(final Map<String, Object> updateInfo) {
         String[] info = (String[]) updateInfo.get("info");
         final String link = (String) updateInfo.get("link");
@@ -239,10 +260,10 @@ public class SZSDLoginActivity extends AppCompatActivity {
         System.out.println(link);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("有更新啦~");
-        StringBuilder message=new StringBuilder();
-        for(int i=0;i<info.length;i++){
+        StringBuilder message = new StringBuilder();
+        for (int i = 0; i < info.length; i++) {
             message.append(info[i]);
-            if(i<info.length-1){
+            if (i < info.length - 1) {
                 message.append("\n");
             }
         }
