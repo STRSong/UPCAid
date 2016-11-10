@@ -176,7 +176,6 @@ public class CourseActivity extends AppCompatActivity {
         /***********************/
         /*设置当前周*/
         currentWeek = sharedPreferences.getInt("currentWeek", 0);
-        currentShowWeek = currentWeek;
         if (currentWeek == 0) {
             ArrayList<String> data = new ArrayList<>();
             for (int i = 1; i <= 25; i++) {
@@ -189,6 +188,7 @@ public class CourseActivity extends AppCompatActivity {
                 @Override
                 public void onOptionPicked(int position, String option) {
                     currentWeek = Integer.parseInt(option);
+                    currentShowWeek = currentWeek;
                     sharedPreferences.edit().putInt("currentWeek", currentWeek).commit();
                     textViewWeek.setText("第" + currentWeek + "周");
                     Message msg = courseHandler.obtainMessage();
@@ -198,6 +198,7 @@ public class CourseActivity extends AppCompatActivity {
             });
             picker.show();
         }
+
         if (calendar.get(Calendar.WEEK_OF_YEAR) > currentWeekOfYear) {
             currentWeek += 1;
             sharedPreferences.edit().putInt("currentWeek", currentWeek).commit();
@@ -365,12 +366,12 @@ public class CourseActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
         ObjectSaveUtils objectSaveUtils = new ObjectSaveUtils(context, "courseInfo");
         courseList = objectSaveUtils.getObject("courseList");
         Message msg = courseHandler.obtainMessage();
         msg.arg1 = currentShowWeek;
         courseHandler.sendMessage(msg);
+        super.onResume();
     }
 
     private Toolbar.OnMenuItemClickListener getMenuItemClickListener() {
@@ -429,6 +430,7 @@ public class CourseActivity extends AppCompatActivity {
                 final Map<String, List<Course>> multiCourse = new HashMap<>();
                 back = new HashMap<>();
                 //获取本周课程
+                System.out.println(week);
                 if (courseList != null) {
                     for (int i = 0, b = 0; i < courseList.size(); i++) {
                         Course course = courseList.get(i);
@@ -814,13 +816,13 @@ public class CourseActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonEdit=(Button)popupView.findViewById(R.id.course_info_btn_edit);
+        Button buttonEdit = (Button) popupView.findViewById(R.id.course_info_btn_edit);
         buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CourseActivity.this, EditCourseActivity.class);
                 intent.putExtra("course", (ArrayList<Course>) courseList);
-                intent.putExtra("courseIndex",courseList.indexOf(course));
+                intent.putExtra("courseIndex", courseList.indexOf(course));
                 startActivity(intent);
                 courseInfoPopup.dismiss();
             }

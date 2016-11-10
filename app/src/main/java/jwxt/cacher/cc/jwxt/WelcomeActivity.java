@@ -42,6 +42,7 @@ public class WelcomeActivity extends Activity {
         if (isAutoLog) {
             account = sharedPreferences.getString("ACCOUNT", "");
             password = sharedPreferences.getString("PASSWORD", "");
+            sharedPreferences.edit().putBoolean("sameUser", true).commit();
             initHandler();
             new Thread(new Runnable() {
                 @Override
