@@ -369,6 +369,9 @@ public class CourseActivity extends AppCompatActivity {
         ObjectSaveUtils objectSaveUtils = new ObjectSaveUtils(context, "courseInfo");
         courseList = objectSaveUtils.getObject("courseList");
         Message msg = courseHandler.obtainMessage();
+        if (currentShowWeek == 0) {
+            currentShowWeek = currentWeek;
+        }
         msg.arg1 = currentShowWeek;
         courseHandler.sendMessage(msg);
         super.onResume();
@@ -430,7 +433,6 @@ public class CourseActivity extends AppCompatActivity {
                 final Map<String, List<Course>> multiCourse = new HashMap<>();
                 back = new HashMap<>();
                 //获取本周课程
-                System.out.println(week);
                 if (courseList != null) {
                     for (int i = 0, b = 0; i < courseList.size(); i++) {
                         Course course = courseList.get(i);
