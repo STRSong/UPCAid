@@ -83,7 +83,7 @@ public class ScoreActivity extends AppCompatActivity {
         //setSearchViewProperties();
         listView = (ListView) this.findViewById(R.id.listView_Score);
 
-        connection = (SZSDConnection) getIntent().getSerializableExtra("connection");
+        connection = SZSDConnection.getInstance();
 
     }
 

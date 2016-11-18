@@ -41,11 +41,11 @@ public class LibListAdapter extends BaseAdapter {
     private AlertDialog alertDialog;
     private String checkCode = null;
 
-    public LibListAdapter(final Context context, ArrayList<BookInfo> bookList, Bitmap bitmap, SZSDConnection szsdConnection) {
+    public LibListAdapter(final Context context, ArrayList<BookInfo> bookList, Bitmap bitmap) {
         this.context = context;
         this.bitmap = bitmap;
         this.bookList = bookList;
-        this.szsdConnection = szsdConnection;
+        this.szsdConnection = SZSDConnection.getInstance();
         renewHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -89,8 +89,8 @@ public class LibListAdapter extends BaseAdapter {
                 ImageView imageView = (ImageView) renewBookView.findViewById(R.id.image_captcha);
                 imageView.setImageBitmap(bitmap);
                 final EditText editText = (EditText) renewBookView.findViewById(R.id.edit_captcha);
-                editText.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_CLASS_NUMBER);
-                if(checkCode!=null){
+                editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
+                if (checkCode != null) {
                     editText.setText(checkCode);
                     editText.setSelection(checkCode.length());
                 }
@@ -109,8 +109,8 @@ public class LibListAdapter extends BaseAdapter {
                 renewBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(checkCode==null){
-                            checkCode=editText.getText().toString();
+                        if (checkCode == null) {
+                            checkCode = editText.getText().toString();
                         }
                         new Thread(new Runnable() {
                             @Override
@@ -127,7 +127,7 @@ public class LibListAdapter extends BaseAdapter {
                         }
                     }
                 });
-                alertDialog=new AlertDialog.Builder(context).create();
+                alertDialog = new AlertDialog.Builder(context).create();
                 alertDialog.show();
                 alertDialog.getWindow().setContentView(renewBookView);
                 //显示输入法

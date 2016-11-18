@@ -58,7 +58,7 @@ public class SZSDLoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_szsd_login);
-        szsdConnection = new SZSDConnection();
+        szsdConnection = SZSDConnection.getInstance();
         context = this;
         textViewUsername = (EditText) findViewById(R.id.tv_szsd_username);
         textViewPassword = (EditText) findViewById(R.id.tv_szsd_password);
@@ -206,9 +206,7 @@ public class SZSDLoginActivity extends AppCompatActivity {
                         break;
                     case 2:
                         Map<String, String> info = (HashMap<String, String>) msg.obj;
-                        SZSDConnection conn = szsdConnection;
                         Intent intent = new Intent(SZSDLoginActivity.this, MainActivity.class);
-                        intent.putExtra("connection", conn);
                         intent.putExtra("name", info.get("name"));
                         intent.putExtra("card", info.get("card"));
                         intent.putExtra("lib", info.get("lib"));

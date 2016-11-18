@@ -26,7 +26,6 @@ public class LibraryActivity extends AppCompatActivity {
     private Context context;
     private ListView listView;
     private Bitmap captcha;
-    private SZSDConnection szsdConnection;
     private ArrayList<BookInfo> bookInfoArrayList;
     private Toolbar toolbar;
     @Override
@@ -46,10 +45,9 @@ public class LibraryActivity extends AppCompatActivity {
         }
 
         listView = (ListView) findViewById(R.id.listView_lib);
-        szsdConnection = (SZSDConnection) getIntent().getSerializableExtra("connection");
         bookInfoArrayList = (ArrayList<BookInfo>) getIntent().getSerializableExtra("bookInfoArrayList");
         captcha=(Bitmap)getIntent().getParcelableExtra("captcha");
-        LibListAdapter adapter = new LibListAdapter(context, bookInfoArrayList, captcha,szsdConnection);
+        LibListAdapter adapter = new LibListAdapter(context, bookInfoArrayList, captcha);
         listView.setAdapter(adapter);
     }
     private View.OnClickListener getNavigationOnClickListener(){

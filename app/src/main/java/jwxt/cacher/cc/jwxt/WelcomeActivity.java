@@ -33,7 +33,7 @@ public class WelcomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        szsdConnection = new SZSDConnection();
+        szsdConnection = SZSDConnection.getInstance();
 
         activity = this;
         context = this;
@@ -118,9 +118,7 @@ public class WelcomeActivity extends Activity {
                 switch (msg.arg1) {
                     case 2:
                         Map<String, String> info = (HashMap<String, String>) msg.obj;
-                        SZSDConnection conn = szsdConnection;
                         Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-                        intent.putExtra("connection", conn);
                         intent.putExtra("name", info.get("name"));
                         intent.putExtra("card", info.get("card"));
                         intent.putExtra("lib", info.get("lib"));

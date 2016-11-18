@@ -44,16 +44,22 @@ import jwxt.cacher.cc.jwxt.info.Course;
 /**
  * Created by xhaiben on 2016/8/30.
  */
-public class SZSDConnection implements Serializable {
+public class SZSDConnection {
     private String jwxtCookie;
     private String szsdCookie;
     private String libCookie = null;
     private int timeOut;
 
-    public SZSDConnection() {
+    //单例模式
+    private static SZSDConnection INSTANCE = new SZSDConnection();
+
+    private SZSDConnection() {
         timeOut = 10000;
     }
 
+    public static SZSDConnection getInstance() {
+        return INSTANCE;
+    }
     public boolean szsdLogin(String username, String password, Context context) {
         try {
             String loginURL = "https://cacher.cc:8443/SZSDServlet2/szsd?command=logToSzsd"

@@ -212,7 +212,7 @@ public class CourseActivity extends AppCompatActivity {
         /**************/
 
 
-        szsdConnection = (SZSDConnection) getIntent().getSerializableExtra("connection");
+        szsdConnection = SZSDConnection.getInstance();
         courseList = (ArrayList<Course>) getIntent().getSerializableExtra("course");
         backDrawable = new int[18];
         //正常 0,2,4,6,8 多个1,3,5,7,9

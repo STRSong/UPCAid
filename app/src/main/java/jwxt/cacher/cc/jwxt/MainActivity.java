@@ -78,12 +78,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context=this;
+        context = this;
 
-        textViewLib=(TextView)findViewById(R.id.tv_main_lib);
-        textViewCard=(TextView)findViewById(R.id.tv_main_card);
-        textViewName=(TextView)findViewById(R.id.tv_main_name);
-        toolbar=(Toolbar)findViewById(R.id.toolbar_main);
+        textViewLib = (TextView) findViewById(R.id.tv_main_lib);
+        textViewCard = (TextView) findViewById(R.id.tv_main_card);
+        textViewName = (TextView) findViewById(R.id.tv_main_name);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -93,16 +93,16 @@ public class MainActivity extends AppCompatActivity {
 //        ActionBar actionBar=getSupportActionBar();
         toolbar.setOnMenuItemClickListener(getMenuItemClickListener());
 
-        progressDialog=new ProgressDialog(context);
+        progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("正在加载，请稍后...");
         progressDialog.setCancelable(false);
 
-        sharedPreferences=this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        isSameUser=sharedPreferences.getBoolean("sameUser",true);
-        szsdConnection=(SZSDConnection)getIntent().getSerializableExtra("connection");
-        String name=(String)getIntent().getSerializableExtra("name");
-        String lib=(String)getIntent().getSerializableExtra("lib");
-        String card=(String)getIntent().getSerializableExtra("card");
+        sharedPreferences = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        isSameUser = sharedPreferences.getBoolean("sameUser", true);
+        szsdConnection = SZSDConnection.getInstance();
+        String name = (String) getIntent().getSerializableExtra("name");
+        String lib = (String) getIntent().getSerializableExtra("lib");
+        String card = (String) getIntent().getSerializableExtra("card");
         textViewName.setText(name);
         textViewLib.setText(lib);
         textViewCard.setText(card);
@@ -142,9 +142,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
 
 
         return super.onCreateOptionsMenu(menu);
@@ -155,17 +156,18 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onPrepareOptionsMenu(menu);
     }
-    private Toolbar.OnMenuItemClickListener getMenuItemClickListener(){
+
+    private Toolbar.OnMenuItemClickListener getMenuItemClickListener() {
         return new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.main_feedback:
 //                        Toast.makeText(context,"AA",Toast.LENGTH_SHORT).show();
-                        if(popupWindow!=null&&!popupWindow.isShowing()){
+                        if (popupWindow != null && !popupWindow.isShowing()) {
                             popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-                            WindowManager.LayoutParams lp=getWindow().getAttributes();
-                            lp.alpha=0.6f;
+                            WindowManager.LayoutParams lp = getWindow().getAttributes();
+                            lp.alpha = 0.6f;
                             getWindow().setAttributes(lp);
                         }
                         break;
@@ -180,71 +182,74 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    public void onCoursesClick(View view){
+    public void onCoursesClick(View view) {
         progressDialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 ObjectSaveUtils objectSaveUtils = new ObjectSaveUtils(context, "courseInfo");
-                List<Course> courseList=null;
-                if(isSameUser) {
+                List<Course> courseList = null;
+                if (isSameUser) {
                     courseList = objectSaveUtils.getObject("courseList");
                 }
-                isSameUser=true;
-                if(courseList==null||courseList.get(0).getCourseName().equals("评教未完成")){
-                    courseList=szsdConnection.getCourseInfo("2016-2017-1","");
-                    objectSaveUtils.setObject("courseList",courseList);
+                isSameUser = true;
+                if (courseList == null || courseList.get(0).getCourseName().equals("评教未完成")) {
+                    courseList = szsdConnection.getCourseInfo("2016-2017-1", "");
+                    objectSaveUtils.setObject("courseList", courseList);
                 }
-                Message msg=handlerCourse.obtainMessage();
-                msg.obj=courseList;
+                Message msg = handlerCourse.obtainMessage();
+                msg.obj = courseList;
                 handlerCourse.sendMessage(msg);
             }
         }).start();
 
     }
-    public void onScoreClick(View view){
-        Intent intent=new Intent(MainActivity.this,ScoreActivity.class);
-        intent.putExtra("connection",szsdConnection);
+
+    public void onScoreClick(View view) {
+        Intent intent = new Intent(MainActivity.this, ScoreActivity.class);
         startActivity(intent);
     }
-    public void onClassRoomClick(View view){
+
+    public void onClassRoomClick(View view) {
         progressDialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Map<String,String> classRoomMap=szsdConnection.getCurrentClassRoom();
-                Message msg=handlerClassRoom.obtainMessage();
-                msg.obj=classRoomMap;
+                Map<String, String> classRoomMap = szsdConnection.getCurrentClassRoom();
+                Message msg = handlerClassRoom.obtainMessage();
+                msg.obj = classRoomMap;
                 handlerClassRoom.sendMessage(msg);
             }
         }).start();
 
     }
-    public void onLibClick(View view){
+
+    public void onLibClick(View view) {
         progressDialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 ArrayList<BookInfo> bookInfoArrayList = szsdConnection.getBookList();
-                checkBitmap=szsdConnection.getLibCaptcha();
-                if(bookInfoArrayList==null){
-                    bookInfoArrayList=new ArrayList<BookInfo>();
+                checkBitmap = szsdConnection.getLibCaptcha();
+                if (bookInfoArrayList == null) {
+                    bookInfoArrayList = new ArrayList<BookInfo>();
                 }
-                Message msg=handlerLibrary.obtainMessage();
-                msg.obj=bookInfoArrayList;
+                Message msg = handlerLibrary.obtainMessage();
+                msg.obj = bookInfoArrayList;
                 handlerLibrary.sendMessage(msg);
             }
         }).start();
     }
-    private void initHandler(){
-        handlerCourse=new Handler(){
+
+    private void initHandler() {
+        handlerCourse = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                ArrayList<Course> courseList=(ArrayList<Course>)msg.obj;
+                ArrayList<Course> courseList = (ArrayList<Course>) msg.obj;
 
                 progressDialog.cancel();
-                if(courseList.size()==1&&courseList.get(0).getCourseName().equals("评教未完成")){
+                if (courseList.size() == 1 && courseList.get(0).getCourseName().equals("评教未完成")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("");
                     builder.setMessage("评教未完成，无法获取课表。");
@@ -257,48 +262,45 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                     builder.create().show();
-                }else{
-                    Intent intent=new Intent(MainActivity.this,CourseActivity.class);
-                    intent.putExtra("connection",szsdConnection);
-                    intent.putExtra("course",courseList);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, CourseActivity.class);
+                    intent.putExtra("course", courseList);
                     startActivity(intent);
                 }
 
             }
         };
-        handlerClassRoom=new Handler(){
+        handlerClassRoom = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                HashMap<String,String> classMap=(HashMap<String,String>)msg.obj;
+                HashMap<String, String> classMap = (HashMap<String, String>) msg.obj;
 
                 progressDialog.cancel();
 
-                Intent intent=new Intent(MainActivity.this,ClassRoomActivity.class);
-                intent.putExtra("connection",szsdConnection);
-                intent.putExtra("classRoomMap",classMap);
+                Intent intent = new Intent(MainActivity.this, ClassRoomActivity.class);
+                intent.putExtra("classRoomMap", classMap);
                 startActivity(intent);
             }
         };
-        handlerLibrary=new Handler(){
+        handlerLibrary = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                ArrayList<BookInfo> bookInfoArrayList=(ArrayList<BookInfo>)msg.obj;
+                ArrayList<BookInfo> bookInfoArrayList = (ArrayList<BookInfo>) msg.obj;
                 progressDialog.cancel();
-                Intent intent=new Intent(MainActivity.this,LibraryActivity.class);
-                intent.putExtra("connection",szsdConnection);
-                intent.putExtra("bookInfoArrayList",bookInfoArrayList);
-                intent.putExtra("captcha",checkBitmap);
+                Intent intent = new Intent(MainActivity.this, LibraryActivity.class);
+                intent.putExtra("bookInfoArrayList", bookInfoArrayList);
+                intent.putExtra("captcha", checkBitmap);
                 startActivity(intent);
             }
         };
-        handlerFeedback=new Handler(){
+        handlerFeedback = new Handler() {
 
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                Toast.makeText(context,"谢谢您的支持！ ^_^",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "谢谢您的支持！ ^_^", Toast.LENGTH_SHORT).show();
             }
         };
         handlerUpdate = new Handler() {
@@ -330,11 +332,12 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
-    private void initPopupWindow(){
-        popupView=View.inflate(context,R.layout.feedback_popupwindow,null);
-        final EditText editTextContent=(EditText)popupView.findViewById(R.id.main_feedback_content);
-        final EditText editTextConnect=(EditText)popupView.findViewById(R.id.main_feedback_connect);
-        Button button=(Button)popupView.findViewById(R.id.btn_main_feedback);
+
+    private void initPopupWindow() {
+        popupView = View.inflate(context, R.layout.feedback_popupwindow, null);
+        final EditText editTextContent = (EditText) popupView.findViewById(R.id.main_feedback_content);
+        final EditText editTextConnect = (EditText) popupView.findViewById(R.id.main_feedback_connect);
+        Button button = (Button) popupView.findViewById(R.id.btn_main_feedback);
         button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -349,20 +352,20 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String account=sharedPreferences.getString("lastUser","");
-                final String content=editTextContent.getText().toString();
-                final String connect=editTextConnect.getText().toString();
-                if(content.length()==0){
-                    Toast.makeText(context,"没有什么问题吗？O_O",Toast.LENGTH_SHORT).show();
-                }else{
-                    if(popupWindow.isShowing()){
+                final String account = sharedPreferences.getString("lastUser", "");
+                final String content = editTextContent.getText().toString();
+                final String connect = editTextConnect.getText().toString();
+                if (content.length() == 0) {
+                    Toast.makeText(context, "没有什么问题吗？O_O", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (popupWindow.isShowing()) {
                         popupWindow.dismiss();
                     }
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            szsdConnection.feedback(account,content,connect);
-                            Message msg=handlerFeedback.obtainMessage();
+                            szsdConnection.feedback(account, content, connect);
+                            Message msg = handlerFeedback.obtainMessage();
                             handlerFeedback.sendMessage(msg);
                         }
                     }).start();
@@ -370,18 +373,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        popupWindow=new PopupWindow(context);
+        popupWindow = new PopupWindow(context);
         popupWindow.setContentView(popupView);
         popupWindow.setAnimationStyle(R.style.PopupAnimationClassRoomSearch);
         popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
-        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context,R.drawable.classroom_search_white));
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.classroom_search_white));
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                WindowManager.LayoutParams lp=getWindow().getAttributes();
-                lp.alpha=1f;
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha = 1f;
                 getWindow().setAttributes(lp);
             }
         });
@@ -419,6 +422,7 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.create().show();
     }
+
     private void downFile(final String downUrl) {
         downFileDialog = new ProgressDialog(context);
         downFileDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -472,6 +476,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+
     //打开apk安装界面
     private void update() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
