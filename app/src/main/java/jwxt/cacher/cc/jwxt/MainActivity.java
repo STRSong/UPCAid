@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                     courseList = objectSaveUtils.getObject("courseList");
                 }
                 isSameUser = true;
-                if (courseList == null || courseList.get(0).getCourseName().equals("评教未完成")) {
+                if (courseList == null || (courseList.size() > 0 && courseList.get(0).getCourseName().equals("评教未完成"))) {
                     courseList = szsdConnection.getCourseInfo("2016-2017-1", "");
                     objectSaveUtils.setObject("courseList", courseList);
                 }
