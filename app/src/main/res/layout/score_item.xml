@@ -13,7 +13,7 @@ android:orientation="horizontal">
     android:textSize="18dp"
     android:text="2014-2015-2"
     android:id="@+id/kksj"
-    android:textColor="@android:color/holo_red_dark" />
+    android:textColor="@android:color/holo_blue_dark" />
 <TextView
     android:layout_width="0dp"
     android:layout_height="wrap_content"

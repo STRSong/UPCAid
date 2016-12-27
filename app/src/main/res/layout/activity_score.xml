@@ -40,7 +40,7 @@
             android:layout_weight="160"
             android:gravity="center"
             android:textSize="18dp"
-            android:textColor="@android:color/holo_red_dark"
+            android:textColor="@android:color/holo_blue_dark"
             android:text="课程名称" />
 
         <TextView
