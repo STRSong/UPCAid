@@ -40,6 +40,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import jwxt.cacher.cc.jwxt.info.BookInfo;
 import jwxt.cacher.cc.jwxt.info.Course;
+import jwxt.cacher.cc.jwxt.util.CacherUtils;
 
 /**
  * Created by xhaiben on 2016/8/30.
@@ -211,6 +212,33 @@ public class SZSDConnection {
         }
         return null;
     }
+
+    /**
+     * @author xhaiben
+     * @param href 成绩详细信息的查询链接，从成绩的HashMap中用xx（详细）获得
+     * @return 返回 JSONObject pscj,pscjbl,qzcj,qzcjbl,qmcj,qmcjbl,zcj
+     *
+     */
+    public JSONObject getScoreDetail(String href){
+        href=href.replace("&","*");
+        try{
+            URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/getScoreDetail?href="+href);
+            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
+            httpURLConnection.setRequestProperty("jwxtCookie",jwxtCookie);
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.connect();
+            String result= CacherUtils.getHttpString(httpURLConnection);
+            httpURLConnection.disconnect();
+
+            JSONObject jsonObject=JSONObject.fromObject(result);
+            return jsonObject;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     private ArrayList<Course> getCourseList(String jsonStr) {
         ArrayList<Course> courseList = new ArrayList<>();

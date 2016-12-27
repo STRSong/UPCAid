@@ -22,13 +22,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import net.sf.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.RunnableFuture;
 
 /**
  * Created by xhaiben on 2016/8/8.
@@ -40,9 +46,11 @@ public class ScoreActivity extends AppCompatActivity {
     private ListView listView;
     private Handler handlerListView;
     private Handler handlerProgressbar;
+    private Handler handlerDetail;
     private ProgressDialog progressDialog;
     private AutoCompleteTextView mEdit;
     private Thread threadWholeScore;
+    private List<HashMap<String, String>> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +189,7 @@ public class ScoreActivity extends AppCompatActivity {
 
         mEdit = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         mEdit.setThreshold(1);
+        //默认查询学期
         String initStr = "2016-2017-1";
         mEdit.setText(initStr);
         mEdit.setSelection(initStr.length());
@@ -227,7 +236,8 @@ public class ScoreActivity extends AppCompatActivity {
                         msg1.arg1 = 1;
                         msg1.obj = progressDialog;
                         handlerProgressbar.sendMessage(msg1);
-                        List<HashMap<String, String>> data = connection.getScore(kksj);
+                        data = connection.getScore(kksj);
+                        System.out.println(data);
                         if (data.size() == 1 && data.get(0).containsKey("评教未完成")) {
                             //评教未完成不能查成绩
                             Message msg = handlerListView.obtainMessage();
@@ -235,7 +245,7 @@ public class ScoreActivity extends AppCompatActivity {
                             handlerListView.sendMessage(msg);
                         } else {
                             SimpleAdapter adapter = new SimpleAdapter(context, data, R.layout.score_item, new String[]{
-                                    "kksj", "kcmc", "zcj", "xf"}, new int[]{R.id.kksj, R.id.kcmc, R.id.zjc, R.id.xf});
+                                    "kcmc", "kclb", "zcj", "xf"}, new int[]{R.id.kksj, R.id.kcmc, R.id.zjc, R.id.xf});
 
                             Message msg = handlerListView.obtainMessage();
                             msg.obj = adapter;
@@ -278,14 +288,72 @@ public class ScoreActivity extends AppCompatActivity {
                     });
                     builder.create().show();
                 } else {
-                    SimpleAdapter adapter = (SimpleAdapter) msg.obj;
+                    final SimpleAdapter adapter = (SimpleAdapter) msg.obj;
                     listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            final String href = data.get(position).get("xx");
+                            if (href == null) {
+                                Toast.makeText(context, "该课程无详细信息", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    JSONObject jsonObject = connection.getScoreDetail(href);
+                                    if (jsonObject != null) {
+                                        Message msg = handlerDetail.obtainMessage();
+                                        msg.obj = jsonObject;
+                                        handlerDetail.sendMessage(msg);
+                                    }
+                                }
+                            }).start();
+                        }
+                    });
                     mEdit.setFocusable(false);
                     mEdit.setFocusableInTouchMode(true);
                     InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(listView.getWindowToken(), 0);
                 }
 
+            }
+        };
+        handlerDetail = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                JSONObject jsonObject = (JSONObject) msg.obj;
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                builder.setTitle("总成绩：" + jsonObject.getString("zcj"));
+                View dialogView = View.inflate(context, R.layout.view_score_detail, null);
+                TextView pscjText = (TextView) dialogView.findViewById(R.id.tv_score_pscj);
+                TextView pscjblText = (TextView) dialogView.findViewById(R.id.tv_score_pscjbl);
+                TextView qzcjText = (TextView) dialogView.findViewById(R.id.tv_score_qzcj);
+                TextView qzcjblText = (TextView) dialogView.findViewById(R.id.tv_score_qzcjbl);
+                TextView qmcjText = (TextView) dialogView.findViewById(R.id.tv_score_qmcj);
+                TextView qmcjblText = (TextView) dialogView.findViewById(R.id.tv_score_qmcjbl);
+                String pscj = jsonObject.getString("pscj");
+                String pscjbl = jsonObject.getString("pscjbl");
+                String qzcj = jsonObject.getString("qzcj");
+                String qzcjbl = jsonObject.getString("qzcjbl");
+                String qmcj = jsonObject.getString("qmcj");
+                String qmcjbl = jsonObject.getString("qmcjbl");
+                pscjText.setText(pscj.equals("?") ? "无" : pscj);
+                pscjblText.setText(pscjbl.equals("?") ? "无" : pscjbl);
+                qzcjText.setText(qzcj.equals("?") ? "无" : qzcj);
+                qzcjblText.setText(qzcj.equals("?") ? "无" : qzcj);
+                qmcjText.setText(qmcj.equals("?") ? "无" : qmcj);
+                qmcjblText.setText(qmcj.equals("?") ? "无" : qmcj);
+//                StringBuffer dialogMsg = new StringBuffer();
+//                dialogMsg.append("平时成绩：" + jsonObject.getString("pscj") + "\t" +
+//                        "平时成绩比例：" + jsonObject.getString("pscjbl") + "\n\n");
+//                dialogMsg.append("期中成绩：" + jsonObject.getString("qzcj") + "\t" +
+//                        "期中成绩比例：" + jsonObject.getString("qzcjbl") + "\n\n");
+//                dialogMsg.append("期末成绩：" + jsonObject.getString("qmcj") + "\t" +
+//                        "期末成绩比例：" + jsonObject.getString("qmcjbl") + "\n");
+//                builder.setMessage(dialogMsg);
+                builder.setView(dialogView);
+                builder.create().show();
             }
         };
         handlerProgressbar = new Handler() {
