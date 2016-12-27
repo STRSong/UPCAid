@@ -12,10 +12,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.print.PrintAttributes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.media.RatingCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -33,7 +31,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Gallery;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -41,18 +38,15 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TooManyListenersException;
 
 import jwxt.cacher.cc.jwxt.info.Course;
 import jwxt.cacher.cc.jwxt.picker.MyOptionPicker;
@@ -78,8 +72,23 @@ public class CourseActivity extends AppCompatActivity {
     private TextView textViewThu;
     private TextView textViewFri;
     private TextView textViewSat;
+    private TextView textViewSun1;
+    private TextView textViewMon1;
+    private TextView textViewTue1;
+    private TextView textViewWed1;
+    private TextView textViewThu1;
+    private TextView textViewFri1;
+    private TextView textViewSat1;
     private TextView textViewWeekChoice;
     private TextView textViewWeek;
+    private LinearLayout linearLayoutSun;
+    private LinearLayout linearLayoutMon;
+    private LinearLayout linearLayoutTue;
+    private LinearLayout linearLayoutWed;
+    private LinearLayout linearLayoutThu;
+    private LinearLayout linearLayoutFri;
+    private LinearLayout linearLayoutSat;
+
     private Handler courseHandler;
     private List<Course> courseList;
     private SZSDConnection szsdConnection;
@@ -137,6 +146,14 @@ public class CourseActivity extends AppCompatActivity {
         textViewFri = (TextView) findViewById(R.id.course_fri);
         textViewSat = (TextView) findViewById(R.id.course_sat);
 
+        textViewSun1 = (TextView) findViewById(R.id.course_sun1);
+        textViewMon1 = (TextView) findViewById(R.id.course_mon1);
+        textViewTue1 = (TextView) findViewById(R.id.course_tue1);
+        textViewWed1 = (TextView) findViewById(R.id.course_wed1);
+        textViewThu1 = (TextView) findViewById(R.id.course_thu1);
+        textViewFri1 = (TextView) findViewById(R.id.course_fri1);
+        textViewSat1 = (TextView) findViewById(R.id.course_sat1);
+
         textViewWeekChoice = (TextView) findViewById(R.id.course_choice);
         Typeface iconfont = Typeface.createFromAsset(getAssets(), "iconfont/iconfont.ttf");
         textViewWeekChoice.setTypeface(iconfont);
@@ -164,6 +181,39 @@ public class CourseActivity extends AppCompatActivity {
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         textViewSat.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
 
+        switch(week){
+            case 1:
+                textViewSun.setTextColor(getResources().getColor(R.color.orange_dark));
+                textViewSun1.setTextColor(getResources().getColor(R.color.orange_dark));
+                break;
+            case 2:
+                textViewMon.setTextColor(getResources().getColor(R.color.orange_dark));
+                textViewMon1.setTextColor(getResources().getColor(R.color.orange_dark));
+                break;
+            case 3:
+                textViewTue.setTextColor(getResources().getColor(R.color.orange_dark));
+                textViewTue1.setTextColor(getResources().getColor(R.color.orange_dark));
+                break;
+            case 4:
+                textViewWed.setTextColor(getResources().getColor(R.color.orange_dark));
+                textViewWed1.setTextColor(getResources().getColor(R.color.orange_dark));
+                break;
+            case 5:
+                textViewThu.setTextColor(getResources().getColor(R.color.orange_dark));
+                textViewThu1.setTextColor(getResources().getColor(R.color.orange_dark));
+                break;
+            case 6:
+                textViewFri.setTextColor(getResources().getColor(R.color.orange_dark));
+                textViewFri1.setTextColor(getResources().getColor(R.color.orange_dark));
+                break;
+            case 7:
+                textViewSat.setTextColor(getResources().getColor(R.color.orange_dark));
+                textViewSat1.setTextColor(getResources().getColor(R.color.orange_dark));
+                break;
+            default:
+                break;
+        }
+
         //星期天是1，星期六是7
         sharedPreferences.edit().putInt("currentDayOfWeek", week).commit();
 
@@ -174,6 +224,7 @@ public class CourseActivity extends AppCompatActivity {
             sharedPreferences.edit().putInt("currentWeekOfYear", calendar.get(Calendar.WEEK_OF_YEAR)).commit();
         }
         /***********************/
+
         /*设置当前周*/
         currentWeek = sharedPreferences.getInt("currentWeek", 0);
         if (currentWeek == 0) {

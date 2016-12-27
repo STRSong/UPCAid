@@ -30,4 +30,6 @@
     <color name="grey">#ff666666</color>
     <color name="lucency_black_20">#33000000</color>
     <color name="dlg_title">#ff666666</color>
+    <color name="orange_dark">#ffff8800</color>
+    <color name="blue_dark">#ff0099cc</color>
 </resources>

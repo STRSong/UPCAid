@@ -19,6 +19,7 @@
             android:textColor="@color/courseWeek"/>
 
         <LinearLayout
+            android:id="@+id/linear_course_sun"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="4"
@@ -34,6 +35,7 @@
                 android:textColor="@color/courseWeek"
                 android:textSize="12dp"/>
             <TextView
+                android:id="@+id/course_sun1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -44,6 +46,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_course_mon"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="4"
@@ -59,6 +62,7 @@
                 android:textColor="@color/courseWeek"
                 android:textSize="12dp"/>
             <TextView
+                android:id="@+id/course_mon1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -69,6 +73,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_course_tue"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="4"
@@ -84,6 +89,7 @@
                 android:textColor="@color/courseWeek"
                 android:textSize="12dp"/>
             <TextView
+                android:id="@+id/course_tue1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -94,6 +100,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_course_wed"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="4"
@@ -109,6 +116,7 @@
                 android:textColor="@color/courseWeek"
                 android:textSize="12dp"/>
             <TextView
+                android:id="@+id/course_wed1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -119,6 +127,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_course_thu"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="4"
@@ -134,6 +143,7 @@
                 android:textColor="@color/courseWeek"
                 android:textSize="12dp"/>
             <TextView
+                android:id="@+id/course_thu1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -144,6 +154,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_course_fri"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="4"
@@ -159,6 +170,7 @@
                 android:textColor="@color/courseWeek"
                 android:textSize="12dp"/>
             <TextView
+                android:id="@+id/course_fri1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -169,6 +181,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_course_sat"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="4"
@@ -184,6 +197,7 @@
                 android:textColor="@color/courseWeek"
                 android:textSize="12dp"/>
             <TextView
+                android:id="@+id/course_sat1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
