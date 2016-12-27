@@ -50,6 +50,7 @@ import java.util.Map;
 
 import jwxt.cacher.cc.jwxt.info.BookInfo;
 import jwxt.cacher.cc.jwxt.info.Course;
+import jwxt.cacher.cc.jwxt.util.CacherUtils;
 import jwxt.cacher.cc.jwxt.util.ObjectSaveUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -319,10 +320,10 @@ public class MainActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 Map<String, Object> updateInfo = (Map<String, Object>) msg.obj;
                 //权限检查
-                int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                if (permission != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
-                }
+//                int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//                if (permission != PackageManager.PERMISSION_GRANTED) {
+//                    ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+//                }
                 showUpdateDialog(updateInfo);
             }
         };
@@ -461,17 +462,15 @@ public class MainActivity extends AppCompatActivity {
                     //设置进度条总进度
                     downFileDialog.setMax(fileLength);
 
-                    File dir = new File(Environment.getExternalStorageDirectory(), "SZSD");
-                    if (!dir.exists()) {
-                        dir.mkdirs();
-                    }
-                    System.out.println(dir.getPath());
-                    File apkFile = new File(dir.getAbsolutePath() + "/" + "UPCAid.apk");
+//                    File dir = new File(Environment.getExternalStorageDirectory(), "SZSD");
+//                    if (!dir.exists()) {
+//                        dir.mkdirs();
+//                    }
+                    File dir = CacherUtils.getExternalCacheDirectory(context, "");
+                    File apkFile = new File(dir, "UPCAid.apk");
                     if (!apkFile.exists()) {
                         apkFile.createNewFile();
                     }
-
-
                     FileOutputStream fileOutputStream = new FileOutputStream(apkFile);
                     byte[] buf = new byte[1024];
                     int length = inputStream.read(buf);
@@ -501,8 +500,8 @@ public class MainActivity extends AppCompatActivity {
     //打开apk安装界面
     private void update() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-                "SZSD" + File.separator + "UPCAid.apk")), "application/vnd.android.package-archive");
+        intent.setDataAndType(Uri.fromFile(new File(CacherUtils.getExternalCacheDirectory(context, ""),
+                "UPCAid.apk")), "application/vnd.android.package-archive");
         startActivity(intent);
     }
 }
