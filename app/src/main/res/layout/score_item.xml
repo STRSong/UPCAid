@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
 android:layout_height="50dp"
     android:gravity="center"
 android:orientation="horizontal">
 <TextView
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_weight="130"
+    android:layout_weight="160"
     android:gravity="center"
     android:textSize="18dp"
     android:text="2014-2015-2"
-    android:id="@+id/kksj"/>
+    android:id="@+id/kksj"
+    android:textColor="@android:color/holo_red_dark" />
 <TextView
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_weight="130"
+    android:layout_weight="90"
     android:gravity="center"
     android:textSize="18dp"
     android:text=""
-    android:id="@+id/kcmc"/>
+    android:id="@+id/kcmc"
+    android:textColor="@android:color/holo_green_dark" />
 <TextView
     android:layout_width="0dp"
     android:layout_height="wrap_content"
@@ -27,13 +30,15 @@ android:orientation="horizontal">
     android:gravity="center"
     android:textSize="18dp"
     android:text="79"
-    android:id="@+id/zjc"/>
+    android:id="@+id/zjc"
+    android:textColor="@android:color/holo_orange_dark" />
 <TextView
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_weight="50"
+    android:layout_weight="60"
     android:gravity="center"
     android:textSize="18dp"
     android:text="3"
-    android:id="@+id/xf"/>
+    android:id="@+id/xf"
+    android:textColor="@android:color/holo_purple" />
 </LinearLayout>

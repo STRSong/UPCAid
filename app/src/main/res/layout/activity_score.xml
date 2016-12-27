@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -36,33 +37,37 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="130"
+            android:layout_weight="160"
             android:gravity="center"
-            android:text="开课学期"
-            android:textSize="18dp"/>
+            android:textSize="18dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:text="课程名称" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="130"
+            android:layout_weight="90"
             android:gravity="center"
-            android:text="课程名称"
-            android:textSize="18dp"/>
+            android:text="类别"
+            android:textSize="18dp"
+            android:textColor="@android:color/holo_green_dark" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="70"
             android:gravity="center"
             android:text="总成绩"
-            android:textSize="18dp"/>
+            android:textSize="18dp"
+            android:textColor="@android:color/holo_orange_dark" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="50"
+            android:layout_weight="60"
             android:gravity="center"
             android:text="学分"
-            android:textSize="18dp"/>
+            android:textSize="18dp"
+            android:textColor="@android:color/holo_purple" />
 
     </LinearLayout>
 
