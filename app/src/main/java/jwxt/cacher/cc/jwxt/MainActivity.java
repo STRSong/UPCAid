@@ -1,5 +1,7 @@
 package jwxt.cacher.cc.jwxt;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.renderscript.ScriptGroup;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -36,6 +39,7 @@ import android.widget.Toast;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -63,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private Context context;
+    private Activity activity;
     private Bitmap checkBitmap;
     private Toolbar toolbar;
 
@@ -74,12 +79,17 @@ public class MainActivity extends AppCompatActivity {
     private int updateVersion;
     private ProgressDialog downFileDialog;
 
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
-
+        activity = this;
         textViewLib = (TextView) findViewById(R.id.tv_main_lib);
         textViewCard = (TextView) findViewById(R.id.tv_main_card);
         textViewName = (TextView) findViewById(R.id.tv_main_name);
@@ -308,6 +318,11 @@ public class MainActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 Map<String, Object> updateInfo = (Map<String, Object>) msg.obj;
+                //权限检查
+                int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (permission != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+                }
                 showUpdateDialog(updateInfo);
             }
         };
@@ -446,11 +461,17 @@ public class MainActivity extends AppCompatActivity {
                     //设置进度条总进度
                     downFileDialog.setMax(fileLength);
 
-                    File file = new File(Environment.getExternalStorageDirectory(), "SZSD");
-                    if (!file.exists()) {
-                        file.mkdir();
+                    File dir = new File(Environment.getExternalStorageDirectory(), "SZSD");
+                    if (!dir.exists()) {
+                        dir.mkdirs();
                     }
-                    File apkFile = new File(file, "UPCAid.apk");
+                    System.out.println(dir.getPath());
+                    File apkFile = new File(dir.getAbsolutePath() + "/" + "UPCAid.apk");
+                    if (!apkFile.exists()) {
+                        apkFile.createNewFile();
+                    }
+
+
                     FileOutputStream fileOutputStream = new FileOutputStream(apkFile);
                     byte[] buf = new byte[1024];
                     int length = inputStream.read(buf);
