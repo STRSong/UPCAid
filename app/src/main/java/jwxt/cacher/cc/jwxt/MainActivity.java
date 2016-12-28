@@ -18,6 +18,7 @@ import android.renderscript.ScriptGroup;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.TintableBackgroundView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -37,12 +38,15 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewLib;
     private TextView textViewCard;
     private TextView textViewName;
+    private TextView textViewAPPTitle;
 
     private SZSDConnection szsdConnection;
     private Handler handlerCourse;
@@ -95,6 +100,17 @@ public class MainActivity extends AppCompatActivity {
         textViewLib = (TextView) findViewById(R.id.tv_main_lib);
         textViewCard = (TextView) findViewById(R.id.tv_main_card);
         textViewName = (TextView) findViewById(R.id.tv_main_name);
+        textViewAPPTitle = (TextView) findViewById(R.id.tv_app_title);
+
+        textViewAPPTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://cacher.cc/2016/12/28/UPCAid/");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -158,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }).start();
+
+
     }
 
     @Override
