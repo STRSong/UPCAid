@@ -343,7 +343,7 @@ public class ScoreActivity extends AppCompatActivity {
                 qzcjText.setText(qzcj.equals("?") ? "无" : qzcj);
                 qzcjblText.setText(qzcj.equals("?") ? "无" : qzcj);
                 qmcjText.setText(qmcj.equals("?") ? "无" : qmcj);
-                qmcjblText.setText(qmcj.equals("?") ? "无" : qmcj);
+                qmcjblText.setText(qmcj.equals("?") ? "无" : qmcjbl);
 //                StringBuffer dialogMsg = new StringBuffer();
 //                dialogMsg.append("平时成绩：" + jsonObject.getString("pscj") + "\t" +
 //                        "平时成绩比例：" + jsonObject.getString("pscjbl") + "\n\n");
