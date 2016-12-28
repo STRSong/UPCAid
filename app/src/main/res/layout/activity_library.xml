@@ -28,7 +28,8 @@
             android:layout_weight="1.5"
             android:gravity="center"
             android:textSize="18dp"
-            android:text="书名"/>
+            android:text="书名"
+            android:textColor="@android:color/holo_blue_dark" />
 
         <TextView
             android:layout_width="0dp"
@@ -37,14 +38,16 @@
             android:gravity="center"
             android:textSize="18dp"
             android:text="责任者"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="5dp"
+            android:textColor="@android:color/holo_green_dark" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
             android:gravity="center"
             android:textSize="18dp"
-            android:text="应还日期"/>
+            android:text="应还日期"
+            android:textColor="@android:color/holo_orange_dark" />
         <TextView
             android:layout_width="45dp"
             android:layout_height="wrap_content"
