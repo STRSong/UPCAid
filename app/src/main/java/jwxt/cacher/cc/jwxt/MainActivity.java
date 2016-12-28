@@ -23,6 +23,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -115,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
         String lib = (String) getIntent().getSerializableExtra("lib");
         String card = (String) getIntent().getSerializableExtra("card");
         textViewName.setText(name);
+        System.out.println(textViewName.getTextSize());
+        if (name.length() >= 6) {
+            textViewName.setTextSize(TypedValue.COMPLEX_UNIT_PX, textViewName.getTextSize() - (name.length() - 6) * 4);
+        }
+        System.out.println(textViewName.getTextSize());
         textViewLib.setText(lib);
         textViewCard.setText(card);
         initHandler();
