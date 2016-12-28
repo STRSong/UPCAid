@@ -55,7 +55,8 @@
             android:textSize="18dp"
             android:text="续借"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp"
+            android:textColor="@android:color/holo_purple" />
     </LinearLayout>
 
     <ListView
