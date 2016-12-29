@@ -341,7 +341,7 @@ public class ScoreActivity extends AppCompatActivity {
                 pscjText.setText(pscj.equals("?") ? "无" : pscj);
                 pscjblText.setText(pscjbl.equals("?") ? "无" : pscjbl);
                 qzcjText.setText(qzcj.equals("?") ? "无" : qzcj);
-                qzcjblText.setText(qzcj.equals("?") ? "无" : qzcj);
+                qzcjblText.setText(qzcj.equals("?") ? "无" : qzcjbl);
                 qmcjText.setText(qmcj.equals("?") ? "无" : qmcj);
                 qmcjblText.setText(qmcj.equals("?") ? "无" : qmcjbl);
 //                StringBuffer dialogMsg = new StringBuffer();
