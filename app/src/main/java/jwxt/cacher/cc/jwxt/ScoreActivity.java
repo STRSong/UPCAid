@@ -135,7 +135,7 @@ public class ScoreActivity extends AppCompatActivity {
                                 msg1.arg1 = 1;
                                 msg1.obj = progressDialog;
                                 handlerProgressbar.sendMessage(msg1);
-                                List<HashMap<String, String>> data = connection.getScore(kksj);
+                                data = connection.getScore(kksj);
                                 if (data.size() == 1 && data.get(0).get("评教未完成").equals("")) {
                                     //评教未完成不能查成绩
                                     Message msg = handlerListView.obtainMessage();
@@ -143,7 +143,7 @@ public class ScoreActivity extends AppCompatActivity {
                                     handlerListView.sendMessage(msg);
                                 } else {
                                     SimpleAdapter adapter = new SimpleAdapter(context, data, R.layout.score_item, new String[]{
-                                            "kksj", "kcmc", "zcj", "xf"}, new int[]{R.id.kksj, R.id.kcmc, R.id.zjc, R.id.xf});
+                                            "kcmc", "kclb", "zcj", "xf"}, new int[]{R.id.kksj, R.id.kcmc, R.id.zjc, R.id.xf});
 
                                     Message msg = handlerListView.obtainMessage();
                                     msg.obj = adapter;
