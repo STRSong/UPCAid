@@ -4,15 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
     <item
+        android:id="@+id/main_changeAccount"
+        android:orderInCategory="80"
+        android:title="切换账号"
+        app:showAsAction="collapseActionView">
+    </item>
+    <item
         android:id="@+id/main_feedback"
         android:orderInCategory="80"
         android:title="意见反馈"
         app:showAsAction="collapseActionView">
     </item>
     <item
-        android:id="@+id/main_changeAccount"
+        android:id="@+id/main_about"
         android:orderInCategory="80"
-        android:title="切换账号"
+        android:title="更新日志"
         app:showAsAction="collapseActionView">
     </item>
 </menu>
