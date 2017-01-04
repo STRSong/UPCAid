@@ -487,7 +487,6 @@ public class SZSDConnection {
             bufferedWriter.write(content);
             bufferedWriter.flush();
             bufferedWriter.close();
-            InputStream inputStream = httpURLConnection.getInputStream();
         } catch (Exception e) {
             e.printStackTrace();
         }
