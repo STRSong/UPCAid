@@ -228,8 +228,10 @@ public class MainActivity extends AppCompatActivity {
                     courseList = objectSaveUtils.getObject("courseList");
                 }
                 isSameUser = true;
+                //尝试重新从教务系统获取课表。
                 if (courseList == null || (courseList.size() > 0 && courseList.get(0).getCourseName().equals("评教未完成"))) {
-                    courseList = szsdConnection.getCourseInfo("2016-2017-1", "");
+                    //课表学期
+                    courseList = szsdConnection.getCourseInfo("2016-2017-2", "");
                     objectSaveUtils.setObject("courseList", courseList);
                 }
                 Message msg = handlerCourse.obtainMessage();

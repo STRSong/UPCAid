@@ -436,7 +436,7 @@ public class CourseActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 ObjectSaveUtils objectSaveUtils = new ObjectSaveUtils(context, "courseInfo");
-                                courseList = szsdConnection.getCourseInfo("2016-2017-1", "");
+                                courseList = szsdConnection.getCourseInfo("2016-2017-2", "");
                                 objectSaveUtils.setObject("courseList", courseList);
                                 Message msg = courseHandler.obtainMessage();
                                 msg.arg1 = currentWeek;
