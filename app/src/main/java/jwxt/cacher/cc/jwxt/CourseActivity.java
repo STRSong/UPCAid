@@ -81,13 +81,6 @@ public class CourseActivity extends AppCompatActivity {
     private TextView textViewSat1;
     private TextView textViewWeekChoice;
     private TextView textViewWeek;
-    private LinearLayout linearLayoutSun;
-    private LinearLayout linearLayoutMon;
-    private LinearLayout linearLayoutTue;
-    private LinearLayout linearLayoutWed;
-    private LinearLayout linearLayoutThu;
-    private LinearLayout linearLayoutFri;
-    private LinearLayout linearLayoutSat;
 
     private Handler courseHandler;
     private List<Course> courseList;
@@ -181,7 +174,7 @@ public class CourseActivity extends AppCompatActivity {
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         textViewSat.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
 
-        switch(week){
+        switch (week) {
             case 1:
                 textViewSun.setTextColor(getResources().getColor(R.color.orange_dark));
                 textViewSun1.setTextColor(getResources().getColor(R.color.orange_dark));
@@ -227,6 +220,9 @@ public class CourseActivity extends AppCompatActivity {
 
         /*设置当前周*/
         currentWeek = sharedPreferences.getInt("currentWeek", 0);
+        if (currentWeek >= 25) {
+            currentWeek = 1;
+        }
         if (currentWeek == 0) {
             ArrayList<String> data = new ArrayList<>();
             for (int i = 1; i <= 25; i++) {
