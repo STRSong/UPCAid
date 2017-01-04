@@ -11,6 +11,8 @@ import android.os.Message;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
+import com.baidu.mobstat.StatService;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +36,9 @@ public class WelcomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         szsdConnection = SZSDConnection.getInstance();
+
+        //添加百度统计
+        StatService.start(this);
 
         activity = this;
         context = this;

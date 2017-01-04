@@ -35,4 +35,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.2.1'
     compile 'com.android.support:recyclerview-v7:23.2.1'
     compile 'com.android.support:gridlayout-v7:23.2.1'
+    compile files('libs/Baidu_Mtj_3.7.5.4.jar')
 }
