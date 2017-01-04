@@ -61,6 +61,7 @@ public class SZSDConnection {
     public static SZSDConnection getInstance() {
         return INSTANCE;
     }
+
     public boolean szsdLogin(String username, String password, Context context) {
         try {
             String loginURL = "https://cacher.cc:8443/SZSDServlet2/szsd?command=logToSzsd"
@@ -214,25 +215,24 @@ public class SZSDConnection {
     }
 
     /**
-     * @author xhaiben
      * @param href 成绩详细信息的查询链接，从成绩的HashMap中用xx（详细）获得
      * @return 返回 JSONObject pscj,pscjbl,qzcj,qzcjbl,qmcj,qmcjbl,zcj
-     *
+     * @author xhaiben
      */
-    public JSONObject getScoreDetail(String href){
-        href=href.replace("&","*");
-        try{
-            URL url=new URL("http://120.27.117.34:4549/SZSDServlet2/getScoreDetail?href="+href);
-            HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
-            httpURLConnection.setRequestProperty("jwxtCookie",jwxtCookie);
+    public JSONObject getScoreDetail(String href) {
+        href = href.replace("&", "*");
+        try {
+            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/getScoreDetail?href=" + href);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestProperty("jwxtCookie", jwxtCookie);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
-            String result= CacherUtils.getHttpString(httpURLConnection);
+            String result = CacherUtils.getHttpString(httpURLConnection);
             httpURLConnection.disconnect();
 
-            JSONObject jsonObject=JSONObject.fromObject(result);
+            JSONObject jsonObject = JSONObject.fromObject(result);
             return jsonObject;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -435,8 +435,10 @@ public class SZSDConnection {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
-            InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            BufferedInputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+            byte[] buff = new byte[1024];
+            int length = inputStream.read(buff);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(buff, 0, length);
             inputStream.close();
             httpURLConnection.disconnect();
             return bitmap;
