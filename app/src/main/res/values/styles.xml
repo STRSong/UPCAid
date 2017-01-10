@@ -8,6 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:listPreferredItemHeight">30dip</item>
     </style>
+    <style name="welcomeTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:listPreferredItemHeight">30dip</item>
+    </style>
     <style name="ToolbarMenuTextColor" parent="AppTheme">
         <item name="android:actionMenuTextColor">@color/white</item>
     </style>
