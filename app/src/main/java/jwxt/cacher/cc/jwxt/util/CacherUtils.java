@@ -30,6 +30,8 @@ public class CacherUtils {
             while (scanner.hasNext()) {
                 buffer.append(scanner.next());
             }
+            inputStream.close();
+            reader.close();
             return buffer.toString();
         } catch (Exception e) {
             e.printStackTrace();

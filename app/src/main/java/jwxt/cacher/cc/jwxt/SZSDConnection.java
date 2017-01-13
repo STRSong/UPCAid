@@ -29,6 +29,7 @@ import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -46,8 +47,8 @@ import jwxt.cacher.cc.jwxt.util.CacherUtils;
  * Created by xhaiben on 2016/8/30.
  */
 public class SZSDConnection {
-    private String jwxtCookie;
-    private String szsdCookie;
+    private String jwxtCookie = null;
+    private String szsdCookie = null;
     private String libCookie = null;
     private int timeOut;
 
@@ -62,77 +63,99 @@ public class SZSDConnection {
         return INSTANCE;
     }
 
-    public boolean szsdLogin(String username, String password, Context context) {
+    public Map<String, String> szsdLogin(String username, String password, Context context) {
         try {
-            String loginURL = "https://cacher.cc:8443/SZSDServlet2/szsd?command=logToSzsd"
+            String loginURL = "http://120.27.117.34:555/upcaid/api?command=logToSzsd"
                     + "&username=" + username
                     + "&password=" + password;
             URL url = new URL(loginURL);
-            HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
-            //https证书设置
-            InputStream inputStream = context.getResources().openRawResource(R.raw.tomcat);
-            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            Certificate certificate = certificateFactory.generateCertificate(inputStream);
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keyStore.load(null, null);
-            keyStore.setCertificateEntry("trust", certificate);
-
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init(keyStore);
-
-            sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
-
-            httpsURLConnection.setSSLSocketFactory(sslContext.getSocketFactory());
-            httpsURLConnection.setConnectTimeout(timeOut);
-            httpsURLConnection.setReadTimeout(timeOut);
-            httpsURLConnection.connect();
-
-            jwxtCookie = httpsURLConnection.getHeaderField("jwxtCookie");
-            szsdCookie = httpsURLConnection.getHeaderField("szsdCookie");
-            if (jwxtCookie != null && szsdCookie != null) {
-                return true;
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+            connection.connect();
+            szsdCookie = connection.getHeaderField("szsdCookie");
+            String selfInfo = CacherUtils.getHttpString(connection);
+            JSONObject jsonObject = JSONObject.fromObject(selfInfo);
+            Map<String, String> infoMap = (Map<String, String>) jsonObject.get("map");
+            if (infoMap != null) {
+                return infoMap;
             }
-            if (httpsURLConnection != null) {
-                httpsURLConnection.disconnect();
-            }
-        } catch (UnknownHostException e) {
-            System.out.println("域名未解析，未联网？");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public Map<String, String> getSelfInfo() {
-        try {
-            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getSelfInfo");
-            HttpURLConnection
-                    httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestProperty("szsdCookie", szsdCookie);
-            httpURLConnection.setDoInput(true);
-            httpURLConnection.setConnectTimeout(timeOut);
-            httpURLConnection.setReadTimeout(timeOut);
-            httpURLConnection.connect();
-            ObjectInputStream inputStream = new ObjectInputStream(httpURLConnection.getInputStream());
-            Map<String, String> a = (Map<String, String>) inputStream.readObject();
-
-            if (inputStream != null) {
-                inputStream.close();
-            }
-            if (httpURLConnection != null) {
-                httpURLConnection.disconnect();
-            }
-            return a;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+//    public boolean szsdLogin(String username, String password, Context context) {
+//        try {
+//            String loginURL = "https://cacher.cc:8443/SZSDServlet2/szsd?command=logToSzsd"
+//                    + "&username=" + username
+//                    + "&password=" + password;
+//            URL url = new URL(loginURL);
+//            HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
+//            //https证书设置
+//            InputStream inputStream = context.getResources().openRawResource(R.raw.tomcat);
+//            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+//            Certificate certificate = certificateFactory.generateCertificate(inputStream);
+//            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+//            keyStore.load(null, null);
+//            keyStore.setCertificateEntry("trust", certificate);
+//
+//            SSLContext sslContext = SSLContext.getInstance("TLS");
+//            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+//            trustManagerFactory.init(keyStore);
+//
+//            sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
+//
+//            httpsURLConnection.setSSLSocketFactory(sslContext.getSocketFactory());
+//            httpsURLConnection.setConnectTimeout(timeOut);
+//            httpsURLConnection.setReadTimeout(timeOut);
+//            httpsURLConnection.connect();
+//
+//            szsdCookie = httpsURLConnection.getHeaderField("szsdCookie");
+//            if (szsdCookie != null) {
+//                return true;
+//            }
+//            if (httpsURLConnection != null) {
+//                httpsURLConnection.disconnect();
+//            }
+//        } catch (UnknownHostException e) {
+//            System.out.println("域名未解析，未联网？");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+
+//    public Map<String, String> getSelfInfo() {
+//        try {
+//            URL url = new URL("http://192.168.0.11:8080/upcaid?command=getSelfInfo");
+//            HttpURLConnection
+//                    httpURLConnection = (HttpURLConnection) url.openConnection();
+//            httpURLConnection.setRequestProperty("szsdCookie", szsdCookie);
+//            httpURLConnection.setDoInput(true);
+//            httpURLConnection.setConnectTimeout(timeOut);
+//            httpURLConnection.setReadTimeout(timeOut);
+//            httpURLConnection.connect();
+//            String str = CacherUtils.getHttpString(httpURLConnection);
+//            JSONObject jsonObject = JSONObject.fromObject(str);
+//            JSONArray jsonArray = (JSONArray) jsonObject.get("list");
+//            jsonObject = jsonArray.getJSONObject(0);
+//            jsonObject.get("map");
+//            Map<String, String> infoMap = (Map<String, String>) jsonObject.get("map");
+//
+//            if (httpURLConnection != null) {
+//                httpURLConnection.disconnect();
+//            }
+//            return infoMap;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     public Map<String, String> getLibAndCardInfo() {
         try {
-            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getLibAndCardInfo");
+            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=getLibAndCardInfo");
             HttpURLConnection
                     httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("szsdCookie", szsdCookie);
@@ -140,11 +163,9 @@ public class SZSDConnection {
             httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
-            ObjectInputStream inputStream = new ObjectInputStream(httpURLConnection.getInputStream());
-            Map<String, String> a = (Map<String, String>) inputStream.readObject();
-            if (inputStream != null) {
-                inputStream.close();
-            }
+            String resqContent = CacherUtils.getHttpString(httpURLConnection);
+            JSONObject jsonObject = JSONObject.fromObject(resqContent);
+            Map<String, String> a = (Map<String, String>) jsonObject.get("map");
             if (httpURLConnection != null) {
                 httpURLConnection.disconnect();
             }
@@ -156,10 +177,14 @@ public class SZSDConnection {
     }
 
     public ArrayList<Course> getCourseInfo(String xq, String zc) {
+        if (jwxtCookie == null) {
+            getJwxtCookie();
+        }
+        System.out.println(jwxtCookie);
         try {
             ArrayList<Course> courseList;
 //            courseList.add(new Course("AAAA"));
-            String courseUrl = "http://120.27.117.34:4549/SZSDServlet2/szsd?command=getCourseInfo"
+            String courseUrl = "http://120.27.117.34:555/upcaid/api?command=getCourseInfo"
                     + "&xq=" + xq
                     + "&zc=" + zc;
             URL url = new URL(courseUrl);
@@ -170,12 +195,9 @@ public class SZSDConnection {
             httpURLConnection.setConnectTimeout(timeOut);
             httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.connect();
-            ObjectInputStream inputStream = new ObjectInputStream(httpURLConnection.getInputStream());
-            String jsonStr = (String) inputStream.readObject();
+            String jsonStr = CacherUtils.getHttpString(httpURLConnection);
+            System.out.println(jsonStr);
             courseList = getCourseList(jsonStr);
-            if (inputStream != null) {
-                inputStream.close();
-            }
             if (httpURLConnection != null) {
                 httpURLConnection.disconnect();
             }
@@ -187,9 +209,12 @@ public class SZSDConnection {
     }
 
     public List<HashMap<String, String>> getScore(String kksj) {
+        if (jwxtCookie == null) {
+            getJwxtCookie();
+        }
         try {
             List<HashMap<String, String>> data;
-            String scoreUrl = "http://120.27.117.34:4549/SZSDServlet2/szsd?command=getScore"
+            String scoreUrl = "http://120.27.117.34:555/upcaid/api?command=getScore"
                     + "&kksj=" + kksj;
             URL url = new URL(scoreUrl);
             HttpURLConnection
@@ -220,9 +245,12 @@ public class SZSDConnection {
      * @author xhaiben
      */
     public JSONObject getScoreDetail(String href) {
+        if (jwxtCookie == null) {
+            getJwxtCookie();
+        }
         href = href.replace("&", "*");
         try {
-            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/getScoreDetail?href=" + href);
+            URL url = new URL("http://192.168.0.11:8080/getScoreDetail?href=" + href);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("jwxtCookie", jwxtCookie);
             httpURLConnection.setDoInput(true);
@@ -231,6 +259,11 @@ public class SZSDConnection {
             httpURLConnection.disconnect();
 
             JSONObject jsonObject = JSONObject.fromObject(result);
+            String str = jsonObject.toString();
+            str = str.replace(" ", "?");
+            System.out.println(str);
+            jsonObject = JSONObject.fromObject(str);
+            System.out.println(jsonObject);
             return jsonObject;
         } catch (Exception e) {
             e.printStackTrace();
@@ -268,7 +301,7 @@ public class SZSDConnection {
 
     public Map<String, String> getCurrentClassRoom() {
         try {
-            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getCurrentClassRoom");
+            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=getCurrentClassRoom");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(timeOut);
             httpURLConnection.setReadTimeout(timeOut);
@@ -291,7 +324,7 @@ public class SZSDConnection {
 
     public Map<String, String> getClassRoom(String week, String day, String n) {
         try {
-            String classRoomUrl = "http://120.27.117.34:4549/SZSDServlet2/szsd?command=getAvailableClassRoom"
+            String classRoomUrl = "http://120.27.117.34:555/upcaid/api?command=getAvailableClassRoom"
                     + "&week=" + week
                     + "&day=" + day
                     + "&n=" + n;
@@ -318,7 +351,7 @@ public class SZSDConnection {
 
     public int getVersionCode() {
         try {
-            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=checkUpdate");
+            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=checkUpdate");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(timeOut);
             httpURLConnection.setReadTimeout(timeOut);
@@ -346,7 +379,7 @@ public class SZSDConnection {
 
     public Map<String, Object> getUpdateInfo() {
         try {
-            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getUpdateInfo");
+            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=getUpdateInfo");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(timeOut);
             httpURLConnection.setReadTimeout(timeOut);
@@ -387,7 +420,7 @@ public class SZSDConnection {
     public ArrayList<BookInfo> getBookList() {
         if (libCookie == null) {
             try {
-                URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=logToLib&cookie=" + szsdCookie);
+                URL url = new URL("http://120.27.117.34:555/upcaid/api?command=logToLib&cookie=" + szsdCookie);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.connect();
@@ -397,16 +430,15 @@ public class SZSDConnection {
                 e.printStackTrace();
             }
         }
+        System.out.println(libCookie);
         try {
-            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getBookList&cookie=" + libCookie);
+            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=getBookList&cookie=" + libCookie);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setDoInput(true);
-            ObjectInputStream inputStream = new ObjectInputStream(httpURLConnection.getInputStream());
-            String listStr = (String) inputStream.readObject();
-            inputStream.close();
+            String resqContent = CacherUtils.getHttpString(httpURLConnection);
             httpURLConnection.disconnect();
             ArrayList<BookInfo> bookInfoList = new ArrayList<>();
-            JSONArray jsonArray = JSONArray.fromObject(listStr);
+            JSONArray jsonArray = JSONArray.fromObject(resqContent);
             for (int i = 0; i < jsonArray.size(); i++) {
                 BookInfo item = new BookInfo();
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -423,7 +455,7 @@ public class SZSDConnection {
             e.printStackTrace();
         } catch (IOException e) {
             System.out.println("没有借书");
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -431,7 +463,7 @@ public class SZSDConnection {
 
     public Bitmap getLibCaptcha() {
         try {
-            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=getLibCaptcha&cookie=" + libCookie);
+            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=getLibCaptcha&cookie=" + libCookie);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
@@ -450,7 +482,7 @@ public class SZSDConnection {
 
     public String renewBook(String bar_code, String check, String captcha) {
         try {
-            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=renewBook&cookie=" + libCookie
+            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=renewBook&cookie=" + libCookie
                     + "&bar_code=" + bar_code
                     + "&check=" + check
                     + "&captcha=" + captcha);
@@ -474,7 +506,7 @@ public class SZSDConnection {
 
     public void feedback(String account, String feedback, String connect) {
         try {
-            URL url = new URL("http://120.27.117.34:4549/SZSDServlet2/szsd?command=feedback");
+            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=feedback");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setDoInput(true);
@@ -491,5 +523,25 @@ public class SZSDConnection {
             e.printStackTrace();
         }
 
+    }
+
+    private boolean getJwxtCookie() {
+        try {
+            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=getJwxtCookie&cookie=" + szsdCookie);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.connect();
+            jwxtCookie = httpURLConnection.getHeaderField("jwxtCookie");
+            System.out.println(jwxtCookie);
+            if (jwxtCookie != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+        return false;
     }
 }
