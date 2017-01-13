@@ -250,7 +250,7 @@ public class SZSDConnection {
         }
         href = href.replace("&", "*");
         try {
-            URL url = new URL("http://192.168.0.11:8080/getScoreDetail?href=" + href);
+            URL url = new URL("http://120.27.117.34:555/upcaid/getScoreDetail?href=" + href);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("jwxtCookie", jwxtCookie);
             httpURLConnection.setDoInput(true);
