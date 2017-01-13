@@ -53,14 +53,13 @@ public class WelcomeActivity extends Activity {
                 @Override
                 public void run() {
                     Message msg = handlerLogin.obtainMessage();
-                    boolean loginResult = szsdConnection.szsdLogin(account, password, context);
+                    Map<String, String> infoMap1 = szsdConnection.szsdLogin(account, password, context);
                     if (account.length() == 0 || password.length() == 0) {
                         msg.arg1 = 3;//用户名或密码为空
-                    } else if (loginResult == false) {
+                    } else if (infoMap1 == null) {
                         msg.arg1 = 1;//登陆失败
                     } else {
                         msg.arg1 = 2;//登陆成功
-                        Map<String, String> infoMap1 = szsdConnection.getSelfInfo();
                         Map<String, String> infoMap2 = szsdConnection.getLibAndCardInfo();
                         Map<String, String> info = new HashMap<String, String>();
                         info.put("name", infoMap1.get("USER_NAME"));

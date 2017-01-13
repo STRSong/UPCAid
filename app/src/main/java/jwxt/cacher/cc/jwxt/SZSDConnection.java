@@ -63,7 +63,7 @@ public class SZSDConnection {
         return INSTANCE;
     }
 
-    public boolean szsdLogin(String username, String password, Context context) {
+    public Map<String, String> szsdLogin(String username, String password, Context context) {
         try {
             String loginURL = "http://192.168.0.11:8080/upcaid?command=logToSzsd"
                     + "&username=" + username
@@ -74,13 +74,16 @@ public class SZSDConnection {
             connection.setDoInput(true);
             connection.connect();
             szsdCookie = connection.getHeaderField("szsdCookie");
-            if (szsdCookie != null) {
-                return true;
+            String selfInfo = CacherUtils.getHttpString(connection);
+            JSONObject jsonObject = JSONObject.fromObject(selfInfo);
+            Map<String, String> infoMap = (Map<String, String>) jsonObject.get("map");
+            if (infoMap != null) {
+                return infoMap;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 //    public boolean szsdLogin(String username, String password, Context context) {
 //        try {
