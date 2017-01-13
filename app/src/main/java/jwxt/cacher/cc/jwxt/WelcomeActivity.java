@@ -102,7 +102,6 @@ public class WelcomeActivity extends Activity {
                     try {
                         Thread.sleep(600);
                     } catch (InterruptedException e) {
-                        //把异常信息打印在控制台上
                         e.printStackTrace();
                     }
                     handler.post(callback);
