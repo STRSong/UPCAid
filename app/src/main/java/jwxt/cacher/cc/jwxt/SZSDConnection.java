@@ -126,32 +126,6 @@ public class SZSDConnection {
 //        return false;
 //    }
 
-//    public Map<String, String> getSelfInfo() {
-//        try {
-//            URL url = new URL("http://192.168.0.11:8080/upcaid?command=getSelfInfo");
-//            HttpURLConnection
-//                    httpURLConnection = (HttpURLConnection) url.openConnection();
-//            httpURLConnection.setRequestProperty("szsdCookie", szsdCookie);
-//            httpURLConnection.setDoInput(true);
-//            httpURLConnection.setConnectTimeout(timeOut);
-//            httpURLConnection.setReadTimeout(timeOut);
-//            httpURLConnection.connect();
-//            String str = CacherUtils.getHttpString(httpURLConnection);
-//            JSONObject jsonObject = JSONObject.fromObject(str);
-//            JSONArray jsonArray = (JSONArray) jsonObject.get("list");
-//            jsonObject = jsonArray.getJSONObject(0);
-//            jsonObject.get("map");
-//            Map<String, String> infoMap = (Map<String, String>) jsonObject.get("map");
-//
-//            if (httpURLConnection != null) {
-//                httpURLConnection.disconnect();
-//            }
-//            return infoMap;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
     public Map<String, String> getLibAndCardInfo() {
         try {
