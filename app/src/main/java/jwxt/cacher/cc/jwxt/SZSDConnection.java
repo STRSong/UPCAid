@@ -49,8 +49,17 @@ import jwxt.cacher.cc.jwxt.util.CacherUtils;
  * Created by xhaiben on 2016/8/30.
  */
 public class SZSDConnection {
+    public void setJwxtCookie(String jwxtCookie) {
+        this.jwxtCookie = jwxtCookie;
+    }
+
     private String jwxtCookie = null;
     private String szsdCookie = null;
+
+    public void setLibCookie(String libCookie) {
+        this.libCookie = libCookie;
+    }
+
     private String libCookie = null;
     private int timeOut;
 

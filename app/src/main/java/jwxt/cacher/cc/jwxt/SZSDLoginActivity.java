@@ -47,8 +47,6 @@ public class SZSDLoginActivity extends AppCompatActivity {
     private Handler handlerProcessDialog;
 
     private Context context;
-    private int currentVersion;
-    private int updateVersion;
 
     private SharedPreferences sharedPreferences;
     private ProgressDialog progressDialog;
@@ -165,6 +163,9 @@ public class SZSDLoginActivity extends AppCompatActivity {
                 msgProcess.arg1 = 1;
                 handlerProcessDialog.sendMessage(msgProcess);
                 Map<String, String> infoMap1 = szsdConnection.szsdLogin(username, password, context);
+                //切换用户 jwxtCookie,libCookie置null
+                szsdConnection.setJwxtCookie(null);
+                szsdConnection.setLibCookie(null);
 
                 if (username.length() == 0 || password.length() == 0) {
                     msg.arg1 = 3;//用户名或密码为空
