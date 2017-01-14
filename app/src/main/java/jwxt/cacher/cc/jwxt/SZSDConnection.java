@@ -11,6 +11,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,6 +22,7 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.security.KeyStore;
 import java.security.SecureRandom;
@@ -480,19 +482,25 @@ public class SZSDConnection {
 
     public void feedback(String account, String feedback, String connect) {
         try {
-            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=feedback");
+            String urlStr = "http://120.27.117.34:555/upcaid/api?command=feedback";
+            URL url = new URL(urlStr);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
-            String content = "&account=" + account
-                    + "&feedback=" + feedback
-                    + "&connect=" + connect;
+            httpURLConnection.setUseCaches(false);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("account", account);
+            jsonObject.put("connect", connect);
+            jsonObject.put("content", feedback);
+            httpURLConnection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = new BufferedOutputStream(httpURLConnection.getOutputStream());
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-            bufferedWriter.write(content);
-            bufferedWriter.flush();
-            bufferedWriter.close();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+            writer.write(jsonObject.toString());
+            writer.flush();
+            writer.close();
+            httpURLConnection.getInputStream().close();
+            httpURLConnection.disconnect();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
