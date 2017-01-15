@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import net.sf.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.RunnableFuture;
 
 /**
@@ -51,12 +53,19 @@ public class ScoreActivity extends AppCompatActivity {
     private AutoCompleteTextView mEdit;
     private Thread threadWholeScore;
     private List<HashMap<String, String>> data;
+    private LinearLayout xxjLin;
+    private TextView xxjTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
         context = this;
+
+        xxjLin = (LinearLayout) findViewById(R.id.score_xxj);
+        xxjTv = (TextView) findViewById(R.id.tv_score_xxj);
+        xxjLin.setVisibility(View.GONE);
+
 
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("正在加载，请稍后...");
@@ -137,18 +146,14 @@ public class ScoreActivity extends AppCompatActivity {
                                 handlerProgressbar.sendMessage(msg1);
                                 data = connection.getScore(kksj);
                                 if (data != null) {
-
                                     if (data.size() == 1 && data.get(0).get("评教未完成").equals("")) {
                                         //评教未完成不能查成绩
                                         Message msg = handlerListView.obtainMessage();
                                         msg.arg1 = 1;
                                         handlerListView.sendMessage(msg);
                                     } else {
-                                        SimpleAdapter adapter = new SimpleAdapter(context, data, R.layout.score_item, new String[]{
-                                                "kcmc", "kclb", "zcj", "xf"}, new int[]{R.id.kksj, R.id.kcmc, R.id.zjc, R.id.xf});
-
                                         Message msg = handlerListView.obtainMessage();
-                                        msg.obj = adapter;
+                                        msg.obj = data;
                                         handlerListView.sendMessage(msg);
                                     }
                                 }
@@ -246,14 +251,10 @@ public class ScoreActivity extends AppCompatActivity {
                                 msg.arg1 = 1;
                                 handlerListView.sendMessage(msg);
                             } else {
-                                SimpleAdapter adapter = new SimpleAdapter(context, data, R.layout.score_item, new String[]{
-                                        "kcmc", "kclb", "zcj", "xf"}, new int[]{R.id.kksj, R.id.kcmc, R.id.zjc, R.id.xf});
 
                                 Message msg = handlerListView.obtainMessage();
-                                msg.obj = adapter;
+                                msg.obj = data;
                                 handlerListView.sendMessage(msg);
-
-
                             }
                         msg1 = handlerProgressbar.obtainMessage();
                         msg1.arg1 = 2;
@@ -290,7 +291,14 @@ public class ScoreActivity extends AppCompatActivity {
                     });
                     builder.create().show();
                 } else {
-                    final SimpleAdapter adapter = (SimpleAdapter) msg.obj;
+                    final List<HashMap<String, String>> data = (List<HashMap<String, String>>) msg.obj;
+                    Map<String, String> xfjMap = data.get(0);
+                    String xxj = xfjMap.get("xxj");
+                    data.remove(0);
+
+                    SimpleAdapter adapter = new SimpleAdapter(context, data, R.layout.score_item, new String[]{
+                            "kcmc", "kclb", "zcj", "xf"}, new int[]{R.id.kksj, R.id.kcmc, R.id.zjc, R.id.xf});
+
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -317,6 +325,8 @@ public class ScoreActivity extends AppCompatActivity {
                     mEdit.setFocusableInTouchMode(true);
                     InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(listView.getWindowToken(), 0);
+                    xxjLin.setVisibility(View.VISIBLE);
+                    xxjTv.setText(xxj);
                 }
 
             }

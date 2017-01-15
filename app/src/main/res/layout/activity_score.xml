@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:toolbar="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toolbar_score"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:background="?attr/colorPrimary"
-        >
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right">
+
             <android.support.v7.widget.SearchView
                 android:id="@+id/search_score_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:iconifiedByDefault="false">
-            </android.support.v7.widget.SearchView>
+                android:iconifiedByDefault="false"
+                android:inputType="date"></android.support.v7.widget.SearchView>
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -39,9 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="160"
             android:gravity="center"
-            android:textSize="18dp"
+            android:text="课程名称"
             android:textColor="@android:color/holo_blue_dark"
-            android:text="课程名称" />
+            android:textSize="18dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -49,16 +46,17 @@
             android:layout_weight="90"
             android:gravity="center"
             android:text="类别"
-            android:textSize="18dp"
-            android:textColor="@android:color/holo_green_dark" />
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="18dp" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="70"
             android:gravity="center"
             android:text="总成绩"
-            android:textSize="18dp"
-            android:textColor="@android:color/holo_orange_dark" />
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="18dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -66,16 +64,56 @@
             android:layout_weight="60"
             android:gravity="center"
             android:text="学分"
-            android:textSize="18dp"
-            android:textColor="@android:color/holo_purple" />
+            android:textColor="@android:color/holo_purple"
+            android:textSize="18dp" />
 
     </LinearLayout>
 
-
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView_Score"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginBottom="30dp">
+            <ListView
+                android:id="@+id/listView_Score"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/score_xxj"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_below="@+id/listView_Score"
+            android:layout_marginTop="-30dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="学分绩："
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/tv_score_xxj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="76.59"
+                android:textColor="@android:color/holo_purple"
+                android:textSize="18dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </LinearLayout>
