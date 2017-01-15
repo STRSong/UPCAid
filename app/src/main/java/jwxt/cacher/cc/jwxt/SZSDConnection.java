@@ -201,7 +201,7 @@ public class SZSDConnection {
         }
         try {
             List<HashMap<String, String>> data;
-            String scoreUrl = "http://192.168.0.11:8080/api?command=getScore"
+            String scoreUrl = "http://120.27.117.34:555/upcaid/api?command=getScore"
                     + "&kksj=" + kksj;
             URL url = new URL(scoreUrl);
             HttpURLConnection
@@ -520,7 +520,7 @@ public class SZSDConnection {
 
     private boolean getJwxtCookie() {
         try {
-            URL url = new URL("http://192.168.0.11:8080/api?command=getJwxtCookie&cookie=" + szsdCookie);
+            URL url = new URL("http://120.27.117.34:555/upcaid/api?command=getJwxtCookie&cookie=" + szsdCookie);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.setDoInput(true);
