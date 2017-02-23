@@ -192,6 +192,7 @@ public class SZSDConnection {
         }
         return null;
     }
+
     /*
     * 返回一个列表 第一个HashMap为学分绩信息
     * */
