@@ -181,11 +181,10 @@ public class SZSDConnection {
             httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.connect();
             String jsonStr = CacherUtils.getHttpString(httpURLConnection);
+            System.out.println("获取的课表");
             System.out.println(jsonStr);
             courseList = getCourseList(jsonStr);
-            if (httpURLConnection != null) {
-                httpURLConnection.disconnect();
-            }
+            httpURLConnection.disconnect();
             return courseList;
         } catch (Exception e) {
             e.printStackTrace();
