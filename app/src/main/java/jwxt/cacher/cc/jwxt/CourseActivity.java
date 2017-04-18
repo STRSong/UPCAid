@@ -58,7 +58,7 @@ import jwxt.cacher.cc.jwxt.views.RotateTransformer;
 import jwxt.cacher.cc.jwxt.views.WeekGridViewAdapter;
 
 
-/**
+/*
  * Created by xhaiben on 2016/8/20.
  */
 public class CourseActivity extends AppCompatActivity {
@@ -175,31 +175,31 @@ public class CourseActivity extends AppCompatActivity {
         textViewSat.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
 
         switch (week) {
-            case 1:
+            case Calendar.SUNDAY:
                 textViewSun.setTextColor(getResources().getColor(R.color.orange_dark));
                 textViewSun1.setTextColor(getResources().getColor(R.color.orange_dark));
                 break;
-            case 2:
+            case Calendar.MONDAY:
                 textViewMon.setTextColor(getResources().getColor(R.color.orange_dark));
                 textViewMon1.setTextColor(getResources().getColor(R.color.orange_dark));
                 break;
-            case 3:
+            case Calendar.TUESDAY:
                 textViewTue.setTextColor(getResources().getColor(R.color.orange_dark));
                 textViewTue1.setTextColor(getResources().getColor(R.color.orange_dark));
                 break;
-            case 4:
+            case Calendar.WEDNESDAY:
                 textViewWed.setTextColor(getResources().getColor(R.color.orange_dark));
                 textViewWed1.setTextColor(getResources().getColor(R.color.orange_dark));
                 break;
-            case 5:
+            case Calendar.THURSDAY:
                 textViewThu.setTextColor(getResources().getColor(R.color.orange_dark));
                 textViewThu1.setTextColor(getResources().getColor(R.color.orange_dark));
                 break;
-            case 6:
+            case Calendar.FRIDAY:
                 textViewFri.setTextColor(getResources().getColor(R.color.orange_dark));
                 textViewFri1.setTextColor(getResources().getColor(R.color.orange_dark));
                 break;
-            case 7:
+            case Calendar.SATURDAY:
                 textViewSat.setTextColor(getResources().getColor(R.color.orange_dark));
                 textViewSat1.setTextColor(getResources().getColor(R.color.orange_dark));
                 break;
@@ -208,13 +208,13 @@ public class CourseActivity extends AppCompatActivity {
         }
 
         //星期天是1，星期六是7
-        sharedPreferences.edit().putInt("currentDayOfWeek", week).commit();
+        sharedPreferences.edit().putInt("currentDayOfWeek", week).apply();
 
         textViewMonth.setText(String.valueOf(month) + "月");
         currentWeekOfYear = sharedPreferences.getInt("currentWeekOfYear", 0);
         if (currentWeekOfYear == 0) {
             currentWeekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
-            sharedPreferences.edit().putInt("currentWeekOfYear", calendar.get(Calendar.WEEK_OF_YEAR)).commit();
+            sharedPreferences.edit().putInt("currentWeekOfYear", calendar.get(Calendar.WEEK_OF_YEAR)).apply();
         }
         /***********************/
 
@@ -236,7 +236,7 @@ public class CourseActivity extends AppCompatActivity {
                 public void onOptionPicked(int position, String option) {
                     currentWeek = Integer.parseInt(option);
                     currentShowWeek = currentWeek;
-                    sharedPreferences.edit().putInt("currentWeek", currentWeek).commit();
+                    sharedPreferences.edit().putInt("currentWeek", currentWeek).apply();
                     textViewWeek.setText("第" + currentWeek + "周");
                     Message msg = courseHandler.obtainMessage();
                     msg.arg1 = currentWeek;
@@ -248,8 +248,8 @@ public class CourseActivity extends AppCompatActivity {
 
         if (calendar.get(Calendar.WEEK_OF_YEAR) > currentWeekOfYear) {
             currentWeek += 1;
-            sharedPreferences.edit().putInt("currentWeek", currentWeek).commit();
-            sharedPreferences.edit().putInt("currentWeekOfYear", calendar.get(Calendar.WEEK_OF_YEAR)).commit();
+            sharedPreferences.edit().putInt("currentWeek", currentWeek).apply();
+            sharedPreferences.edit().putInt("currentWeekOfYear", calendar.get(Calendar.WEEK_OF_YEAR)).apply();
         }
         lastCurrentWeek = sharedPreferences.getInt("lastCurrentWeek", 0);
         if (lastCurrentWeek == 0) {
