@@ -62,6 +62,9 @@ import jwxt.cacher.cc.jwxt.views.WeekGridViewAdapter;
  * Created by xhaiben on 2016/8/20.
  */
 public class CourseActivity extends AppCompatActivity {
+
+    public static final String xq = "2017-2018-1";
+
     private RelativeLayout courseRelative;
     private Context context;
     private TextView textViewMonth;
@@ -436,7 +439,7 @@ public class CourseActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 ObjectSaveUtils objectSaveUtils = new ObjectSaveUtils(context, "courseInfo");
-                                courseList = szsdConnection.getCourseInfo("2016-2017-2", "");
+                                courseList = szsdConnection.getCourseInfo(xq, "");
                                 objectSaveUtils.setObject("courseList", courseList);
                                 Message msg = courseHandler.obtainMessage();
                                 msg.arg1 = currentWeek;

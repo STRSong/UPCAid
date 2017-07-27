@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.RunnableFuture;
 
+import jwxt.cacher.cc.jwxt.info.Course;
+
 /*
  * Created by xhaiben on 2016/8/8.
  */
@@ -196,7 +198,7 @@ public class ScoreActivity extends AppCompatActivity {
         mEdit = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         mEdit.setThreshold(1);
         //默认查询学期
-        String initStr = "2016-2017-2";
+        String initStr = "2016-2017-3";
         mEdit.setText(initStr);
         mEdit.setSelection(initStr.length());
         mEdit.setTextColor(Color.WHITE);
