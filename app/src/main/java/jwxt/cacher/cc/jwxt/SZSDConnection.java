@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -53,7 +55,7 @@ public class SZSDConnection {
         this.jwxtCookie = jwxtCookie;
     }
 
-    private String serverHost = "http://211.87.178.228";
+    private String serverHost = "http://card.cacher.cc";
 
     private String jwxtCookie = null;
     private String szsdCookie = null;
@@ -78,7 +80,7 @@ public class SZSDConnection {
 
     public Map<String, String> szsdLogin(String username, String password, Context context) {
         try {
-            String loginURL = serverHost+"/upcaid/api?command=logToSzsd"
+            String loginURL = serverHost + "/upcaid/api?command=logToSzsd"
                     + "&username=" + username
                     + "&password=" + password;
             System.out.println(loginURL);
@@ -103,7 +105,7 @@ public class SZSDConnection {
 
     public Map<String, String> getLibAndCardInfo() {
         try {
-            URL url = new URL(serverHost+"/upcaid/api?command=getLibAndCardInfo");
+            URL url = new URL(serverHost + "/upcaid/api?command=getLibAndCardInfo");
             HttpURLConnection
                     httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("szsdCookie", szsdCookie);
@@ -132,7 +134,7 @@ public class SZSDConnection {
         try {
             ArrayList<Course> courseList;
 //            courseList.add(new Course("AAAA"));
-            String courseUrl = serverHost+"/upcaid/api?command=getCourseInfo"
+            String courseUrl = serverHost + "/upcaid/api?command=getCourseInfo"
                     + "&xq=" + xq
                     + "&zc=" + zc;
             URL url = new URL(courseUrl);
@@ -143,7 +145,7 @@ public class SZSDConnection {
             httpURLConnection.setConnectTimeout(timeOut);
             httpURLConnection.setReadTimeout(timeOut);
             httpURLConnection.connect();
-            String jsonStr = CacherUtils.getHttpString(httpURLConnection);
+            String jsonStr = IOUtils.toString(httpURLConnection.getInputStream(), "UTF-8");
             System.out.println("获取的课表");
             System.out.println(jsonStr);
             courseList = getCourseList(jsonStr);
@@ -164,7 +166,7 @@ public class SZSDConnection {
         }
         try {
             List<HashMap<String, String>> data;
-            String scoreUrl = serverHost+"/upcaid/api?command=getScore"
+            String scoreUrl = serverHost + "/upcaid/api?command=getScore"
                     + "&kksj=" + kksj;
             URL url = new URL(scoreUrl);
             HttpURLConnection
@@ -200,7 +202,7 @@ public class SZSDConnection {
         }
         href = href.replace("&", "*");
         try {
-            URL url = new URL(serverHost+"/upcaid/getScoreDetail?href=" + href);
+            URL url = new URL(serverHost + "/upcaid/getScoreDetail?href=" + href);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("jwxtCookie", jwxtCookie);
             httpURLConnection.setDoInput(true);
@@ -251,7 +253,7 @@ public class SZSDConnection {
 
     public Map<String, String> getCurrentClassRoom() {
         try {
-            URL url = new URL(serverHost+"/upcaid/api?command=getCurrentClassRoom");
+            URL url = new URL(serverHost + "/upcaid/api?command=getCurrentClassRoom");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(timeOut);
             httpURLConnection.setReadTimeout(timeOut);
@@ -274,7 +276,7 @@ public class SZSDConnection {
 
     public Map<String, String> getClassRoom(String week, String day, String n) {
         try {
-            String classRoomUrl = serverHost+"/upcaid/api?command=getAvailableClassRoom"
+            String classRoomUrl = serverHost + "/upcaid/api?command=getAvailableClassRoom"
                     + "&week=" + week
                     + "&day=" + day
                     + "&n=" + n;
@@ -301,7 +303,7 @@ public class SZSDConnection {
 
     public int getVersionCode() {
         try {
-            URL url = new URL(serverHost+"/upcaid/api?command=checkUpdate");
+            URL url = new URL(serverHost + "/upcaid/api?command=checkUpdate");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(timeOut);
             httpURLConnection.setReadTimeout(timeOut);
@@ -329,7 +331,7 @@ public class SZSDConnection {
 
     public Map<String, Object> getUpdateInfo() {
         try {
-            URL url = new URL(serverHost+"/upcaid/api?command=getUpdateInfo");
+            URL url = new URL(serverHost + "/upcaid/api?command=getUpdateInfo");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setConnectTimeout(timeOut);
             httpURLConnection.setReadTimeout(timeOut);
@@ -370,7 +372,7 @@ public class SZSDConnection {
     public ArrayList<BookInfo> getBookList() {
         if (libCookie == null) {
             try {
-                URL url = new URL(serverHost+"/upcaid/api?command=logToLib&cookie=" + szsdCookie);
+                URL url = new URL(serverHost + "/upcaid/api?command=logToLib&cookie=" + szsdCookie);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.connect();
@@ -382,7 +384,7 @@ public class SZSDConnection {
         }
         System.out.println(libCookie);
         try {
-            URL url = new URL(serverHost+"/upcaid/api?command=getBookList&cookie=" + libCookie);
+            URL url = new URL(serverHost + "/upcaid/api?command=getBookList&cookie=" + libCookie);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setDoInput(true);
             String resqContent = CacherUtils.getHttpString(httpURLConnection);
@@ -413,7 +415,7 @@ public class SZSDConnection {
 
     public Bitmap getLibCaptcha() {
         try {
-            URL url = new URL(serverHost+"/upcaid/api?command=getLibCaptcha&cookie=" + libCookie);
+            URL url = new URL(serverHost + "/upcaid/api?command=getLibCaptcha&cookie=" + libCookie);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
@@ -432,7 +434,7 @@ public class SZSDConnection {
 
     public String renewBook(String bar_code, String check, String captcha) {
         try {
-            URL url = new URL(serverHost+"/upcaid/api?command=renewBook&cookie=" + libCookie
+            URL url = new URL(serverHost + "/upcaid/api?command=renewBook&cookie=" + libCookie
                     + "&bar_code=" + bar_code
                     + "&check=" + check
                     + "&captcha=" + captcha);
@@ -456,7 +458,7 @@ public class SZSDConnection {
 
     public void feedback(String account, String feedback, String connect) {
         try {
-            String urlStr = serverHost+"/upcaid/api?command=feedback";
+            String urlStr = serverHost + "/upcaid/api?command=feedback";
             URL url = new URL(urlStr);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
@@ -483,7 +485,7 @@ public class SZSDConnection {
 
     private boolean getJwxtCookie() {
         try {
-            URL url = new URL(serverHost+"/upcaid/api?command=getJwxtCookie&cookie=" + szsdCookie);
+            URL url = new URL(serverHost + "/upcaid/api?command=getJwxtCookie&cookie=" + szsdCookie);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.setDoInput(true);
