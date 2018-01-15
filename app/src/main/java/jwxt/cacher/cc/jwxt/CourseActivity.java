@@ -63,7 +63,7 @@ import jwxt.cacher.cc.jwxt.views.WeekGridViewAdapter;
  */
 public class CourseActivity extends AppCompatActivity {
 
-    public static final String xq = "2017-2018-1";
+    public static final String xq = "2017-2018-2";
 
     private RelativeLayout courseRelative;
     private Context context;

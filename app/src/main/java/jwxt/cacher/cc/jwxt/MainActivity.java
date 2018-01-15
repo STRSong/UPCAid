@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this.finish();
                         break;
                     case R.id.main_about:
-                        Uri uri = Uri.parse("https://www.cacher.cc/2016/12/28/UPCAid.html");
+                        Uri uri = Uri.parse("http://www.cacher.cc/2016/12/28/UPCAid.html");
                         intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
                         break;

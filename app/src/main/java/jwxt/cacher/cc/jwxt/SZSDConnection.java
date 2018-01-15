@@ -55,7 +55,7 @@ public class SZSDConnection {
         this.jwxtCookie = jwxtCookie;
     }
 
-    private String serverHost = "http://card.cacher.cc";
+    private String serverHost = "http://aid.cacher.cc";
 
     private String jwxtCookie = null;
     private String szsdCookie = null;
